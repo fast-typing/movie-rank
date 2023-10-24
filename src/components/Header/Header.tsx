@@ -145,13 +145,9 @@ export default function Header() {
           <IconButton color="primary" onClick={() => setOpenSideBar(true)}>
             <DragHandleRoundedIcon />
           </IconButton>
-          <Drawer
-            anchor={"right"}
-            open={openSideBar}
-            onClose={() => setOpenSideBar(false)}
-          >
+          <div className={openSideBar ? "absolute top-[86px] inset-x-0 bottom-0 z-50" : "hidden"}>
             <Box sx={sideBarStyle}>{nav(true)}</Box>
-          </Drawer>
+          </div>
         </div>
       </header>
 

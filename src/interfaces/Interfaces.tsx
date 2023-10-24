@@ -18,6 +18,11 @@ export interface Movie {
   average_rating: number;
   premiere_russia?: string;
   premiere_world: string;
+  is_planned: boolean;
+  is_abandoned: boolean;
+  is_favorite: boolean;
+  is_postponed: boolean;
+  is_finished: boolean;
   id: number;
 }
 
@@ -39,8 +44,8 @@ export interface User {
   abandoned_films: [];
   favorite_films: [];
   postponed_films: [];
-  // current_films: [];
   finished_films: [];
+  // current_films: [];
 }
 
 export interface Login {

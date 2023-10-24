@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
 import {
@@ -9,33 +9,38 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
-import { getMovie, getReviews, markFilm } from "../../services/http.service";
+import { favoriteToggle, getMovie, getReviews, getUserData, markFilm } from "../../services/http.service";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { movieFieldsC, toggleButtonsC } from "../../App.constants";
 import ReviewBlock from "../../components/ReviewBlock/ReviewBlock";
 import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContainer";
+import { changeBooleanTypesOfMovies } from "../../context/UserProvider";
+import { markFavorites } from "../../services/favorite.service";
 
 export default function MoviePage() {
   const [movie, setMovie] = useState<Movie>(null);
-  const [alignment, setAlignment] = useState<string>(null);
+  const [alignment, setAlignment] = useState<"postopened" | "abandoned" | "finished" | "planned">(null);
   const [reviews, setReviews] = useState(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingButtons, setLoadingButtons] = useState<boolean>(false);
-  const [loadingFavorite, setLoadingFavorite] = useState<boolean>(false);
-  const [favorite, setFavorite] = useState<boolean>(false);
+  const [favorite, setFavorite] = useState({ isFavorite: false, loading: false });
 
   const { id } = useParams();
   const movieFields = movieFieldsC;
 
   useEffect(() => {
     const init = async () => {
-      const resMovie = await getMovie(id);
+      let resMovies = await getMovie(id);
       const resReviews = await getReviews(id);
-      if (!resMovie || !resReviews) return;
+      const token = localStorage.getItem('token')
+      const user = await getUserData(token)
+      if (!resMovies || !resReviews || !user) return;
+      resMovies = changeBooleanTypesOfMovies([resMovies], user)[0]
+      setFavorite({ ...favorite, isFavorite: resMovies.is_favorite })
 
       const jsxReviews = resReviews.map((review) => (
         <ReviewBlock review={review} />
@@ -45,17 +50,22 @@ export default function MoviePage() {
         info.push(
           <div className="flex gap-2 justify-between md:justify-normal">
             <span className="w-[150px]">{movieFields[key]}: </span>
-            <h3>{resMovie[key]}</h3>
+            <h3>{resMovies[key]}</h3>
           </div>
         );
       }
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000)
-      setMovie(resMovie);
+      let alignment = null
+      if (resMovies.is_abandoned) alignment = "abandoned"
+      if (resMovies.is_planned) alignment = "planned"
+      if (resMovies.is_postponed) alignment = "postponed"
+      if (resMovies.is_finished) alignment = "finished"
+      setAlignment(alignment)
+
+      setMovie(resMovies);
       setReviews(jsxReviews);
       setDetailedInfo(info);
+      setLoading(false);
     };
 
     init();
@@ -67,17 +77,25 @@ export default function MoviePage() {
   ) => {
     setLoadingButtons(true);
     const token = localStorage.getItem('token') ?? '';
-    const res = await markFilm(token, movie.id, newAlignment);
-    if (typeof res == "string") setAlignment(newAlignment);
+    if (newAlignment === null) {
+      const res = await markFilm(token, movie.id, alignment);
+      if (typeof res == "string") setAlignment(null);
+    } else {
+      const res = await markFilm(token, movie.id, newAlignment);
+      if (typeof res == "string") setAlignment(newAlignment);
+    }
     setLoadingButtons(false);
   };
 
   async function toggleFavorite() {
-    setLoadingFavorite(true);
+    setFavorite({ ...favorite, loading: true });
     const token = localStorage.getItem('token') ?? '';
-    const res = await markFilm(token, movie.id, "favorite");
-    if (typeof res == "string") setFavorite(!favorite);
-    setLoadingFavorite(false);
+    const res = await favoriteToggle(token, movie.id);
+    if (typeof res == "string") { 
+      setFavorite({ loading: false, isFavorite: !favorite.isFavorite }); 
+    } else {
+      setFavorite({ ...favorite, loading: false });
+    }
   }
 
   const toggleButtons = toggleButtonsC.map((item) => {
@@ -89,9 +107,9 @@ export default function MoviePage() {
     );
   });
 
-  const floatIcon = loadingFavorite ? (
+  const floatIcon = favorite.loading ? (
     <RefreshRoundedIcon className="loading" />
-  ) : favorite ? (
+  ) : favorite.isFavorite ? (
     <BookmarkIcon />
   ) : (
     <BookmarkBorderIcon />
@@ -148,7 +166,7 @@ export default function MoviePage() {
             <div className="flex items-center gap-4">
               <IconButton
                 color="primary"
-                disabled={loadingFavorite}
+                disabled={favorite.loading}
                 onClick={toggleFavorite}
               >
                 {floatIcon}

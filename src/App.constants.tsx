@@ -38,11 +38,9 @@ export const closeInputStyleC = {
 };
 
 export const sideBarStyleC = {
-  width: "50vw",
-  maxWidth: "500px",
-  minWidth: "350px",
+  width: "100%",
+  height: "100%",
   backgroundColor: "#424242",
-  height: "100vh",
   padding: 4,
 };
 
@@ -66,4 +64,12 @@ export const filterInputsC = [
   { value: "year", name: "Год показа" },
   { value: "genres", name: "Жанр" },
   { value: "country", name: "Страна" },
+]
+
+export const movieTypesC = [
+  { value: "favorite_films", name: "Избранные фильмы" },
+  { value: "finished_films", name: "Просмотренные фильмы" },
+  { value: "abandoned_films", name: "Заброшенные фильмы" },
+  { value: "postponed_films", name: "Отложенные фильмы" },
+  { value: "planned_films", name: "Запланированные фильмы" },
 ]

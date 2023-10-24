@@ -8,11 +8,11 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { useNavigate } from "react-router-dom";
-import { markFilm } from "../../services/http.service";
+import { favoriteToggle, markFilm } from "../../services/http.service";
 import { red } from "@mui/material/colors";
 
-export default function MovieCard(props: { movie: Movie }) {
-  const [favorite, setFavorite] = useState(false);
+export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean }) {
+  const [favorite, setFavorite] = useState(props.movie.is_favorite);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -29,7 +29,7 @@ export default function MovieCard(props: { movie: Movie }) {
   async function toggleFavorite() {
     setLoading(true);
     const token = localStorage.getItem('token') ?? '';
-    const res = await markFilm(token, props.movie.id, "favorite");
+    const res = await favoriteToggle(token, props.movie.id);
     if (typeof res == "string") { setFavorite(!favorite); }
     setLoading(false);
   }
@@ -44,11 +44,14 @@ export default function MovieCard(props: { movie: Movie }) {
 
   return (
     <div className="card">
-      <div className="float-icon">
-        <IconButton disabled={loading} onClick={toggleFavorite} color="primary">
-          {floatIcon}
-        </IconButton>
-      </div>
+      {
+        props.hideFavorite ? null :
+          <div className="float-icon">
+            <IconButton disabled={loading} onClick={toggleFavorite} color="primary">
+              {floatIcon}
+            </IconButton>
+          </div>
+      }
       <div className="grid gap-1 cursor-pointer" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
         <img src={props.movie.poster} alt={props.movie.poster} />
         <div className="flex justify-between items-center">

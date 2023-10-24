@@ -76,6 +76,16 @@ const theme = createTheme({
         }
       }]
     },
+    MuiDrawer: {
+      variants: [{
+        props: {},
+        style: {
+          '& .MuiDrawer-paper': {
+            top: 86
+          }
+        }
+      }]
+    },
     MuiIconButton: {
       variants: [{
         props: { color: "primary" },
@@ -134,6 +144,24 @@ const theme = createTheme({
         style: {
           backgroundColor: 'white',
           margin: '16px 0'
+        }
+      }]
+    },
+    MuiAccordionSummary: {
+      variants: [{
+        props: {},
+        style: {
+          backgroundColor: '#212121',
+          color: "white"
+        }
+      }]
+    },
+    MuiAccordionDetails: {
+      variants: [{
+        props: {},
+        style: {
+          backgroundColor: '#212121',
+          color: "white"
         }
       }]
     },

@@ -12,8 +12,12 @@ export function getAllMovies(): Promise<Movie[] | void> {
     return _request(`get_all_films`, 'GET')
 }
 
-export function markFilm(token: string, filmId: number, type: "favorite" | "postopened" | "abandoned" | "finished" | "planned") {
-    return _request(`update_user_list?token=${token}&film_id=${filmId}&list_type=${type}`, 'PATCH')
+export function markFilm(token: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
+    return _request(`update_user_list?token=${token}&film_id=${film_id}&list_type=${type}`, 'PATCH')
+}
+
+export function favoriteToggle(token: string, film_id: number) {
+    return _request(`add_to_favorite?token=${token}&film_id=${film_id}`, 'PATCH')
 }
 
 export function getMovie(id: string): Promise<Movie | void> {
