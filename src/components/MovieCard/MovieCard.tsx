@@ -8,7 +8,7 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { useNavigate } from "react-router-dom";
-import { favoriteToggle, markFilm } from "../../services/http.service";
+import { favoriteToggle } from "../../services/http.service";
 import { red } from "@mui/material/colors";
 
 export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean }) {
@@ -28,9 +28,9 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
 
   async function toggleFavorite() {
     setLoading(true);
-    const token = localStorage.getItem('token') ?? '';
-    const res = await favoriteToggle(token, props.movie.id);
-    if (typeof res == "string") { setFavorite(!favorite); }
+    const user_id = localStorage.getItem('user_id') ?? '';
+    const res = await favoriteToggle(user_id, props.movie.id);
+    if (res.Message) { setFavorite(!favorite); }
     setLoading(false);
   }
 
@@ -62,7 +62,7 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
           </div>
         </div>
       </div>
-      <div className="flex gap-2">{getGenres()}</div>
+      {/* <div className="flex gap-2 one-rows-text">{getGenres()}</div> */}
     </div>
   );
 }

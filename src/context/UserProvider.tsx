@@ -30,7 +30,7 @@ function changeMovieField(movies: Movie[], user: User, movieField: string, userF
         // console.log(movie)
         return {
             ...movie,
-            [movieField]: !!user[userField].filter((filter_movie: Movie) => filter_movie.id === movie.id).length
+            [movieField]: !!user[userField]?.filter((filter_movie: Movie) => filter_movie.id === movie.id).length
         }
     })
 }

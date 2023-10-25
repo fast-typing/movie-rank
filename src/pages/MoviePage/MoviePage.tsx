@@ -48,9 +48,11 @@ export default function MoviePage() {
       const info = [];
       for (let key of Object.keys(movieFields)) {
         info.push(
-          <div className="flex gap-2 justify-between md:justify-normal">
-            <span className="w-[150px]">{movieFields[key]}: </span>
-            <h3>{resMovies[key]}</h3>
+          <div className="flex gap-2 justify-between md:justify-normal text-sm">
+            <span className="md:w-[140px]">{movieFields[key]}: </span>
+            <h3 className="text-sm text-right md:text-left">
+              {Array.isArray(resMovies[key]) ? resMovies[key].map((el) => <span>{el}, </span>) : resMovies[key]}
+            </h3>
           </div>
         );
       }
@@ -76,23 +78,23 @@ export default function MoviePage() {
     newAlignment: "postopened" | "abandoned" | "finished" | "planned"
   ) => {
     setLoadingButtons(true);
-    const token = localStorage.getItem('token') ?? '';
+    const user_id = localStorage.getItem('user_id') ?? '';
     if (newAlignment === null) {
-      const res = await markFilm(token, movie.id, alignment);
-      if (typeof res == "string") setAlignment(null);
+      const res = await markFilm(user_id, movie.id, alignment);
+      if (res.Message) setAlignment(null);
     } else {
-      const res = await markFilm(token, movie.id, newAlignment);
-      if (typeof res == "string") setAlignment(newAlignment);
+      const res = await markFilm(user_id, movie.id, newAlignment);
+      if (res.Message) setAlignment(newAlignment);
     }
     setLoadingButtons(false);
   };
 
   async function toggleFavorite() {
     setFavorite({ ...favorite, loading: true });
-    const token = localStorage.getItem('token') ?? '';
-    const res = await favoriteToggle(token, movie.id);
-    if (typeof res == "string") { 
-      setFavorite({ loading: false, isFavorite: !favorite.isFavorite }); 
+    const user_id = localStorage.getItem('user_id') ?? '';
+    const res = await favoriteToggle(user_id, movie.id);
+    if (res.Message) {
+      setFavorite({ loading: false, isFavorite: !favorite.isFavorite });
     } else {
       setFavorite({ ...favorite, loading: false });
     }
@@ -152,14 +154,15 @@ export default function MoviePage() {
           </div>
         </div>
       ) : (
-        <div className="grid gap-4 w-full">
-          <div className="w-full grid gap-4 items-center md:justify-between xl:flex">
+        <div className="grid gap-8 w-full">
+          <div className="w-full grid gap-4">
             <div className="flex flex-wrap sm:flex-nowrap gap-4 justify-between sm:justify-start items-center">
-              <h1>{movie.title}</h1>
+              <h1>{movie.title}, ({movie.average_rating})</h1>
               <Rating
                 max={10}
                 precision={0.5}
                 defaultValue={movie.average_rating}
+                size="large"
                 readOnly
               />
             </div>
@@ -182,31 +185,37 @@ export default function MoviePage() {
               </ToggleButtonGroup>
             </div>
           </div>
-          <div className="grid md:flex gap-4 w-full">
-            <img
-              src={movie.poster}
-              className="rounded object-cover w-full md:w-[30%]"
-              alt=""
-            />
-            <video className="rounded w-full md:w-[70%]" controls>
-              <source
-                src="https://video-preview.s3.yandex.net/OHRcNgIAAAA.mp4"
-                type="video/mp4"
+          <div className="grid md:flex gap-8 w-full">
+            <div className="grid gap-4 md:max-w-[30%] min-w-[300px]">
+              <img
+                src={movie.poster}
+                className="rounded object-cover w-full"
+                alt={movie.title}
               />
-              Your browser doesn't support HTML5 video tag.
-            </video>
+              <video className="rounded w-full" controls>
+                <source
+                  src={movie.trailer}
+                  type="video/mp4"
+                />
+                Your browser doesn't support HTML5 video tag.
+              </video>
+            </div>
+            <div className="w-full">
+              <h2 className="mb-4">О фильме</h2>
+              <div className="grid gap-4">
+                {detailedInfo}
+              </div>
+            </div>
           </div>
-          <Divider />
+          {/* <Divider />
           <div>
             <h1 className="mb-4">Подробная информация</h1>
-            <AdaptiveContainer
-              content={detailedInfo}
-              additionalStyles="gap-x-16 gap-y-3"
-            />
-          </div>
-          <Divider />
+            <div className="grid gap-4">
+              {detailedInfo}
+            </div>
+          </div> */}
           <div>
-            <h1 className="mb-4">Отзывы</h1>
+            <h2 className="mb-4">Отзывы</h2>
             <div className="grid gap-8">
               {reviews.length ? reviews : "Отзывов нема :("}
             </div>

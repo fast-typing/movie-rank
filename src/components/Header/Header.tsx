@@ -33,12 +33,15 @@ export default function Header() {
   const closeInputStyle = closeInputStyleC;
   const sideBarStyle = sideBarStyleC;
 
-  function findBySearch(event: any) {
+  function findBySearch(event: any, isMobile: boolean) {
     event.preventDefault();
     if (!search.length) return;
     setInputOpen(false);
-    navigate(`/search?title=${encodeURI(search)}`);
+    routeTo(`/search?title=${encodeURI(search)}`)
     setSearch("");
+    if (isMobile) {
+      setOpenSideBar(false)
+    }
   }
 
   function closeInput(): void {
@@ -58,9 +61,18 @@ export default function Header() {
     setAuth(false)
     setUser(null)
     localStorage.removeItem('token')
+    localStorage.removeItem('user_id')
+    window.location.reload()
   }
 
-  const nav = (isMobile: boolean): ReactJSXElement => {
+  function routeTo(path: string, isMobile?: boolean) {
+    navigate(path)
+    if (isMobile) {
+      setOpenSideBar(false)
+    }
+  }
+
+  const nav = (isMobile: boolean): JSX.Element => {
     const buttonClass = isMobile ? "w-full" : "";
     const inputStyle = isMobile
       ? { width: "100%" }
@@ -71,14 +83,14 @@ export default function Header() {
     return (
       <form
         className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"}
-        onSubmit={findBySearch}
+        onSubmit={(e) => findBySearch(e, isMobile)}
       >
         <span
           className="pseudo-input"
           onMouseEnter={() => setInputOpen(true)}
           onMouseLeave={closeInput}
         >
-          <span className="material-symbols-outlined" onClick={findBySearch}>
+          <span className="material-symbols-outlined" onClick={(e) => findBySearch(e, isMobile)}>
             search
           </span>
           <input
@@ -98,18 +110,14 @@ export default function Header() {
             ""
           )}
         </span>
-        <Link to={``} className={buttonClass}>
-          <Button variant="contained" className={buttonClass}>
-            Главная
-          </Button>
-        </Link>
+        <Button onClick={() => routeTo('', isMobile)} variant="contained" className={buttonClass}>
+          Главная
+        </Button>
         {isAuth ? (
           <>
-            <Link to={`profile`} className={buttonClass}>
-              <Button variant="contained" className={buttonClass}>
-                Профиль
-              </Button>
-            </Link>
+            <Button onClick={() => routeTo('profile', isMobile)} variant="contained" className={buttonClass}>
+              Профиль
+            </Button>
             <Button variant="contained" onClick={logout} className={buttonClass}>
               Выйти
             </Button>

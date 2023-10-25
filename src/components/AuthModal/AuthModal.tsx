@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Backdrop, Button, Fade, Modal } from "@mui/material";
 import { login, registration } from "../../services/http.service";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Login, Registration } from "../../interfaces/Interfaces";
+import { Registration } from "../../interfaces/Interfaces";
 import { AuthContext } from "../../context/AuthProvider";
 
 interface Props {
@@ -24,11 +24,14 @@ export default function AuthModal(props: Props) {
     if (form.username.length < 3 || form.password.length < 3) return;
     if (props.type === "Вход") {
       const res = await login(form);
-      const token = (res as Login)?.access_token;
-      if (!token?.length) return;
+      const token = res[0]?.access_token;
+      const user_id = res[1]?.user_id;
+      if (!token?.length || !user_id?.length) return;
       localStorage.setItem('token', token)
+      localStorage.setItem('user_id', user_id)
       setAuth(true)
       close()
+      window.location.reload()
     } else {
       const res = await registration(form);
       if (!(res as Registration)?.id) return;

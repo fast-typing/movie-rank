@@ -30,7 +30,7 @@ export default function Search() {
   const [movies, setMovies] = useState<Movies>({ old: [], current: [] });
   const [skeleton, setSkeleton] = useState({
     loading: true,
-    skeleton: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) => <MovieSceleton />),
+    skeleton: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) => <MovieSceleton />),
   });
 
   useEffect(() => {

@@ -1,6 +1,6 @@
-import { Movie, Review, Login, Registration, User } from "../interfaces/Interfaces";
+import { Movie, Review, Registration, User } from "../interfaces/Interfaces";
 
-export function login(data): Promise<Login | void> {
+export function login(data) {
     return _request(`login?username=${data.username}&password=${data.password}`, 'POST')
 }
 
@@ -12,12 +12,12 @@ export function getAllMovies(): Promise<Movie[] | void> {
     return _request(`get_all_films`, 'GET')
 }
 
-export function markFilm(token: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
-    return _request(`update_user_list?token=${token}&film_id=${film_id}&list_type=${type}`, 'PATCH')
+export function markFilm(user_id: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
+    return _request(`update_user_list?user_id=${user_id}&film_id=${film_id}&list_type=${type}`, 'PATCH')
 }
 
-export function favoriteToggle(token: string, film_id: number) {
-    return _request(`add_to_favorite?token=${token}&film_id=${film_id}`, 'PATCH')
+export function favoriteToggle(user_id: string, film_id: number) {
+    return _request(`update_user_list?user_id=${user_id}&film_id=${film_id}&list_type=favorite`, 'PATCH')
 }
 
 export function getMovie(id: string): Promise<Movie | void> {

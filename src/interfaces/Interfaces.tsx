@@ -48,10 +48,6 @@ export interface User {
   // current_films: [];
 }
 
-export interface Login {
-  access_token: string
-}
-
 export interface Registration {
   id: string
 }

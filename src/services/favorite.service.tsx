@@ -9,7 +9,7 @@ export async function markFavorites(movies: Movie[]) {
     return movies.map((movie) => {
         return {
             ...movie,
-            is_favorite: !!user.favorite_films.filter((fil_movie: Movie) => fil_movie.id === movie.id).length
+            is_favorite: !!user.favorite_films?.filter((fil_movie: Movie) => fil_movie.id === movie.id)?.length ?? false
         }
     })
 }

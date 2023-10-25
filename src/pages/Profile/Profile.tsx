@@ -21,11 +21,11 @@ export default function Profile() {
   }, [])
 
   function getMovieJSX(type: string): JSX.Element {
-    return user.data[type].length ? user.data[type].map((movie) => <MovieCard movie={movie} hideFavorite={true} />) : 'Пусто :('
+    return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} hideFavorite={true} />) : 'Пусто :('
   }
 
   function getMovieArrLength(type: string): number {
-    return user.data[type].length ? user.data[type].length : 0
+    return user.data[type]?.length ? user.data[type]?.length : null
   }
 
   return (
@@ -42,7 +42,7 @@ export default function Profile() {
                 id="panel1a-header"
               >
                 <div className="flex gap-2 items-center">
-                  <h2>{type.name}</h2>
+                  <h3>{type.name}</h3>
                   <span className={getMovieArrLength(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : "rounded-full w-8 h-8 flex items-center justify-center"}>{getMovieArrLength(type.value)}</span>
                 </div>
               </AccordionSummary>
