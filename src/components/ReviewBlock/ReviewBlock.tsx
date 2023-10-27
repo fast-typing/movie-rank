@@ -20,11 +20,7 @@ export default function ReviewBlock({ review }) {
           <ThumbDownRoundedIcon />
         </IconButton>
       </div>
-      <input
-        className="w-full md:w-[235px]"
-        type="text"
-        placeholder="Оставить комментарий..."
-      />
+      <input className="w-full md:w-[235px]" type="text" placeholder="Оставить комментарий..." />
     </div>
   );
 }

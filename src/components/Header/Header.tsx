@@ -74,22 +74,11 @@ export default function Header() {
 
   const nav = (isMobile: boolean): JSX.Element => {
     const buttonClass = isMobile ? "w-full" : "";
-    const inputStyle = isMobile
-      ? { width: "100%" }
-      : inputOpen
-        ? openInputStyle
-        : closeInputStyle;
+    const inputStyle = isMobile ? { width: "100%" } : inputOpen ? openInputStyle : closeInputStyle;
 
     return (
-      <form
-        className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"}
-        onSubmit={(e) => findBySearch(e, isMobile)}
-      >
-        <span
-          className="pseudo-input"
-          onMouseEnter={() => setInputOpen(true)}
-          onMouseLeave={closeInput}
-        >
+      <form className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"} onSubmit={(e) => findBySearch(e, isMobile)} >
+        <span className="pseudo-input" onMouseEnter={() => setInputOpen(true)} onMouseLeave={closeInput} >
           <span className="material-symbols-outlined" onClick={(e) => findBySearch(e, isMobile)}>
             search
           </span>
@@ -103,8 +92,7 @@ export default function Header() {
           />
           {isMobile ? (
             <IconButton onClick={() => setOpenSideBar(false)}>
-              {" "}
-              <CloseRoundedIcon />{" "}
+              <CloseRoundedIcon />
             </IconButton>
           ) : (
             ""
@@ -127,10 +115,7 @@ export default function Header() {
             <Button onClick={() => openModal("Вход")} variant="contained">
               Вход
             </Button>
-            <Button
-              onClick={() => openModal("Регистрация")}
-              variant="contained"
-            >
+            <Button onClick={() => openModal("Регистрация")} variant="contained" >
               Регистрация
             </Button>
           </div>

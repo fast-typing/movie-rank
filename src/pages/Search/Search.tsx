@@ -8,8 +8,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import MovieSceleton from "../../components/MovieSceleton/MovieSceleton";
 import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContainer";
 import { getAllMovies, getUserData } from "../../services/http.service";
-import { MPAARatingC, filterInputsC } from "../../App.constants";
-import { markFavorites } from "../../services/favorite.service";
+import { filterInputsC } from "../../App.constants";
+import { markFavorites } from "../../services/movieField.service";
 
 interface Movies {
   old: Movie[];
@@ -25,7 +25,7 @@ export default function Search() {
     country: "",
     genres: "",
     year: "",
-    age_rating: "",
+    average_rating: "",
   });
   const [movies, setMovies] = useState<Movies>({ old: [], current: [] });
   const [skeleton, setSkeleton] = useState({
@@ -146,7 +146,7 @@ export default function Search() {
       country: "",
       genres: "",
       year: "",
-      age_rating: "",
+      average_rating: "",
     })
   }
 
@@ -165,13 +165,13 @@ export default function Search() {
             />
           </div>
         ))}
-        <FormControl sx={{ width: "100%" }}>
+        {/* <FormControl sx={{ width: "100%" }}>
           <InputLabel id="age">MPAA</InputLabel>
           <Select
-            name="age_rating"
+            name="MPAA_rating"
             label="MPAA"
             onChange={handleChange}
-            value={filter.age_rating}
+            value={filter.average_rating}
           >
             <MenuItem value="">
               <em>None</em>
@@ -180,7 +180,7 @@ export default function Search() {
               <MenuItem value={el.value.toLowerCase()}>{el.name}</MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl> */}
         <FormControl sx={{ width: "100%" }}>
           <InputLabel id="age">Сортировка</InputLabel>
           <Select label="Сортировка" onChange={changeSort} value={sortBy}>

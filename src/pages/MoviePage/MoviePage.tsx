@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
 import {
-  Divider,
+  Button,
   IconButton,
+  Modal,
   Rating,
   Skeleton,
   ToggleButton,
@@ -14,20 +15,18 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { movieFieldsC, toggleButtonsC } from "../../App.constants";
-import ReviewBlock from "../../components/ReviewBlock/ReviewBlock";
-import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContainer";
-import { changeBooleanTypesOfMovies } from "../../context/UserProvider";
-import { markFavorites } from "../../services/favorite.service";
+import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
+import Reviews from "./Reviews/Reviews";
 
 export default function MoviePage() {
   const [movie, setMovie] = useState<Movie>(null);
   const [alignment, setAlignment] = useState<"postopened" | "abandoned" | "finished" | "planned">(null);
-  const [reviews, setReviews] = useState(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingButtons, setLoadingButtons] = useState<boolean>(false);
   const [favorite, setFavorite] = useState({ isFavorite: false, loading: false });
+  const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
 
   const { id } = useParams();
   const movieFields = movieFieldsC;
@@ -35,23 +34,19 @@ export default function MoviePage() {
   useEffect(() => {
     const init = async () => {
       let resMovies = await getMovie(id);
-      const resReviews = await getReviews(id);
-      const token = localStorage.getItem('token')
+      const token = localStorage.getItem('token') ?? ''
       const user = await getUserData(token)
-      if (!resMovies || !resReviews || !user) return;
+      if (!resMovies || !user) return;
       resMovies = changeBooleanTypesOfMovies([resMovies], user)[0]
       setFavorite({ ...favorite, isFavorite: resMovies.is_favorite })
 
-      const jsxReviews = resReviews.map((review) => (
-        <ReviewBlock review={review} />
-      ));
       const info = [];
       for (let key of Object.keys(movieFields)) {
         info.push(
           <div className="flex gap-2 justify-between md:justify-normal text-sm">
             <span className="md:w-[140px]">{movieFields[key]}: </span>
             <h3 className="text-sm text-right md:text-left">
-              {Array.isArray(resMovies[key]) ? resMovies[key].map((el) => <span>{el}, </span>) : resMovies[key]}
+              {Array.isArray(resMovies[key]) ? resMovies[key].map((el) => <span>{el}, </span>) ?? '-' : resMovies[key] ?? '-'}
             </h3>
           </div>
         );
@@ -59,14 +54,14 @@ export default function MoviePage() {
 
       let alignment = null
       if (resMovies.is_abandoned) alignment = "abandoned"
-      if (resMovies.is_planned) alignment = "planned"
-      if (resMovies.is_postponed) alignment = "postponed"
-      if (resMovies.is_finished) alignment = "finished"
+      else if (resMovies.is_planned) alignment = "planned"
+      else if (resMovies.is_postponed) alignment = "postponed"
+      else if (resMovies.is_finished) alignment = "finished"
       setAlignment(alignment)
 
       setMovie(resMovies);
-      setReviews(jsxReviews);
       setDetailedInfo(info);
+      console.log(1)
       setLoading(false);
     };
 
@@ -100,6 +95,12 @@ export default function MoviePage() {
     }
   }
 
+
+  function getRandomWidth(): number {
+    let rand = 50 + Math.random() * (400 + 1 - 50);
+    return Math.floor(rand);
+  }
+
   const toggleButtons = toggleButtonsC.map((item) => {
     return (
       <ToggleButton className="w-full grid md:w-fit md:flex" value={item.value}>
@@ -120,37 +121,42 @@ export default function MoviePage() {
   return (
     <div>
       {loading ? (
-        <div className="grid gap-4 w-full">
-          <div className="w-full grid lg:flex gap-4 items-center md:justify-between">
+        <div className="grid gap-8 w-full">
+          <div className="w-full grid gap-4">
             <div className="flex flex-wrap sm:flex-nowrap gap-4 justify-between sm:justify-start items-center">
-              <Skeleton variant="rounded" width={200} height={47} />
-              <Skeleton variant="rounded" width={200} height={47} />
+              <Skeleton variant="rounded" width={350} height={45}></Skeleton>
+              <Skeleton variant="rounded" width={280} height={45}></Skeleton>
             </div>
             <div className="flex items-center gap-4">
-              <Skeleton variant="circular" width={40} height={40} />
-              <Skeleton
-                className="w-full md:w-[415px]"
-                variant="rounded"
-                height={47}
-              />
+              <Skeleton variant="circular" width={40} height={45}></Skeleton>
+              <Skeleton variant="rounded" width={600} height={45}></Skeleton>
             </div>
           </div>
-          <div className="grid md:flex gap-4 w-full">
-            <Skeleton
-              className="w-full md:w-[30%]"
-              variant="rounded"
-              height={500}
-            />
-            <Skeleton
-              className="w-full md:w-[70%]"
-              variant="rounded"
-              height={500}
-            />
+          <div className="grid md:flex gap-8 w-full">
+            <div className="grid gap-4 md:max-w-[30%] min-w-[350px]">
+              <Skeleton variant="rounded" className="w-full" height={500}></Skeleton>
+              <Skeleton variant="rounded" className="w-full" height={170}></Skeleton>
+            </div>
+            <div className="w-full">
+              <h2 className="mb-4">О фильме</h2>
+              <div className="grid gap-4">
+                {
+                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) =>
+                    <div className="flex gap-2 justify-between md:justify-normal text-sm">
+                      <Skeleton variant="rounded" className="md:w-[140px]" height={25}></Skeleton>
+                      <Skeleton variant="rounded" width={getRandomWidth()} height={25}></Skeleton>
+                    </div>
+                  )
+                }
+              </div>
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-16 gap-y-4 h-fit w-full">
-            {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) => (
-              <Skeleton variant="rounded" width={180} height={30} />
-            ))}
+          <div>
+            <h2 className="mb-4">Отзывы</h2>
+            <Skeleton variant="rounded" className="w-full" height={300}></Skeleton>
+            {/* <div className="grid gap-8">
+              {reviews.length ? reviews : "Отзывов нема :("}
+            </div> */}
           </div>
         </div>
       ) : (
@@ -186,19 +192,33 @@ export default function MoviePage() {
             </div>
           </div>
           <div className="grid md:flex gap-8 w-full">
-            <div className="grid gap-4 md:max-w-[30%] min-w-[300px]">
+            <div className="grid gap-4 md:max-w-[30%] min-w-[350px]">
               <img
                 src={movie.poster}
                 className="rounded object-cover w-full"
                 alt={movie.title}
               />
-              <video className="rounded w-full" controls>
-                <source
-                  src={movie.trailer}
-                  type="video/mp4"
-                />
-                Your browser doesn't support HTML5 video tag.
-              </video>
+              <Button variant="contained" className="h-fit" onClick={() => setVideoModalOpen(true)}>Смотреть трейлер</Button>
+              <div>
+                <Modal
+                  open={videoModalOpen}
+                  onClose={() => setVideoModalOpen(false)}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <div className="modalContent w-4/5 xl:w-1/2">
+                    <h2>Трейлер к фильму {movie.title}</h2>
+                    <video className="rounded w-full" controls>
+                      <source
+                        src={movie.trailer}
+                        type="video/mp4"
+                      />
+                      Your browser doesn't support HTML5 video tag.
+                    </video>
+                    {/* <VideoPlayer id={'yWtFb9LJs3o'} /> */}
+                  </div>
+                </Modal>
+              </div>
             </div>
             <div className="w-full">
               <h2 className="mb-4">О фильме</h2>
@@ -207,21 +227,25 @@ export default function MoviePage() {
               </div>
             </div>
           </div>
-          {/* <Divider />
-          <div>
-            <h1 className="mb-4">Подробная информация</h1>
-            <div className="grid gap-4">
-              {detailedInfo}
-            </div>
-          </div> */}
-          <div>
+          <Reviews film_id={id} />
+          {/* <div>
             <h2 className="mb-4">Отзывы</h2>
+            <Button variant="contained" size="medium" onClick={() => {
+              setEdit(!edit)
+            }}>
+              Оставить отзыв
+            </Button>
             <div className="grid gap-8">
+              {edit && <EditComment filmid={movie.id} />}
               {reviews.length ? reviews : "Отзывов нема :("}
             </div>
-          </div>
+            <Stack spacing={2}>
+              <Pagination count={10} shape="rounded" page={page} onChange={handleChange} />
+            </Stack>
+          </div> */}
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }

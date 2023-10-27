@@ -16,11 +16,11 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  function getGenres() {
-    return props.movie.genres.map((genre) => (
-      <Chip onClick={() => routeTo(`/search?genres=${genre}`)} label={genre} variant="outlined" />
-    ));
-  }
+  // function getGenres() {
+  //   return props.movie.genres.map((genre) => (
+  //     <Chip onClick={() => routeTo(`/search?genres=${genre}`)} label={genre} variant="outlined" />
+  //   ));
+  // }
 
   function routeTo(path: string) {
     navigate(path);
@@ -34,28 +34,21 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
     setLoading(false);
   }
 
-  const floatIcon = loading ? (
-    <RefreshRoundedIcon className="loading" />
-  ) : favorite ? (
-    <BookmarkIcon />
-  ) : (
-    <BookmarkBorderIcon />
-  );
+  const floatIcon = props.hideFavorite ? null :
+    <div className="float-icon">
+      <IconButton disabled={loading} onClick={toggleFavorite} color="primary">
+        {loading ? (<RefreshRoundedIcon className="loading" />) :
+          favorite ? (<BookmarkIcon />) : (<BookmarkBorderIcon />)}
+      </IconButton>
+    </div>
 
   return (
     <div className="card">
-      {
-        props.hideFavorite ? null :
-          <div className="float-icon">
-            <IconButton disabled={loading} onClick={toggleFavorite} color="primary">
-              {floatIcon}
-            </IconButton>
-          </div>
-      }
+      {floatIcon}
       <div className="grid gap-1 cursor-pointer" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
         <img src={props.movie.poster} alt={props.movie.poster} />
-        <div className="flex justify-between items-center">
-          <h2>{props.movie.title}</h2>
+        <div className="flex justify-between items-center gap-1">
+          <h3 className="two-rows-text">{props.movie.title}</h3>
           <div className="flex gap-1">
             <span>{props.movie.average_rating}</span>
             <StarIcon sx={{ color: red[500] }} />

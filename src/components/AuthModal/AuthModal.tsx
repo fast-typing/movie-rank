@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Backdrop, Button, Fade, Modal } from "@mui/material";
-import { login, registration } from "../../services/http.service";
+import { getUserIP, login, registration } from "../../services/http.service";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Registration } from "../../interfaces/Interfaces";
 import { AuthContext } from "../../context/AuthProvider";
@@ -13,11 +13,7 @@ interface Props {
 
 export default function AuthModal(props: Props) {
   const { setAuth, isAuth } = useContext(AuthContext);
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-    email: "",
-  });
+  const [form, setForm] = useState({ username: "", password: "", email: "", });
 
   async function submitModal(event: any) {
     event.preventDefault();
@@ -27,11 +23,12 @@ export default function AuthModal(props: Props) {
       const token = res[0]?.access_token;
       const user_id = res[1]?.user_id;
       if (!token?.length || !user_id?.length) return;
+      const IP = await getUserIP()
       localStorage.setItem('token', token)
       localStorage.setItem('user_id', user_id)
-      setAuth(true)
-      close()
+      localStorage.setItem('ip', JSON.stringify(IP))
       window.location.reload()
+      setAuth(true)
     } else {
       const res = await registration(form);
       if (!(res as Registration)?.id) return;
@@ -45,24 +42,16 @@ export default function AuthModal(props: Props) {
   }
 
   function handleChange(e: any) {
-    setForm((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+    setForm((prev) => { return { ...prev, [e.target.name]: e.target.value } });
   }
 
   return (
     <Modal
       open={props.open}
       onClose={close}
-      aria-labelledby="modal-modal-title"
-      aria-describedby="modal-modal-description"
       closeAfterTransition
       slots={{ backdrop: Backdrop }}
-      slotProps={{
-        backdrop: {
-          timeout: 500,
-        },
-      }}
+      slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={props.open}>
         <form className="modalContent w-[300px]" onSubmit={submitModal}>
@@ -70,28 +59,14 @@ export default function AuthModal(props: Props) {
             <h2>{props.type}</h2>
             <CloseRoundedIcon className="cursor-pointer" onClick={close} />
           </div>
-          <input
-            name="username"
-            placeholder="Логин"
-            onChange={handleChange}
-            value={form.username}
+          <input name="username" placeholder="Логин" onChange={handleChange} value={form.username}
           />
           {props.type === "Регистрация" ? (
-            <input
-              name="email"
-              placeholder="Почта"
-              onChange={handleChange}
-              value={form.email}
-            />
+            <input name="email" placeholder="Почта" onChange={handleChange} value={form.email} />
           ) : (
             ""
           )}
-          <input
-            name="password"
-            placeholder="Пароль"
-            onChange={handleChange}
-            value={form.password}
-          />
+          <input name="password" placeholder="Пароль" onChange={handleChange} value={form.password} />
           <Button variant="contained" onClick={submitModal}>
             Отправить
           </Button>

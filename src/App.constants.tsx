@@ -16,7 +16,7 @@ export const movieFieldsC = {
   editor: "Монтажеры",
   budget: "Бюджет",
   box_office_world: "Сборы",
-  age_rating: "Рейтинг MPAA",
+  age_rating: "Рейтинг в России",
   premiere_russia: "Премьера в России",
   premiere_world: "Премьера в мире",
 };
@@ -51,13 +51,13 @@ export const toggleButtonsC = [
   { value: "planned", icon: <MapRoundedIcon />, text: "Запланировано" },
 ];
 
-export const MPAARatingC = [
-  { value: "G", name: "0+" },
-  { value: "P", name: "6+" },
-  { value: "PG13", name: "12+" },
-  { value: "R", name: "16+" },
-  { value: "NC17", name: "18+" },
-];
+// export const MPAARatingC = [
+//   { value: "G", name: "0+" },
+//   { value: "P", name: "6+" },
+//   { value: "PG13", name: "12+" },
+//   { value: "R", name: "16+" },
+//   { value: "NC17", name: "18+" },
+// ];
 
 export const filterInputsC = [
   { value: "title", name: "Название" },

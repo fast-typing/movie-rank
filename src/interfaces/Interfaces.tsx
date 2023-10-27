@@ -14,7 +14,7 @@ export interface Movie {
   editor: string[];
   budget: string;
   box_office_world: string;
-  age_rating: "G" | "P" | "PG13" | "R" | "NC17";
+  age_rating: string;
   average_rating: number;
   premiere_russia?: string;
   premiere_world: string;

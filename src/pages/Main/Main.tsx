@@ -5,7 +5,7 @@ import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContai
 import { getAllMovies } from "../../services/http.service";
 import { Movie } from "../../interfaces/Interfaces";
 import "./Main.css";
-import { markFavorites } from "../../services/favorite.service";
+import { markFavorites } from "../../services/movieField.service";
 
 export default function Main() {
   const [topMovies, setTopMovies] = useState([]);
