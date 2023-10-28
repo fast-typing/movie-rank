@@ -32,7 +32,7 @@ export function getUserData(token: string): Promise<User | void> {
     return _request(`get_user?token=${token}`, "GET");
 }
 
-export function createReview(token: string, data: any): Promise<void> {
+export function createReview(token: string, data: any): Promise<Review | void> {
     return _request(`create_review?token=${token}`, "POST", data);
 }
 

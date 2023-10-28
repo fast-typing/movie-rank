@@ -5,7 +5,7 @@ import ThumbDownRoundedIcon from "@mui/icons-material/ThumbDownRounded";
 
 export default function ReviewBlock({ review }) {
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-2 p-4 rounded" style={{ backgroundColor: "#212121" }}>
       <div className="flex items-center gap-2">
         <h3>{review.title}</h3>—<span>{review.username}</span>
       </div>

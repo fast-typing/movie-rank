@@ -5,44 +5,44 @@ import ReviewBlock from "../../../components/ReviewBlock/ReviewBlock";
 import ReviewForm from "./ReviewForm";
 
 export default function Reviews({ film_id }) {
-    const [edit, setEdit] = useState<boolean>(false);
-    const [reviews, setReviews] = useState({ content: null, loading: true });
-    const [page, setPage] = useState(1);
+  const [edit, setEdit] = useState<boolean>(false);
+  const [reviews, setReviews] = useState({ content: null, loading: true });
+  const [page, setPage] = useState({ current: 1, max: 1, content: null });
 
-
-    useEffect(() => {
-        const init = async () => {
-            const resReviews = await getReviews(film_id);
-            if (!resReviews) return;
-
-            const jsxReviews = resReviews.map((review) => (
-                <ReviewBlock review={review} />
-            ));
-
-            setReviews({ loading: false, content: jsxReviews });
-        };
-
-        init();
-    }, []);
-
-    const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
-        setPage(value);
+  useEffect(() => {
+    const init = async () => {
+      const resReviews = await getReviews(film_id);
+      if (!resReviews) return;
+      const jsxReviews = resReviews.map((review) => <ReviewBlock review={review} />);
+      setReviews({ loading: false, content: jsxReviews });
+      setPage({ ...page, max: Math.ceil(jsxReviews.length / 3), content: jsxReviews.slice(0, 3) });
     };
 
-    return (
-        reviews.loading ? null : (
-            <div>
-                <h2 className="mb-4">Отзывы</h2>
-                <Button variant="contained" onClick={() => setEdit(!edit)}>
-                    Оставить отзыв
-                </Button>
-                <div className="grid gap-8">
-                    {edit ? <ReviewForm film_id={film_id} /> : null}
-                    {reviews.content?.length ? reviews?.content : "Отзывов нема :("}
-                </div>
-                <Stack spacing={2}>
-                    <Pagination count={10} shape="rounded" page={page} onChange={changePage} />
-                </Stack>
-            </div>)
-    )
+    init();
+  }, []);
+
+  const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    const content = reviews.content.slice((value - 1) * 3, value * 3);
+    setPage({ ...page, current: value, content: content });
+  };
+
+  return !reviews.loading ? (
+    <div>
+      <div className="flex justify-between items-center mb-8">
+        <h1>Рецензии</h1>
+        <Button variant="contained" onClick={() => setEdit(!edit)}>
+          {edit ? "Закрыть" : "Создать рецензию"}
+        </Button>
+      </div>
+      <div className="grid gap-8 mb-4">
+        {edit ? <ReviewForm film_id={film_id} /> : null}
+        {page.content?.length ? page?.content : "Рецензий нема :("}
+      </div>
+      {page.max > 1 ? (
+        <Stack spacing={2}>
+          <Pagination size="large" count={page.max} shape="rounded" page={page.current} onChange={changePage} />
+        </Stack>
+      ) : null}
+    </div>
+  ) : null;
 }

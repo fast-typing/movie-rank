@@ -165,6 +165,19 @@ const theme = createTheme({
         }
       }]
     },
+    MuiPagination: {
+      variants: [{
+        props: {},
+        style: {
+          '& button': {
+            color: "white",
+            // '&.MuiButtonBase-root.Mui-selected.': {
+            //   backgroundColor: mainColor
+            // }
+          }
+        }
+      }]
+    }
   },
   typography: {
     'fontFamily': 'Montserrat',

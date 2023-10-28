@@ -1,15 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import {
-  Button,
-  IconButton,
-  Modal,
-  Rating,
-  Skeleton,
-  ToggleButton,
-  ToggleButtonGroup,
-} from "@mui/material";
+import { Button, IconButton, Modal, Rating, Skeleton, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { favoriteToggle, getMovie, getReviews, getUserData, markFilm } from "../../services/http.service";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
@@ -17,6 +9,8 @@ import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { movieFieldsC, toggleButtonsC } from "../../App.constants";
 import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
 import Reviews from "./Reviews/Reviews";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import PageSkeleton from "./PageSkeleton/PageSkeleton";
 
 export default function MoviePage() {
   const [movie, setMovie] = useState<Movie>(null);
@@ -25,7 +19,10 @@ export default function MoviePage() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [loadingButtons, setLoadingButtons] = useState<boolean>(false);
-  const [favorite, setFavorite] = useState({ isFavorite: false, loading: false });
+  const [favorite, setFavorite] = useState({
+    isFavorite: false,
+    loading: false,
+  });
   const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
 
   const { id } = useParams();
@@ -34,11 +31,11 @@ export default function MoviePage() {
   useEffect(() => {
     const init = async () => {
       let resMovies = await getMovie(id);
-      const token = localStorage.getItem('token') ?? ''
-      const user = await getUserData(token)
+      const token = localStorage.getItem("token") ?? "";
+      const user = await getUserData(token);
       if (!resMovies || !user) return;
-      resMovies = changeBooleanTypesOfMovies([resMovies], user)[0]
-      setFavorite({ ...favorite, isFavorite: resMovies.is_favorite })
+      resMovies = changeBooleanTypesOfMovies([resMovies], user)[0];
+      setFavorite({ ...favorite, isFavorite: resMovies.is_favorite });
 
       const info = [];
       for (let key of Object.keys(movieFields)) {
@@ -46,22 +43,23 @@ export default function MoviePage() {
           <div className="flex gap-2 justify-between md:justify-normal text-sm">
             <span className="md:w-[140px]">{movieFields[key]}: </span>
             <h3 className="text-sm text-right md:text-left">
-              {Array.isArray(resMovies[key]) ? resMovies[key].map((el) => <span>{el}, </span>) ?? '-' : resMovies[key] ?? '-'}
+              {Array.isArray(resMovies[key])
+                ? resMovies[key].map((el) => <span>{el}, </span>) ?? "-"
+                : resMovies[key] ?? "-"}
             </h3>
           </div>
         );
       }
 
-      let alignment = null
-      if (resMovies.is_abandoned) alignment = "abandoned"
-      else if (resMovies.is_planned) alignment = "planned"
-      else if (resMovies.is_postponed) alignment = "postponed"
-      else if (resMovies.is_finished) alignment = "finished"
-      setAlignment(alignment)
+      let alignment = null;
+      if (resMovies.is_abandoned) alignment = "abandoned";
+      else if (resMovies.is_planned) alignment = "planned";
+      else if (resMovies.is_postponed) alignment = "postponed";
+      else if (resMovies.is_finished) alignment = "finished";
+      setAlignment(alignment);
 
       setMovie(resMovies);
       setDetailedInfo(info);
-      console.log(1)
       setLoading(false);
     };
 
@@ -73,7 +71,7 @@ export default function MoviePage() {
     newAlignment: "postopened" | "abandoned" | "finished" | "planned"
   ) => {
     setLoadingButtons(true);
-    const user_id = localStorage.getItem('user_id') ?? '';
+    const user_id = localStorage.getItem("user_id") ?? "";
     if (newAlignment === null) {
       const res = await markFilm(user_id, movie.id, alignment);
       if (res.Message) setAlignment(null);
@@ -86,19 +84,13 @@ export default function MoviePage() {
 
   async function toggleFavorite() {
     setFavorite({ ...favorite, loading: true });
-    const user_id = localStorage.getItem('user_id') ?? '';
+    const user_id = localStorage.getItem("user_id") ?? "";
     const res = await favoriteToggle(user_id, movie.id);
     if (res.Message) {
       setFavorite({ loading: false, isFavorite: !favorite.isFavorite });
     } else {
       setFavorite({ ...favorite, loading: false });
     }
-  }
-
-
-  function getRandomWidth(): number {
-    let rand = 50 + Math.random() * (400 + 1 - 50);
-    return Math.floor(rand);
   }
 
   const toggleButtons = toggleButtonsC.map((item) => {
@@ -121,63 +113,19 @@ export default function MoviePage() {
   return (
     <div>
       {loading ? (
-        <div className="grid gap-8 w-full">
+        <PageSkeleton />
+      ) : (
+        <div className="grid gap-12 w-full">
           <div className="w-full grid gap-4">
             <div className="flex flex-wrap sm:flex-nowrap gap-4 justify-between sm:justify-start items-center">
-              <Skeleton variant="rounded" width={350} height={45}></Skeleton>
-              <Skeleton variant="rounded" width={280} height={45}></Skeleton>
-            </div>
-            <div className="flex items-center gap-4">
-              <Skeleton variant="circular" width={40} height={45}></Skeleton>
-              <Skeleton variant="rounded" width={600} height={45}></Skeleton>
-            </div>
-          </div>
-          <div className="grid md:flex gap-8 w-full">
-            <div className="grid gap-4 md:max-w-[30%] min-w-[350px]">
-              <Skeleton variant="rounded" className="w-full" height={500}></Skeleton>
-              <Skeleton variant="rounded" className="w-full" height={170}></Skeleton>
-            </div>
-            <div className="w-full">
-              <h2 className="mb-4">О фильме</h2>
-              <div className="grid gap-4">
-                {
-                  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) =>
-                    <div className="flex gap-2 justify-between md:justify-normal text-sm">
-                      <Skeleton variant="rounded" className="md:w-[140px]" height={25}></Skeleton>
-                      <Skeleton variant="rounded" width={getRandomWidth()} height={25}></Skeleton>
-                    </div>
-                  )
-                }
+              <h1>{movie.title}</h1>
+              <div className="flex gap-1 items-center">
+                <Rating max={10} precision={0.5} defaultValue={movie.average_rating} size="large" readOnly />
+                <p className="text-lg">{movie.average_rating}</p>
               </div>
             </div>
-          </div>
-          <div>
-            <h2 className="mb-4">Отзывы</h2>
-            <Skeleton variant="rounded" className="w-full" height={300}></Skeleton>
-            {/* <div className="grid gap-8">
-              {reviews.length ? reviews : "Отзывов нема :("}
-            </div> */}
-          </div>
-        </div>
-      ) : (
-        <div className="grid gap-8 w-full">
-          <div className="w-full grid gap-4">
-            <div className="flex flex-wrap sm:flex-nowrap gap-4 justify-between sm:justify-start items-center">
-              <h1>{movie.title}, ({movie.average_rating})</h1>
-              <Rating
-                max={10}
-                precision={0.5}
-                defaultValue={movie.average_rating}
-                size="large"
-                readOnly
-              />
-            </div>
             <div className="flex items-center gap-4">
-              <IconButton
-                color="primary"
-                disabled={favorite.loading}
-                onClick={toggleFavorite}
-              >
+              <IconButton color="primary" disabled={favorite.loading} onClick={toggleFavorite}>
                 {floatIcon}
               </IconButton>
               <ToggleButtonGroup
@@ -193,12 +141,15 @@ export default function MoviePage() {
           </div>
           <div className="grid md:flex gap-8 w-full">
             <div className="grid gap-4 md:max-w-[30%] min-w-[350px]">
-              <img
-                src={movie.poster}
-                className="rounded object-cover w-full"
-                alt={movie.title}
-              />
-              <Button variant="contained" className="h-fit" onClick={() => setVideoModalOpen(true)}>Смотреть трейлер</Button>
+              <img src={movie.poster} className="rounded object-cover w-full" alt={movie.title} />
+              <Button
+                startIcon={<PlayArrowRoundedIcon />}
+                variant="contained"
+                className="h-fit"
+                onClick={() => setVideoModalOpen(true)}
+              >
+                Смотреть трейлер
+              </Button>
               <div>
                 <Modal
                   open={videoModalOpen}
@@ -209,10 +160,7 @@ export default function MoviePage() {
                   <div className="modalContent w-4/5 xl:w-1/2">
                     <h2>Трейлер к фильму {movie.title}</h2>
                     <video className="rounded w-full" controls>
-                      <source
-                        src={movie.trailer}
-                        type="video/mp4"
-                      />
+                      <source src={movie.trailer} type="video/mp4" />
                       Your browser doesn't support HTML5 video tag.
                     </video>
                     {/* <VideoPlayer id={'yWtFb9LJs3o'} /> */}
@@ -222,30 +170,12 @@ export default function MoviePage() {
             </div>
             <div className="w-full">
               <h2 className="mb-4">О фильме</h2>
-              <div className="grid gap-4">
-                {detailedInfo}
-              </div>
+              <div className="grid gap-4">{detailedInfo}</div>
             </div>
           </div>
           <Reviews film_id={id} />
-          {/* <div>
-            <h2 className="mb-4">Отзывы</h2>
-            <Button variant="contained" size="medium" onClick={() => {
-              setEdit(!edit)
-            }}>
-              Оставить отзыв
-            </Button>
-            <div className="grid gap-8">
-              {edit && <EditComment filmid={movie.id} />}
-              {reviews.length ? reviews : "Отзывов нема :("}
-            </div>
-            <Stack spacing={2}>
-              <Pagination count={10} shape="rounded" page={page} onChange={handleChange} />
-            </Stack>
-          </div> */}
         </div>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
