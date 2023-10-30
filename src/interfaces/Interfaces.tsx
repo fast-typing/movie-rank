@@ -35,6 +35,7 @@ export interface Review {
   message: string;
   title: string;
   created_at: string;
+  attitude: "positive" | "neutral" | "negative"
 }
 
 export interface User {

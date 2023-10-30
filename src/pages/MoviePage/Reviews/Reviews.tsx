@@ -1,32 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Button, Pagination, Rating, Stack } from "@mui/material";
-import { createReview, getReviews } from "../../../services/http.service";
+import { Button, Pagination, Stack } from "@mui/material";
 import ReviewBlock from "../../../components/ReviewBlock/ReviewBlock";
 import ReviewForm from "./ReviewForm";
 
-export default function Reviews({ film_id }) {
+export default function Reviews({ film_id, reviews }) {
   const [edit, setEdit] = useState<boolean>(false);
-  const [reviews, setReviews] = useState({ content: null, loading: true });
   const [page, setPage] = useState({ current: 1, max: 1, content: null });
 
   useEffect(() => {
-    const init = async () => {
-      const resReviews = await getReviews(film_id);
-      if (!resReviews) return;
-      const jsxReviews = resReviews.map((review) => <ReviewBlock review={review} />);
-      setReviews({ loading: false, content: jsxReviews });
-      setPage({ ...page, max: Math.ceil(jsxReviews.length / 3), content: jsxReviews.slice(0, 3) });
-    };
-
-    init();
+    const jsxReviews = reviews.map((review) => <ReviewBlock review={review} />);
+    setPage({ ...page, max: Math.ceil(jsxReviews.length / 3), content: jsxReviews.slice(0, 3) });
   }, []);
 
   const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    const content = reviews.content.slice((value - 1) * 3, value * 3);
-    setPage({ ...page, current: value, content: content });
+    const content = reviews?.slice((value - 1) * 3, value * 3);
+    const jsxReviews = content.map((review) => <ReviewBlock review={review} />);
+    setPage({ ...page, current: value, content: jsxReviews });
   };
 
-  return !reviews.loading ? (
+  return (
     <div>
       <div className="flex justify-between items-center mb-8">
         <h1>Рецензии</h1>
@@ -44,5 +36,5 @@ export default function Reviews({ film_id }) {
         </Stack>
       ) : null}
     </div>
-  ) : null;
+  )
 }

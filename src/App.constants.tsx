@@ -56,6 +56,7 @@ export const FILTER_INPUTS = [
   { value: "year", name: "Год показа" },
   { value: "genres", name: "Жанр" },
   { value: "country", name: "Страна" },
+  { value: "age_rating", name: "Возрастной ретинг" },
 ]
 
 export const MOVIE_TYPES = [

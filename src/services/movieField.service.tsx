@@ -1,7 +1,7 @@
 import { Movie, User } from "../interfaces/Interfaces"
 import { getUserData } from "./http.service"
 
-export async function markFavorites(movies: Movie[]) {
+export async function markFavorites(movies: Movie[]): Promise<Movie[]> {
     const token = localStorage.getItem('token')
     if (!token?.length) return movies
     const user = await getUserData(token)
@@ -16,7 +16,7 @@ export async function markFavorites(movies: Movie[]) {
 
 export function changeBooleanTypesOfMovies(movies: Movie[], user: User): Movie[] {
     let newMoviesArr = movies
-    if (!user) return []
+    if (!user) return movies
     newMoviesArr = changeMovieField(newMoviesArr, user, 'is_abandoned', 'abandoned_films')
     newMoviesArr = changeMovieField(newMoviesArr, user, 'is_planned', 'planned_films')
     newMoviesArr = changeMovieField(newMoviesArr, user, 'is_favorite', 'favorite_films')

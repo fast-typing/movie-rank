@@ -12,20 +12,7 @@ export default function Main() {
   const [newMovies, setNewMovies] = useState([]);
   const [skeleton, setSkeleton] = useState({
     loading: true,
-    content: (
-      <>
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-        <MovieSceleton />
-      </>
-    ),
+    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map(el => <MovieSceleton />)
   });
 
   useEffect(() => {
@@ -51,15 +38,15 @@ export default function Main() {
   return (
     <>
       <div>
-        <h1 className="mb-3">Топ 10 лучших фильмов</h1>
-        <AdaptiveContainer
-          content={skeleton.loading ? skeleton.content : topMovies}
-        />
-      </div>
-      <div>
         <h1 className="mb-3">Новинки</h1>
         <AdaptiveContainer
           content={skeleton.loading ? skeleton.content : newMovies}
+        />
+      </div>
+      <div>
+        <h1 className="mb-3">Топ 10 лучших фильмов</h1>
+        <AdaptiveContainer
+          content={skeleton.loading ? skeleton.content : topMovies}
         />
       </div>
     </>

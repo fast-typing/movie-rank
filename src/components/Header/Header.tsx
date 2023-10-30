@@ -24,13 +24,8 @@ export default function Header() {
   const [inputOpen, setInputOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
 
-  const openInputStyle = OPENED_INPUT_STYLE;
-  const closeInputStyle = CLOSED_INPUT_STYLE;
-  const sideBarStyle = SIDE_BAR_STYLE;
-
   function findBySearch(event: any, isMobile: boolean) {
     event.preventDefault();
-    if (!search.length) return;
     setInputOpen(false);
     routeTo(`/search?title=${encodeURI(search)}`)
     setSearch("");
@@ -67,14 +62,24 @@ export default function Header() {
     }
   }
 
+  function searchSAd(e, isMobile) {
+    if (inputOpen == true) {
+      findBySearch(e, isMobile)
+    } else {
+      setInputOpen(true)
+    }
+  }
+
   const nav = (isMobile: boolean): JSX.Element => {
     const buttonClass = isMobile ? "w-full" : "";
-    const inputStyle = isMobile ? { width: "100%" } : inputOpen ? openInputStyle : closeInputStyle;
+    const inputStyle = isMobile ? { width: "100%" } : inputOpen ? OPENED_INPUT_STYLE : CLOSED_INPUT_STYLE;
 
     return (
       <form className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"} onSubmit={(e) => findBySearch(e, isMobile)} >
-        <span className="pseudo-input" onMouseEnter={() => setInputOpen(true)} onMouseLeave={closeInput} >
-          <span className="material-symbols-outlined" onClick={(e) => findBySearch(e, isMobile)}>
+        {/* <span className="pseudo-input" onMouseEnter={() => setInputOpen(true)} onMouseLeave={closeInput} > */}
+        <span className="pseudo-input" >
+          {/* <span className="material-symbols-outlined" onClick={(e) => findBySearch(e, isMobile)}> */}
+          <span className="material-symbols-outlined" onClick={(e) => searchSAd(e, isMobile)}>
             search
           </span>
           <input
@@ -134,7 +139,7 @@ export default function Header() {
             <DragHandleRoundedIcon />
           </IconButton>
           <div className={openSideBar ? "absolute top-[86px] inset-x-0 bottom-0 z-50" : "hidden"}>
-            <Box sx={sideBarStyle}>{nav(true)}</Box>
+            <Box sx={SIDE_BAR_STYLE}>{nav(true)}</Box>
           </div>
         </div>
       </header>
