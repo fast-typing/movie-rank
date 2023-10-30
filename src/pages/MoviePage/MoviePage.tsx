@@ -1,36 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import { getMovie, getReviews, getUserData } from "../../services/http.service";
+import { getMovie, getUserData } from "../../services/http.service";
 import { MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
-import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
-import TopInfo from "./Widgets/Widgets";
-import { Rating } from "@mui/material";
-import Widgets from "./Widgets/Widgets";
+import MainInfo from "./MainInfo/MainInfo";
 
 export default function MoviePage() {
   const [movie, setMovie] = useState<Movie>(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
-  const [reviews, setReviews] = useState(null)
   const [loading, setLoading] = useState<boolean>(true);
   const { id } = useParams();
   const movieFields = MOVIE_FIELDS;
 
   useEffect(() => {
     const init = async () => {
-      let resMovie = await getMovie(id);
-      const resReviews = await getReviews(id);
+      let resMovies = await getMovie(id);
       const token = localStorage.getItem("token") ?? "";
       const user = await getUserData(token);
-      if (!resMovie) return;
-      resMovie = changeBooleanTypesOfMovies([resMovie], user)[0];
+      if (!resMovies || !user) return;
 
-      initDetailedInfo(resMovie)
-      setReviews(resReviews)
-      setMovie(resMovie);
+      initDetailedInfo(resMovies)
+      setMovie(resMovies);
       setLoading(false);
     };
 
@@ -59,16 +52,7 @@ export default function MoviePage() {
       <PageSkeleton />
     ) : (
       <div className="grid gap-12 w-full">
-        <div className="w-full grid gap-4">
-          <div className="flex flex-wrap sm:flex-nowrap gap-4 justify-between sm:justify-start items-center">
-            <h1>{movie.title}</h1>
-            <div className="flex gap-1 items-center">
-              <Rating max={10} precision={0.1} defaultValue={movie.average_rating} size="large" readOnly />
-              <p className="text-lg">{movie.average_rating}</p>
-            </div>
-          </div>
-          <Widgets movie={movie} />
-        </div>
+        <MainInfo movie={movie} />
         <div className="grid md:flex gap-8 w-full">
           <Trailer movie={movie} />
           <div className="w-full">
@@ -76,7 +60,7 @@ export default function MoviePage() {
             <div className="grid gap-4">{detailedInfo}</div>
           </div>
         </div>
-        <Reviews film_id={id} reviews={reviews} />
+        <Reviews film_id={id} />
       </div>
     )
   );
