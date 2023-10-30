@@ -36,7 +36,7 @@ export default function PageSkeleton() {
         </div>
       </div>
       <div>
-        <h2 className="mb-4">Отзывы</h2>
+        <Skeleton className="mb-4" variant="rounded" width={200} height={50}></Skeleton>
         <Skeleton variant="rounded" className="w-full" height={300}></Skeleton>
       </div>
     </div>

@@ -8,8 +8,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import MovieSceleton from "../../components/MovieSceleton/MovieSceleton";
 import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContainer";
 import { getAllMovies, getUserData } from "../../services/http.service";
-import { filterInputsC } from "../../App.constants";
 import { markFavorites } from "../../services/movieField.service";
+import { FILTER_INPUTS } from "../../App.constants";
 
 interface Movies {
   old: Movie[];
@@ -25,7 +25,7 @@ export default function Search() {
     country: "",
     genres: "",
     year: "",
-    average_rating: "",
+    // average_rating: "",
   });
   const [movies, setMovies] = useState<Movies>({ old: [], current: [] });
   const [skeleton, setSkeleton] = useState({
@@ -146,14 +146,14 @@ export default function Search() {
       country: "",
       genres: "",
       year: "",
-      average_rating: "",
+      // average_rating: "",
     })
   }
 
   return (
     <div className="grid sm:flex gap-8">
       <div className="grid gap-4 w-full sm:w-[300px] h-fit">
-        {filterInputsC.map((el) => (
+        {FILTER_INPUTS.map((el) => (
           <div className="w-full">
             <p className="ml-2">{el.name}</p>
             <input
@@ -165,22 +165,6 @@ export default function Search() {
             />
           </div>
         ))}
-        {/* <FormControl sx={{ width: "100%" }}>
-          <InputLabel id="age">MPAA</InputLabel>
-          <Select
-            name="MPAA_rating"
-            label="MPAA"
-            onChange={handleChange}
-            value={filter.average_rating}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {MPAARatingC.map((el) => (
-              <MenuItem value={el.value.toLowerCase()}>{el.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl> */}
         <FormControl sx={{ width: "100%" }}>
           <InputLabel id="age">Сортировка</InputLabel>
           <Select label="Сортировка" onChange={changeSort} value={sortBy}>
@@ -207,13 +191,8 @@ export default function Search() {
       </div>
       <div className="w-full">
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {skeleton.loading
-            ? skeleton.skeleton
-            : movies.current.length
-              ? movies.current.map((movie) => (
-                <MovieCard key={movie.id} movie={movie} />
-              ))
-              : "Пусто :("}
+          {skeleton.loading ? skeleton.skeleton : movies.current.length
+            ? movies.current.map((movie) => (<MovieCard key={movie.id} movie={movie} />)) : "Пусто :("}
         </div>
       </div>
     </div>

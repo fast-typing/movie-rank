@@ -1,19 +1,14 @@
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import MovieIcon from "@mui/icons-material/Movie";
-import { Box, Drawer, IconButton, Button } from "@mui/material";
+import { Box, IconButton, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DragHandleRoundedIcon from "@mui/icons-material/DragHandleRounded";
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace";
-import {
-  closeInputStyleC,
-  openInputStyleC,
-  sideBarStyleC,
-} from "../../App.constants";
 import "./Header.css";
 import AuthModal from "../AuthModal/AuthModal";
 import { AuthContext } from "../../context/AuthProvider";
 import { UserContext } from "../../context/UserProvider";
+import { CLOSED_INPUT_STYLE, OPENED_INPUT_STYLE, SIDE_BAR_STYLE } from "../../App.constants";
 
 interface Modal {
   isOpen: boolean;
@@ -29,9 +24,9 @@ export default function Header() {
   const [inputOpen, setInputOpen] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
 
-  const openInputStyle = openInputStyleC;
-  const closeInputStyle = closeInputStyleC;
-  const sideBarStyle = sideBarStyleC;
+  const openInputStyle = OPENED_INPUT_STYLE;
+  const closeInputStyle = CLOSED_INPUT_STYLE;
+  const sideBarStyle = SIDE_BAR_STYLE;
 
   function findBySearch(event: any, isMobile: boolean) {
     event.preventDefault();

@@ -4,7 +4,7 @@ import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContai
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { getUserData } from "../../services/http.service";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { movieTypesC } from "../../App.constants";
+import { MOVIE_TYPES } from "../../App.constants";
 
 export default function Profile() {
   const [user, setUser] = useState({ data: null, loading: true })
@@ -34,7 +34,7 @@ export default function Profile() {
       : (
         <div>
           <h1 className="mb-6">Добро пожаловать, {user.data.username}!</h1>
-          {movieTypesC.map((type) => {
+          {MOVIE_TYPES.map((type) => {
             return <Accordion>
               <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -51,24 +51,6 @@ export default function Profile() {
               </AccordionDetails>
             </Accordion>
           })}
-          {/* <div className="grid gap-8">
-            <div className="mb-6">
-              <h2 className="mb-3">Просмотренные фильмы</h2>
-              <AdaptiveContainer content={getMovieJSX('finished_films')} />
-            </div>
-            <div className="mb-6">
-              <h2 className="mb-3">Заброшенные фильмы</h2>
-              <AdaptiveContainer content={getMovieJSX('abandoned_films')} />
-            </div>
-            <div className="mb-6">
-              <h2 className="mb-3">Отложенные фильмы</h2>
-              <AdaptiveContainer content={getMovieJSX('postponed_films')} />
-            </div>
-            <div className="mb-6">
-              <h2 className="mb-3">Запланированные фильмы</h2>
-              <AdaptiveContainer content={getMovieJSX('planned_films')} />
-            </div>
-          </div> */}
         </div>
       )
   )

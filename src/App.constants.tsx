@@ -3,7 +3,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
 
-export const movieFieldsC = {
+export const MOVIE_FIELDS = {
   country: "Страна",
   genres: "Жанры",
   year: "Год создания",
@@ -21,7 +21,7 @@ export const movieFieldsC = {
   premiere_world: "Премьера в мире",
 };
 
-export const openInputStyleC = {
+export const OPENED_INPUT_STYLE = {
   width: "250px",
   transition: "width .5s, opacity .4s, padding .6s",
   opacity: 1,
@@ -29,7 +29,7 @@ export const openInputStyleC = {
   paddingRight: 12,
 };
 
-export const closeInputStyleC = {
+export const CLOSED_INPUT_STYLE = {
   width: 0,
   transition: "width .5s, opacity .4s, padding .6s",
   opacity: 0,
@@ -37,36 +37,28 @@ export const closeInputStyleC = {
   paddingRight: 0,
 };
 
-export const sideBarStyleC = {
+export const SIDE_BAR_STYLE = {
   width: "100%",
   height: "100%",
   backgroundColor: "#424242",
   padding: 4,
 };
 
-export const toggleButtonsC = [
+export const TOGGLE_BUTTONS = [
   { value: "finished", icon: <CheckRoundedIcon />, text: "Просмотрено" },
   { value: "postponed", icon: <AccessTimeRoundedIcon />, text: "Отложено" },
   { value: "abandoned", icon: <DeleteRoundedIcon />, text: "Брошено" },
   { value: "planned", icon: <MapRoundedIcon />, text: "Запланировано" },
 ];
 
-// export const MPAARatingC = [
-//   { value: "G", name: "0+" },
-//   { value: "P", name: "6+" },
-//   { value: "PG13", name: "12+" },
-//   { value: "R", name: "16+" },
-//   { value: "NC17", name: "18+" },
-// ];
-
-export const filterInputsC = [
+export const FILTER_INPUTS = [
   { value: "title", name: "Название" },
   { value: "year", name: "Год показа" },
   { value: "genres", name: "Жанр" },
   { value: "country", name: "Страна" },
 ]
 
-export const movieTypesC = [
+export const MOVIE_TYPES = [
   { value: "favorite_films", name: "Избранные фильмы" },
   { value: "finished_films", name: "Просмотренные фильмы" },
   { value: "abandoned_films", name: "Заброшенные фильмы" },
