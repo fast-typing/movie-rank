@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Badge, Skeleton } from "@mui/material";
-import AdaptiveContainer from "../../components/AdaptiveContainer/AdaptiveContainer";
+import AdaptiveContainer from "../../components/AdaptiveContainer";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { getUserData } from "../../services/http.service";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

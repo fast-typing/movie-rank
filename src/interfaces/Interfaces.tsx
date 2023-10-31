@@ -35,7 +35,11 @@ export interface Review {
   message: string;
   title: string;
   created_at: string;
-  attitude: "positive" | "neutral" | "negative"
+  attitude: "positive" | "neutral" | "negative";
+  disliked_by_users: string[];
+  dislikes: number;
+  liked_by_users: string[]
+  likes: number
 }
 
 export interface User {
@@ -50,5 +54,5 @@ export interface User {
 }
 
 export interface Registration {
-  id: string
+  id: string;
 }

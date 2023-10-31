@@ -4,82 +4,122 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
 * {
-    margin: 0;
-    padding: 0;
-    font-family: "Montserrat";
+  margin: 0;
+  padding: 0;
+  font-family: "Montserrat";
 }
 
 :root {
-    --mainColor: #d32f2f;
-    --hoverColor: #b71c1c;
+  --mainColor: #d32f2f;
+  --hoverColor: #b71c1c;
 }
 
 header,
 main {
-    margin: auto;
-    width: 1200px;
+  margin: auto;
+  width: 1200px;
 }
 
 h1 {
-    font-size: 1.8rem;
+  font-size: 1.8rem;
 }
 
 h2 {
-    font-size: 1.3rem;
+  font-size: 1.3rem;
 }
 
 .plyr__controls {
-    & button:nth-child(1),
-    & button:nth-child(3) {
-        display: none;
-    }
+  & button:nth-child(1),
+  & button:nth-child(3) {
+    display: none;
+  }
 }
 
 /* .plyr__volume button {
   display: block;
 } */
 
-input, textarea {
-    color: white;
-    padding: 6px 14px;
-    border-radius: 4px;
-    outline: none;
-    border: 1px solid rgb(150, 150, 150);
-    transition: 0.2s;
-    background-color: #212121;
+input,
+textarea {
+  color: white;
+  padding: 6px 14px;
+  border-radius: 4px;
+  outline: none;
+  border: 1px solid rgb(150, 150, 150);
+  transition: 0.2s;
+  background-color: #212121;
 
-    &:hover {
-        border-color: var(--mainColor);
-    }
+  &:hover {
+    border-color: var(--mainColor);
+  }
 
-    &:focus {
-        border-color: var(--mainColor);
-        box-shadow: 0 0 0 0.1remvar (--mainColor);
-    }
+  &:focus {
+    border-color: var(--mainColor);
+    box-shadow: 0 0 0 0.1remvar (--mainColor);
+  }
 }
 
 main {
-    padding: 60px 0;
-    min-height: calc(100vh - 84px);
+  padding: 60px 0;
+  min-height: calc(100vh - 84px);
+  color: white;
+  height: 100%;
+}
+
+.pseudo-input {
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  gap: 8px;
+
+  & span {
+    cursor: pointer;
+    padding: 6px;
+  }
+
+  & input {
     height: 100%;
+    outline: none;
+    border-radius: 6px;
+  }
+}
+
+header,
+span {
+  color: white;
+}
+
+.modalContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #424242;
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px,
+    rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
+  padding: 20px;
+  border-radius: 4px;
+  display: grid;
+  gap: 16px;
+  color: white;
 }
 
 .main-container {
-    background-color: #323232;
+  background-color: #323232;
 }
 
 .header-container {
-    background-color: #212121;
+  background-color: #212121;
 }
 
 @media screen and (max-width: 1280px) {
-    header,
-    main {
-        width: 100%;
-        padding: 0 25px;
-    }
+  header,
+  main {
+    width: 100%;
+    padding: 0 25px;
+  }
 
-    main {
-        padding: 60px 25px;
-    }
+  main {
+    padding: 60px 25px;
+  }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Pagination, Stack } from "@mui/material";
-import ReviewBlock from "../../../components/ReviewBlock/ReviewBlock";
 import ReviewForm from "./ReviewForm";
+import ReviewBlock from "../../../components/ReviewBlock";
 
 export default function Reviews({ film_id, reviews }) {
   const [edit, setEdit] = useState<boolean>(false);
@@ -36,5 +36,5 @@ export default function Reviews({ film_id, reviews }) {
         </Stack>
       ) : null}
     </div>
-  )
+  );
 }

@@ -57,7 +57,7 @@ export default function Widgets({ movie }) {
 
     return (
         <div className="flex items-center gap-4">
-            <IconButton color="primary" disabled={favorite.loading} onClick={toggleFavorite}>
+            <IconButton color="primary" className="h-fit" disabled={favorite.loading} onClick={toggleFavorite}>
                 {floatIcon}
             </IconButton>
             <ToggleButtonGroup

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
 import { getMovie, getReviews, getUserData } from "../../services/http.service";
@@ -7,7 +7,6 @@ import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
 import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
-import TopInfo from "./Widgets/Widgets";
 import { Rating } from "@mui/material";
 import Widgets from "./Widgets/Widgets";
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MovieCard from "../../components/MovieCard/MovieCard";
 import { Movie } from "../../interfaces/Interfaces";
-import MovieSceleton from "../../components/MovieSceleton/MovieSceleton";
+import MovieSceleton from "../../components/MovieSkeleton";
 import { getAllMovies } from "../../services/http.service";
 import { markFavorites } from "../../services/movieField.service";
 import Filter from "./Filter/Flter";
