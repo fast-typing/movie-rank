@@ -9,7 +9,7 @@ export function registration(data): Promise<Registration | void> {
 }
 
 export function getAllMovies(): Promise<Movie[] | void> {
-    return _request(`get_all_films?limit=50`, "GET");
+    return _request(`get_all_films?limit=500`, "GET");
 }
 
 export function markFilm(user_id: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
@@ -44,7 +44,7 @@ export async function getUserIP() {
 }
 
 async function _request(path: string, method: string, body?: any) {
-    const url = "https://dvigit.onrender.com/" + path;
+    const url = "http://213.171.9.36/" + path;
     const options = { method: method };
     if (body) {
         options["body"] = JSON.stringify(body);

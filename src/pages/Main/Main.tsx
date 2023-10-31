@@ -7,6 +7,7 @@ import { Movie } from "../../interfaces/Interfaces";
 import "./Main.css";
 import { markFavorites } from "../../services/movieField.service";
 import Chip from '@mui/material/Chip';
+import { Link } from "react-router-dom";
 
 export default function Main() {
   const[genre,setGenre] = useState([]);
@@ -62,15 +63,15 @@ export default function Main() {
       });
       setGenre(allgenre)
   }
-  
+
   return (
     <>
-    <div className="flex overflow-y-auto items-center" id="genre">
+    <div className="flex overflow-y-auto items-center gap-10 h-[285px] p-5 md:p-0 md:gap-5" id="genres">
     {genre.map((element, index) => (
-      <div className="flex h-[200px] items-center ml-8 mr-8 cursor-pointer">
-        {/* <Chip label={element} size="medium" onClick={console.log} key={index} className="text-3xl"/> */}
-        <p key={index} className="text-3xl">{element}</p>
-      </div>
+      <Link to={`/search?genres=${element}`} className="flex items-center cursor-pointer h-full relative">
+       <img src={`./img/${element.replace("й","и")}.jpg`} className="w-full h-full brightness-[0.6] absolute rounded-lg hover:brightness-[0.4] hover:scale-[1.1] duration-300"/>
+        <h2 key={index} className="text-center text-4xl w-[300px] relative">{element}</h2>
+      </Link>
       ))}
       </div>
       <div>

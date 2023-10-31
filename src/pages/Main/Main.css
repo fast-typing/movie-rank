@@ -1,18 +1,29 @@
 main {
     color: white
 }
-#genre::-webkit-scrollbar {
+#genres::-webkit-scrollbar {
     height: 12px;
   }
   
-  #genre::-webkit-scrollbar-thumb {
+  #genres::-webkit-scrollbar-thumb {
     width: 20px;
     border-radius: 10px;
     background-color: #212121;
     /* #d32f2f; */
   }
   
-  #genre::-webkit-scrollbar-track {
+  #genres::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: none;
   }
+
+.card-genre:hover{
+  background-image:linear-gradient( rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3) ) !important;
+}
+
+@media (max-width: 768px){
+  #genres::-webkit-scrollbar {
+    height: 0px;
+  }
+  
+}
