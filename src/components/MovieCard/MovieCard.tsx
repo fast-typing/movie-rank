@@ -16,20 +16,14 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // function getGenres() {
-  //   return props.movie.genres.map((genre) => (
-  //     <Chip onClick={() => routeTo(`/search?genres=${genre}`)} label={genre} variant="outlined" />
-  //   ));
-  // }
-
   function routeTo(path: string) {
     navigate(path);
   }
 
   async function toggleFavorite() {
     setLoading(true);
-    const user_id = localStorage.getItem('user_id') ?? '';
-    const res = await favoriteToggle(user_id, props.movie.id);
+    const token = localStorage.getItem('token') ?? '';
+    const res = await favoriteToggle(token, props.movie.id);
     if (res.Message) { setFavorite(!favorite); }
     setLoading(false);
   }
@@ -55,7 +49,6 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
           </div>
         </div>
       </div>
-      {/* <div className="flex gap-2 one-rows-text">{getGenres()}</div> */}
     </div>
   );
 }

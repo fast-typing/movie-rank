@@ -48,9 +48,12 @@ const theme = createTheme({
         {
           props: {},
           style: {
-            backgroundColor: '#212121',
+            backgroundColor: '#424242',
             transition: '.2s',
             color: "white",
+            '&:hover': {
+              backgroundColor: '#303030'
+            },
             '&.Mui-selected': {
               backgroundColor: mainColor
             },
@@ -151,7 +154,7 @@ const theme = createTheme({
       variants: [{
         props: {},
         style: {
-          backgroundColor: '#212121',
+          backgroundColor: '#424242',
           color: "white"
         }
       }]
@@ -160,7 +163,7 @@ const theme = createTheme({
       variants: [{
         props: {},
         style: {
-          backgroundColor: '#212121',
+          backgroundColor: '#424242',
           color: "white"
         }
       }]

@@ -35,10 +35,6 @@ h2 {
   }
 }
 
-/* .plyr__volume button {
-  display: block;
-} */
-
 input,
 textarea {
   color: white;
@@ -94,7 +90,7 @@ span {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #424242;
+  background-color: #323232;
   box-shadow: rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px,
     rgba(0, 0, 0, 0.12) 0px 9px 46px 8px;
   padding: 20px;
@@ -105,11 +101,11 @@ span {
 }
 
 .main-container {
-  background-color: #323232;
+  background-color: #212121;
 }
 
 .header-container {
-  background-color: #212121;
+  background-color: #424242;
 }
 
 @media screen and (max-width: 1280px) {

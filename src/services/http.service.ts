@@ -28,12 +28,16 @@ export function createReview(token: string, review: any): Promise<Review> {
   return _request(`create_review?token=${token}`, "POST", review);
 }
 
-export function markFilm(user_id: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
-  return _request(`update_user_list?user_id=${user_id}&film_id=${film_id}&list_type=${type}`, "PATCH");
+export function markFilm(token: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
+  return _request(`update_user_list?token=${token}&film_id=${film_id}&list_type=${type}`, "PATCH");
 }
 
-export function favoriteToggle(user_id: string, film_id: number) {
-  return _request(`update_user_list?user_id=${user_id}&film_id=${film_id}&list_type=favorite`, "PATCH");
+export function favoriteToggle(token: string, film_id: number) {
+  return _request(`update_user_list?token=${token}&film_id=${film_id}&list_type=favorite`, "PATCH");
+}
+
+export function rateReview(user_id: string, review_id: number, action: "like" | "dislike") {
+  return _request(`rate_review?user_id=${user_id}&review_id=${review_id}&action=${action}`, "PATCH");
 }
 
 export async function getUserIP() {
@@ -44,7 +48,7 @@ export async function getUserIP() {
 }
 
 async function _request(path: string, method: string, body?: any) {
-  const url = "https://dvigit.onrender.com/" + path;
+  const url = "http://213.171.9.36/" + path;
   const options = { method: method };
   if (body) {
     options["body"] = JSON.stringify(body);

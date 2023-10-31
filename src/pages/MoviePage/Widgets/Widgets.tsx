@@ -22,12 +22,12 @@ export default function Widgets({ movie }) {
 
     const handleAlignment = async (event: React.MouseEvent<HTMLElement>, newAlignment: "postopened" | "abandoned" | "finished" | "planned") => {
         setLoadingButtons(true);
-        const user_id = localStorage.getItem("user_id") ?? "";
+        const token = localStorage.getItem("token") ?? "";
         if (newAlignment === null) {
-            const res = await markFilm(user_id, movie.id, alignment);
+            const res = await markFilm(token, movie.id, alignment);
             if (res.Message) setAlignment(null);
         } else {
-            const res = await markFilm(user_id, movie.id, newAlignment);
+            const res = await markFilm(token, movie.id, newAlignment);
             if (res.Message) setAlignment(newAlignment);
         }
         setLoadingButtons(false);
@@ -38,8 +38,8 @@ export default function Widgets({ movie }) {
 
     async function toggleFavorite() {
         setFavorite({ ...favorite, loading: true });
-        const user_id = localStorage.getItem("user_id") ?? "";
-        const res = await favoriteToggle(user_id, movie.id);
+        const token = localStorage.getItem("token") ?? "";
+        const res = await favoriteToggle(token, movie.id);
         if (res.Message) {
             setFavorite({ isFavorite: !favorite.isFavorite, loading: false });
         } else {

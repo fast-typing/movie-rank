@@ -8,7 +8,7 @@ import { Movie } from "../../../interfaces/Interfaces";
 export default function Filter({ movies, setMovies, isMovieSet, setLoading }) {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const [sortBy, setSortBy] = useState<"old" | "new" | "rating">("old");
+    const [sortBy, setSortBy] = useState<"old" | "new" | "rating">(null);
     const [filter, setFilter] = useState({
         title: "",
         country: "",
@@ -41,6 +41,7 @@ export default function Filter({ movies, setMovies, isMovieSet, setLoading }) {
     }, [filter, isMovieSet]);
 
     useEffect(() => {
+        console.log(movies)
         if (!movies?.current?.length) return;
         setLoading(true)
         const sortedMovies = movies.current.sort((curr, prev) => {
@@ -50,13 +51,25 @@ export default function Filter({ movies, setMovies, isMovieSet, setLoading }) {
                 case "rating": return prev.average_rating - curr.average_rating;
             }
         });
-        setMovies(sortedMovies);
+        setMovies({current: sortedMovies});
         setLoading(false)
     }, [sortBy]);
 
     useEffect(() => {
-        setFilter({ ...filter, title: decodeURIComponent(searchParams.get("title")) });
-    }, [searchParams.get("title")]);
+        const getValue = (field: string): string => {
+            const value = decodeURIComponent(searchParams.get(field))
+            return value === 'null' ? '' : value
+        }
+
+        setFilter({
+            ...filter,
+            title: getValue('title').replace('+', ' '),
+            country: getValue('country'),
+            genres: getValue('genres'),
+            year: getValue('year'),
+            age_rating: getValue('age_rating')
+        });
+    }, [searchParams.get("title"), searchParams.get("country"), searchParams.get("genres"), searchParams.get("year"), searchParams.get("age_rating")]);
 
     function filterByField(field: string, allMovies: Movie[]): Movie[] {
         const value = filter[field];
@@ -84,7 +97,6 @@ export default function Filter({ movies, setMovies, isMovieSet, setLoading }) {
         return query;
     }
 
-
     function handleChange(e) {
         setFilter({ ...filter, [e.target.name]: e.target.value });
     }
@@ -108,19 +120,12 @@ export default function Filter({ movies, setMovies, isMovieSet, setLoading }) {
             {FILTER_INPUTS.map((el) => (
                 <div className="w-full">
                     <p className="ml-2">{el.name}</p>
-                    <input
-                        className="w-full"
-                        placeholder={el.name}
-                        name={el.value}
-                        onChange={handleChange}
-                        value={filter[el.value]}
-                    />
+                    <input className="w-full" placeholder={el.name} name={el.value} onChange={handleChange} value={filter[el.value]} />
                 </div>
             ))}
             <FormControl sx={{ width: "100%" }}>
                 <InputLabel id="age">Сортировка</InputLabel>
                 <Select label="Сортировка" onChange={changeSort} value={sortBy}>
-                    <MenuItem value=""> <em>None</em> </MenuItem>
                     <MenuItem value={"old"}>Сначала старые</MenuItem>
                     <MenuItem value={"new"}>Сначала новые</MenuItem>
                     <MenuItem value={"rating"}>Наибольший рейтинг</MenuItem>

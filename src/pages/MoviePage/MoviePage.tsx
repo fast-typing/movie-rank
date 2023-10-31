@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
 import { getMovie, getReviews, getUserData } from "../../services/http.service";
@@ -22,6 +22,7 @@ export default function MoviePage() {
     const init = async () => {
       let resMovie = await getMovie(id);
       const resReviews = await getReviews(id);
+      console.log(resReviews)
       const token = localStorage.getItem("token") ?? "";
       const user = await getUserData(token);
       if (!resMovie) return;
@@ -43,7 +44,7 @@ export default function MoviePage() {
         (<div className="flex gap-2 justify-between md:justify-normal text-sm">
           <span className="md:w-[140px]">{movieFields[key]}: </span>
           <h3 className="text-sm text-right md:text-left">
-            {Array.isArray(movie[key]) ? movie[key].map((el) => <span>{el}, </span>) ?? "-" : movie[key] ?? "-"}
+            {Array.isArray(movie[key]) ? movie[key].join(', ') ?? "-" : movie[key] ?? "-"}
           </h3>
         </div>)
 

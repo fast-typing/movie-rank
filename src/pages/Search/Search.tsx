@@ -49,8 +49,8 @@ export default function Search() {
   function setMoviesByFilter(inputMovies) {
     const current = inputMovies.current
     setMovies({ ...movies, current: current })
-    const jsxMovies = current.map((movie) => <MovieCard key={movie.id} movie={movie} />);
-    setPage({ current: 1, max: Math.ceil(current.length / 12), content: jsxMovies.slice(0, 12) })
+    const jsxMovies = current?.map((movie) => <MovieCard key={movie.id} movie={movie} />);
+    setPage({ current: 1, max: Math.ceil(current?.length / 12), content: jsxMovies?.slice(0, 12) })
   }
 
   const pagination = (className: string) => {

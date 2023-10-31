@@ -5,8 +5,11 @@ import MovieCard from "../../components/MovieCard/MovieCard";
 import { getAllMovies } from "../../services/http.service";
 import { Movie } from "../../interfaces/Interfaces";
 import { markFavorites } from "../../services/movieField.service";
+import { Link } from "react-router-dom";
+import './Main.css'
 
 export default function Main() {
+  const [genres, setGenres] = useState([]);
   const [topMovies, setTopMovies] = useState([]);
   const [newMovies, setNewMovies] = useState([]);
   const [skeleton, setSkeleton] = useState({
@@ -19,6 +22,7 @@ export default function Main() {
       const res = await getAllMovies();
       if (!res) return;
       const markedMovies = await markFavorites(res);
+      setGenres(getAllGenres(res))
       setTopMovies(sortByField("average_rating", markedMovies));
       setNewMovies(sortByField("year", markedMovies));
       setSkeleton({ ...skeleton, loading: false });
@@ -34,8 +38,23 @@ export default function Main() {
       .map((movie) => <MovieCard key={movie.id} movie={movie}></MovieCard>);
   }
 
+  function getAllGenres(movies): string[] {
+    const genres = []
+    movies.map(movie => {
+      movie.genres.map(genre => genres.includes(genre) ? null : genres.push(genre))
+    })
+    return genres
+  }
+
   return (
     <>
+      <div className="genres-container">
+        {genres.map((el, index) => (
+          <Link to={`/search?genres=${el}`} style={{ backgroundImage: `url(./img/${el}.jpg)` }} className="genre">
+            <span key={index}>{el}</span>
+          </Link>
+        ))}
+      </div>
       <div>
         <h1 className="mb-3">Новинки</h1>
         <AdaptiveContainer content={skeleton.loading ? skeleton.content : newMovies} />

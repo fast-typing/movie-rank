@@ -40,7 +40,7 @@ export const CLOSED_INPUT_STYLE = {
 export const SIDE_BAR_STYLE = {
   width: "100%",
   height: "100%",
-  backgroundColor: "#424242",
+  backgroundColor: "#212121",
   padding: 4,
 };
 
