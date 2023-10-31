@@ -66,7 +66,7 @@ export default function Main() {
 
   return (
     <>
-    <div className="flex overflow-y-auto items-center gap-10 h-[285px] p-5 md:p-0 md:gap-5" id="genres">
+    <div className="flex overflow-y-auto items-center gap-10 h-[285px] p-5" id="genres">
     {genre.map((element, index) => (
       <Link to={`/search?genres=${element}`} className="flex items-center cursor-pointer h-full relative">
        <img src={`./img/${element.replace("й","и")}.jpg`} className="w-full h-full brightness-[0.6] absolute rounded-lg hover:brightness-[0.4] hover:scale-[1.1] duration-300"/>
