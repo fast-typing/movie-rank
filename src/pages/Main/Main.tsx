@@ -40,17 +40,24 @@ export default function Main() {
 
   function getAllGenres(movies): string[] {
     const genres = []
-    movies.map(movie => {
-      movie.genres.map(genre => genres.includes(genre) ? null : genres.push(genre))
-    })
+    movies.map(movie => movie.genres.map(genre => {
+      if (!genres.includes(genre)) {
+        genres.push(genre)
+      }
+    }))
     return genres
+  }
+
+  function getCorrectGenre(str: string): string {
+    const correct = encodeURIComponent(str).replaceAll('%CC%86', '%D0%B8')
+    return decodeURIComponent(correct)
   }
 
   return (
     <>
       <div className="genres-container">
         {genres.map((el, index) => (
-          <Link to={`/search?genres=${el}`} style={{ backgroundImage: `url(./img/${el}.jpg)` }} className="genre">
+          <Link to={`/search?genres=${el}`} style={{ backgroundImage: `url(./img/${getCorrectGenre(el)}.jpg)` }} className="genre">
             <span key={index}>{el}</span>
           </Link>
         ))}

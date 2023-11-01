@@ -1,18 +1,18 @@
 import { createTheme } from "@mui/material";
 import { red } from "@mui/material/colors";
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Theme {
-    color: string,
+    color: string;
   }
 
   interface ThemeOptions {
-    color: string,
+    color: string;
   }
 }
 
-const mainColor = red[700]
-const hoverColor = red[900]
+const mainColor = red[700];
+const hoverColor = red[900];
 
 const theme = createTheme({
   components: {
@@ -23,170 +23,202 @@ const theme = createTheme({
           style: {
             backgroundColor: mainColor,
             color: "white",
-            '&:hover': {
-              backgroundColor: hoverColor
-            }
-          }
+            "&:hover": {
+              backgroundColor: hoverColor,
+            },
+          },
         },
         {
           props: { variant: "outlined" },
           style: {
-            border: '2px solid ' + mainColor,
+            border: "2px solid " + mainColor,
             backgroundColor: "transparent",
             color: mainColor,
-            '&:hover': {
+            "&:hover": {
               backgroundColor: mainColor,
-              border: '2px solid ' + mainColor,
-              color: "white"
-            }
-          }
+              border: "2px solid " + mainColor,
+              color: "white",
+            },
+          },
         },
-      ]
+      ],
     },
     MuiToggleButton: {
       variants: [
         {
           props: {},
           style: {
-            backgroundColor: '#424242',
-            transition: '.2s',
+            backgroundColor: "#424242",
+            transition: ".2s",
             color: "white",
-            '&:hover': {
-              backgroundColor: '#303030'
+            "&:hover": {
+              backgroundColor: "#303030",
             },
-            '&.Mui-selected': {
-              backgroundColor: mainColor
+            "&.Mui-selected": {
+              backgroundColor: mainColor,
             },
-            '&:hover.Mui-selected': {
-              backgroundColor: hoverColor
+            "&:hover.Mui-selected": {
+              backgroundColor: hoverColor,
             },
-            '&.Mui-disabled': {
-              opacity: .6
-            }
-          }
+            "&.Mui-disabled": {
+              opacity: 0.6,
+            },
+          },
         },
-      ]
+      ],
     },
     MuiInputLabel: {
-      variants: [{
-        props: {},
-        style: {
-          color: "white",
-          '&.Mui-focused': {
+      variants: [
+        {
+          props: {},
+          style: {
             color: "white",
-            fontWeight: 500,
-          }
-        }
-      }]
+            "&.Mui-focused": {
+              color: "white",
+              fontWeight: 500,
+            },
+          },
+        },
+      ],
     },
     MuiDrawer: {
-      variants: [{
-        props: {},
-        style: {
-          '& .MuiDrawer-paper': {
-            top: 86
-          }
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            "& .MuiDrawer-paper": {
+              top: 86,
+            },
+          },
+        },
+      ],
     },
     MuiIconButton: {
-      variants: [{
-        props: { color: "primary" },
-        style: {
-          color: "white",
-          transition: '.2s',
-          backgroundColor: mainColor,
-          '&:hover': {
-            backgroundColor: hoverColor
-          },
-          '&.Mui-disabled': {
+      variants: [
+        {
+          props: { color: "primary" },
+          style: {
+            color: "white",
+            transition: ".2s",
             backgroundColor: mainColor,
-            opacity: .6
-          }
-        }
-      }]
+            "&:hover": {
+              backgroundColor: hoverColor,
+            },
+            "&.Mui-disabled": {
+              backgroundColor: mainColor,
+              opacity: 0.6,
+            },
+          },
+        },
+      ],
     },
-    MuiSelect: {
-      variants: [{
-        props: {},
-        style: {
-          color: "white",
-          '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: 'white'
+    MuiOutlinedInput: {
+      variants: [
+        {
+          props: {},
+          style: {
+            color: "white",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgb(150, 150, 150)",
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: mainColor + "!important",
+            },
+            "& svg": {
+              color: "white",
+            },
           },
-          '&.Mui-focused fieldset': {
-            borderColor: mainColor + '!important'
+        },
+      ],
+    },
+    MuiFormControl: {
+      variants: [
+        {
+          props: {},
+          style: {
+            "& label": {
+              color: "rgb(150, 150, 150)",
+            },
           },
-          '& svg': {
-            color: 'white'
-          }
-        }
-      }]
+        },
+      ],
     },
     MuiSvgIcon: {
-      variants: [{
-        props: {},
-        style: {
-          color: "white",
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            color: "white",
+          },
+        },
+      ],
     },
     MuiRating: {
-      variants: [{
-        props: {},
-        style: {
-          '& svg': {
-            color: mainColor,
-          }
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            "& svg": {
+              color: mainColor,
+            },
+          },
+        },
+      ],
     },
     MuiDivider: {
-      variants: [{
-        props: {},
-        style: {
-          backgroundColor: 'white',
-          margin: '16px 0'
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            backgroundColor: "white",
+            margin: "16px 0",
+          },
+        },
+      ],
     },
     MuiAccordionSummary: {
-      variants: [{
-        props: {},
-        style: {
-          backgroundColor: '#424242',
-          color: "white"
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            backgroundColor: "#424242",
+            color: "white",
+          },
+        },
+      ],
     },
     MuiAccordionDetails: {
-      variants: [{
-        props: {},
-        style: {
-          backgroundColor: '#424242',
-          color: "white"
-        }
-      }]
+      variants: [
+        {
+          props: {},
+          style: {
+            backgroundColor: "#424242",
+            color: "white",
+          },
+        },
+      ],
     },
     MuiPagination: {
-      variants: [{
-        props: {},
-        style: {
-          '& button': {
-            color: "white",
-            // '&.MuiButtonBase-root.Mui-selected.': {
-            //   backgroundColor: mainColor
-            // }
-          }
-        }
-      }]
-    }
+      variants: [
+        {
+          props: {},
+          style: {
+            "& button": {
+              color: "white",
+              // '&.MuiButtonBase-root.Mui-selected.': {
+              //   backgroundColor: mainColor
+              // }
+            },
+          },
+        },
+      ],
+    },
   },
   typography: {
-    'fontFamily': 'Montserrat',
-    'fontSize': 13
+    fontFamily: "Montserrat",
+    fontSize: 13,
   },
-  color: mainColor
+  color: mainColor,
 });
 
-export default theme
+export default theme;

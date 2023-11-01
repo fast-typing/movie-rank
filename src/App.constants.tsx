@@ -54,9 +54,9 @@ export const TOGGLE_BUTTONS = [
 export const FILTER_INPUTS = [
   { value: "title", name: "Название" },
   { value: "year", name: "Год показа" },
-  { value: "genres", name: "Жанр" },
-  { value: "country", name: "Страна" },
-  { value: "age_rating", name: "Возрастной ретинг" },
+  // { value: "genres", name: "Жанр" },
+  // { value: "country", name: "Страна" },
+  // { value: "age_rating", name: "Возрастной ретинг" },
 ]
 
 export const MOVIE_TYPES = [
@@ -66,3 +66,5 @@ export const MOVIE_TYPES = [
   { value: "postponed_films", name: "Отложенные фильмы" },
   { value: "planned_films", name: "Запланированные фильмы" },
 ]
+
+export const AMOUNT_OF_MOVIES_ON_PAGE = 12

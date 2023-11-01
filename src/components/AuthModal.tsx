@@ -15,18 +15,6 @@ export default function AuthModal(props: Props) {
   const { setAuth } = useContext(AuthContext);
   const [form, setForm] = useState({ username: "", password: "", email: "" });
 
-  async function submit(event: any) {
-    event.preventDefault();
-    if (form.username.length < 3 || form.password.length < 3) return;
-    if (props.type === "Вход") {
-      loginInAccount();
-    } else {
-      const res = await registration(form);
-      if (!(res as Registration)?.id) return;
-      loginInAccount();
-    }
-  }
-
   async function loginInAccount() {
     const res = await login({ username: form.username, password: form.password });
     const token = res[0]?.access_token;
@@ -51,6 +39,19 @@ export default function AuthModal(props: Props) {
     });
   }
 
+  async function submit(event: any) {
+    console.log(1)
+    event.preventDefault();
+    if (form.username.length < 3 || form.password.length < 3) return;
+    if (props.type === "Вход") {
+      loginInAccount();
+    } else {
+      const res = await registration(form);
+      if (!(res as Registration)?.id) return;
+      loginInAccount();
+    }
+  }
+
   return (
     <Modal
       open={props.open}
@@ -60,7 +61,7 @@ export default function AuthModal(props: Props) {
       slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={props.open}>
-        <form className="modalContent w-[350px]" onSubmit={submit}>
+        <form className="modalContent w-[350px]" onSubmit={(e) => submit(e)}>
           <div className="flex justify-between">
             <h2>{props.type}</h2>
             <CloseRoundedIcon className="cursor-pointer" onClick={close} />
@@ -71,8 +72,8 @@ export default function AuthModal(props: Props) {
           ) : (
             ""
           )}
-          <input name="password" placeholder="Пароль" onChange={handleChange} value={form.password} />
-          <Button variant="contained" onClick={submit}>
+          <input type="password" name="password" placeholder="Пароль" onChange={handleChange} value={form.password} />
+          <Button type="submit" variant="contained">
             Отправить
           </Button>
         </form>
