@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { createReview } from "../../../services/http.service";
 import { Button, ToggleButton, ToggleButtonGroup } from "@mui/material";
-import SentimentNeutralRoundedIcon from '@mui/icons-material/SentimentNeutralRounded';
-import SentimentSatisfiedAltRoundedIcon from '@mui/icons-material/SentimentSatisfiedAltRounded';
-import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
+import { REVIEW_RATING_OPTIONS } from "../../../App.constants";
 
 export default function ReviewForm({ film_id }) {
   const [form, setForm] = useState({ title: "", message: "" });
@@ -19,11 +17,8 @@ export default function ReviewForm({ film_id }) {
   }
 
   function handleChange(e: any) {
-    setForm((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
+    setForm((prev) => { return { ...prev, [e.target.name]: e.target.value }; });
   }
-
 
   const handleAlignment = (
     event: React.MouseEvent<HTMLElement>,
@@ -32,29 +27,20 @@ export default function ReviewForm({ film_id }) {
     setAttitude(newAlignment);
   };
 
+  const toggleButtons = REVIEW_RATING_OPTIONS.map(el =>
+    <ToggleButton value={el.value}>
+      <div className="flex gap-2">
+        {el.icon} <span>{el.text}</span>
+      </div>
+    </ToggleButton>
+  )
+
   return (
     <form className="grid gap-4" onSubmit={submitModal}>
       <div className="flex items-center gap-4">
         Выберите оценку
         <ToggleButtonGroup value={attitude} exclusive onChange={handleAlignment} >
-          <ToggleButton value="positive">
-            <div className="flex gap-2">
-              <SentimentSatisfiedAltRoundedIcon />
-              <span>Супер круто!</span>
-            </div>
-          </ToggleButton>
-          <ToggleButton value="neutral">
-            <div className="flex gap-2">
-              <SentimentNeutralRoundedIcon />
-              <span>Средне</span>
-            </div>
-          </ToggleButton>
-          <ToggleButton value="negative">
-            <div className="flex gap-2">
-              <SentimentVeryDissatisfiedRoundedIcon />
-              <span>Ужасно...</span>
-            </div>
-          </ToggleButton>
+          {toggleButtons}
         </ToggleButtonGroup>
       </div>
       <input

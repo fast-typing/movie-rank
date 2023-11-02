@@ -25,7 +25,8 @@ export default function Header() {
 
   function findBySearch(event: any, isMobile: boolean) {
     event.preventDefault();
-    routeTo(`/search?title=${encodeURI(search)}`);
+    const path = search.length ? `/search?title=${search}` : '/search'
+    routeTo(path);
     setSearch("");
     setInputOpen(false);
     if (isMobile) {
@@ -97,6 +98,9 @@ export default function Header() {
         </span>
         <Button onClick={() => routeTo("", isMobile)} variant="contained" className={buttonClass}>
           Главная
+        </Button>
+        <Button onClick={() => routeTo("/cinema", isMobile)} variant="contained" className={buttonClass}>
+          Кинотеатры
         </Button>
         {isAuth ? (
           <>

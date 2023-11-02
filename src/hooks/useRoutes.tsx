@@ -3,6 +3,7 @@ import Main from "../pages/Main/Main";
 import MoviePage from "../pages/MoviePage/MoviePage";
 import Profile from "../pages/Profile/Profile";
 import Search from "../pages/Search/Search";
+import Cinema from "../pages/Cinema/Cinema";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider";
 
@@ -13,7 +14,8 @@ export default function useRoutes() {
                 <Routes>
                     <Route path="/" element={<Main />} />
                     <Route path="/search" element={<Search />} />
-                    <Route path="/movie/:id" element={<MoviePage />} />
+                    <Route path="/cinema" element={<Cinema />} />
+                    <Route path="/movie/:filmId" element={<MoviePage />} />
 
                     <Route element={<PrivateRoute />}>
                         <Route path="/profile" element={<Profile />} />

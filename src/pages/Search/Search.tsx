@@ -33,11 +33,10 @@ export default function Search() {
   const [filter, setFilter] = useState({
     title: "",
     year: "",
-    country: '',
-    genres: '',
-    age_rating: '',
+    country: "",
+    genres: "",
+    age_rating: "",
   });
-
 
   useEffect(() => {
     const init = async () => {
@@ -88,11 +87,6 @@ export default function Search() {
       return value === 'null' ? '' : value
     }
 
-    // const getArrValue = (field: string): string[] => {
-    //   const value = decodeURIComponent(searchParams.get(field))
-    //   return value === 'null' ? [] : value.split('_')
-    // }
-
     setFilter({
       ...filter,
       title: getStringValue('title').replace('+', ' '),
@@ -102,6 +96,19 @@ export default function Search() {
       age_rating: getStringValue('age_rating')
     });
   }, [searchParams.get("title"), searchParams.get("country"), searchParams.get("genres"), searchParams.get("year"), searchParams.get("age_rating")]);
+
+  useEffect(() => {
+    if (!movies?.old?.length) return
+    setLoading(true)
+    let allMovies = movies.old;
+    allMovies = filterByField("title", allMovies);
+    allMovies = filterByField("country", allMovies);
+    allMovies = filterByField("genres", allMovies);
+    allMovies = filterByField("year", allMovies);
+    allMovies = filterByField("age_rating", allMovies);
+    setMoviesByFilter(allMovies);
+    setLoading(false)
+  }, [filter]);
 
   useEffect(() => {
     if (!movies?.current?.length) return;
@@ -117,24 +124,8 @@ export default function Search() {
     setLoading(false)
   }, [sortBy]);
 
-  useEffect(() => {
-    if (!movies?.old?.length) return
-    setLoading(true)
-    let allMovies = movies.old;
-    allMovies = filterByField("title", allMovies);
-    allMovies = filterByField("country", allMovies);
-    allMovies = filterByField("genres", allMovies);
-    allMovies = filterByField("year", allMovies);
-    allMovies = filterByField("age_rating", allMovies);
-    setMoviesByFilter(allMovies);
-    setLoading(false)
-  }, [filter]);
-
   function filterByField(field: string, allMovies: Movie[]): Movie[] {
     const filterValue = filter[field];
-    if (filterValue !== searchParams.get(field)) {
-      setSearchParams({ ...getQuery(), [field]: filterValue });
-    }
 
     if (!filterValue?.length) return allMovies;
     return allMovies.filter((movie) => {
@@ -148,15 +139,6 @@ export default function Search() {
     });
   }
 
-  function getQuery() {
-    const query = {};
-    window.location.toString()?.split("?")[1]?.split("&").map((el) => {
-      const [key, value] = el?.split("=");
-      query[key] = decodeURIComponent(value);
-    });
-    return query;
-  }
-
   function routeToRandom() {
     const randomIndex = Math.floor(Math.random() * movies.current.length);
     const id = movies.current[randomIndex].id;
@@ -165,7 +147,16 @@ export default function Search() {
 
   function onFilterChange(e) {
     const value = e.target.value
-    setFilter({ ...filter, [e.target.name]: value });
+    const key = e.target.name
+    setSearchParams(searchParams => {
+      if (value === '') {
+        searchParams.delete(key);
+      } else {
+        searchParams.set(key, value);
+      }
+      return searchParams;
+    });
+    setFilter({ ...filter, [key]: value });
   }
 
   function onSortChange(e) {
@@ -174,6 +165,10 @@ export default function Search() {
 
   function clearFormValue() {
     setFilter({ title: "", year: "", country: '', genres: '', age_rating: '', })
+    for (const key of Object.keys(filter)) {
+      searchParams.delete(key)
+    }
+    setSearchParams(searchParams)
   }
 
   const changePage = (event: React.ChangeEvent<unknown>, value: number) => {

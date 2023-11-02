@@ -2,6 +2,15 @@ import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
+import SentimentNeutralRoundedIcon from '@mui/icons-material/SentimentNeutralRounded';
+import SentimentSatisfiedAltRoundedIcon from '@mui/icons-material/SentimentSatisfiedAltRounded';
+import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
+
+export const AMOUNT_OF_MOVIES_ON_PAGE = 12
+export const AMOUNT_OF_COMMENTS_ON_PAGE = 12
+export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
+
+export const CITY = 'ижевск' 
 
 export const MOVIE_FIELDS = {
   country: "Страна",
@@ -67,4 +76,8 @@ export const MOVIE_TYPES = [
   { value: "planned_films", name: "Запланированные фильмы" },
 ]
 
-export const AMOUNT_OF_MOVIES_ON_PAGE = 12
+export const REVIEW_RATING_OPTIONS = [
+  { value: "positive", text: "Очень круто!", icon: <SentimentSatisfiedAltRoundedIcon /> },
+  { value: "neutral", text: "Средне", icon: <SentimentNeutralRoundedIcon /> },
+  { value: "negative", text: "Ужасно...", icon: <SentimentVeryDissatisfiedRoundedIcon /> },
+]

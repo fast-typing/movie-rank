@@ -1,3 +1,4 @@
+import { environment } from "../enviroment/environment";
 import { Movie, Review, Registration, User } from "../interfaces/Interfaces";
 
 export function login(data) {
@@ -38,6 +39,22 @@ export function favoriteToggle(token: string, film_id: number) {
 
 export function rateReview(user_id: string, review_id: number, action: "like" | "dislike") {
   return _request(`rate_review?user_id=${user_id}&review_id=${review_id}&action=${action}`, "PATCH");
+}
+
+export function createComment(token: string, body: any) {
+  return _request(`create_comment?token=${token}`, "POST", body);
+}
+
+export function getAllComments(film_id: string) {
+  return _request(`get_all_comments?film_id=${film_id}`, "GET");
+}
+
+export async function getCoordinates(address: string) {
+  // return fetch(`https://geocode-maps.yandex.ru/1.x/?lang=ru_RU&apikey=${environment.yandexApiKey}&geocode=${address}&format=json`);
+  return await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=${environment.yandexApiKey}&geocode=${address}`)
+    .then((response) => response.json())
+    .then((res) => res)
+    .catch((error) => console.error(error));
 }
 
 export async function getUserIP() {

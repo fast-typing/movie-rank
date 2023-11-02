@@ -48,8 +48,8 @@ export default function Main() {
     return genres
   }
 
-  function getCorrectGenre(str: string): string {
-    const correct = encodeURIComponent(str).replaceAll('%CC%86', '%D0%B8')
+  function getCorrectNameOfGenre(genre: string): string {
+    const correct = encodeURIComponent(genre).replaceAll('%CC%86', '%D0%B8')
     return decodeURIComponent(correct)
   }
 
@@ -57,7 +57,7 @@ export default function Main() {
     <>
       <div className="genres-container">
         {genres.map((el, index) => (
-          <Link to={`/search?genres=${el}`} style={{ backgroundImage: `url(./img/${getCorrectGenre(el)}.jpg)` }} className="genre">
+          <Link to={`/search?genres=${el}`} style={{ backgroundImage: `url(./img/${getCorrectNameOfGenre(el)}.jpg)` }} className="genre">
             <span key={index}>{el}</span>
           </Link>
         ))}

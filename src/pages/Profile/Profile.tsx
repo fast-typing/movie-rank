@@ -24,7 +24,7 @@ export default function Profile() {
     return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} hideFavorite={true} />) : 'Пусто :('
   }
 
-  function getMovieArrLength(type: string): number {
+  function getAmountOfMovieByType(type: string): number {
     return user.data[type]?.length ? user.data[type]?.length : null
   }
 
@@ -43,7 +43,7 @@ export default function Profile() {
               >
                 <div className="flex gap-2 items-center">
                   <h3>{type.name}</h3>
-                  <span className={getMovieArrLength(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : "rounded-full w-8 h-8 flex items-center justify-center"}>{getMovieArrLength(type.value)}</span>
+                  <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)]" : null) + "rounded-full w-8 h-8 flex items-center justify-center"}>{getAmountOfMovieByType(type.value)}</span>
                 </div>
               </AccordionSummary>
               <AccordionDetails>
