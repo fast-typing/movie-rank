@@ -1,20 +1,32 @@
 import { YMaps, Map, SearchControl, FullscreenControl } from "@pbe/react-yandex-maps";
-import { useEffect } from "react";
-import { getCoordinates } from "../../services/http.service";
+import { useEffect, useState } from "react";
+import { getCoordinates, getUserIP } from "../../services/http.service";
 
 export default function Cinema() {
-    const { latitude, longitude } = JSON.parse(localStorage.getItem('ip'))
+    const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 })
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        const a = getCoordinates('Ижевск ИПЭК')
-        console.log(a)
+        const init = async () => {
+            let IP = localStorage.getItem('ip')
+            if (!IP) { IP = await getUserIP() }
+            const yandexRes = await getCoordinates('Ижевск ИПЭК')
+            if (!yandexRes?.metaDataProperty?.GeocoderResponseMetaData?.Point?.pos) return
+            const coordinatesRes = yandexRes.metaDataProperty.GeocoderResponseMetaData.Point.pos.split(' ')
+            console.log(yandexRes, coordinatesRes)
+            setCoordinates({ latitude: coordinatesRes[1], longitude: coordinatesRes[0] })
+            setLoading(false)
+        }
+
+        init()
     }, [])
 
     return (
-        <YMaps>
-            <Map className="w-full" defaultState={{ center: [latitude, longitude], zoom: 14.5 }} >
-                <FullscreenControl />
-            </Map>
-        </YMaps>
+        loading ? null :
+            <YMaps>
+                <Map className="w-full" defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 14.5 }} >
+                    <FullscreenControl />
+                </Map>
+            </YMaps>
     )
 }

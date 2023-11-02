@@ -51,7 +51,8 @@ export function getAllComments(film_id: string) {
 
 export async function getCoordinates(address: string) {
   // return fetch(`https://geocode-maps.yandex.ru/1.x/?lang=ru_RU&apikey=${environment.yandexApiKey}&geocode=${address}&format=json`);
-  return await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=${environment.yandexApiKey}&geocode=${address}`)
+  const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${environment.yandexApiKey}&geocode=${address}&format=json`;
+  return await fetch(url)
     .then((response) => response.json())
     .then((res) => res)
     .catch((error) => console.error(error));

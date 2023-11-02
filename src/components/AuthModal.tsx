@@ -20,10 +20,8 @@ export default function AuthModal(props: Props) {
     const token = res[0]?.access_token;
     const user_id = res[1]?.user_id;
     if (!token?.length || !user_id?.length) return;
-    const IP = await getUserIP();
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
-    localStorage.setItem("ip", JSON.stringify(IP));
     window.location.reload();
     setAuth(true);
   }
