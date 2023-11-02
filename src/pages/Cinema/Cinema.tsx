@@ -8,18 +8,23 @@ export default function Cinema() {
 
     useEffect(() => {
         const init = async () => {
-            let IP = localStorage.getItem('ip')
+            let IP = JSON.parse(localStorage.getItem('ip'))
             if (!IP) { IP = await getUserIP() }
-            const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
-            if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
-            const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')
-            console.log(yandexRes, coordinatesRes)
-            setCoordinates({ latitude: coordinatesRes[1], longitude: coordinatesRes[0] })
-            setLoading(false)
+            // const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
+            // if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
+            // const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')
+            // console.log(yandexRes, coordinatesRes)
+            setCoordinates({ latitude: IP.latitude, longitude: IP.longitude })
+            // setCoordinates({ latitude: coordinatesRes[1], longitude: coordinatesRes[0] })
+            setLoading(false) 
         }
 
         init()
     }, [])
+
+    useEffect(() => {
+        console.log(loading)
+    }, [loading])
 
     return (
         loading ? null :
