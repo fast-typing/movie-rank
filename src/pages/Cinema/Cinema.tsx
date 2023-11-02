@@ -10,9 +10,9 @@ export default function Cinema() {
         const init = async () => {
             let IP = localStorage.getItem('ip')
             if (!IP) { IP = await getUserIP() }
-            const yandexRes = await getCoordinates('Ижевск ИПЭК')
-            if (!yandexRes?.metaDataProperty?.GeocoderResponseMetaData?.Point?.pos) return
-            const coordinatesRes = yandexRes.metaDataProperty.GeocoderResponseMetaData.Point.pos.split(' ')
+            const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
+            if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
+            const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')
             console.log(yandexRes, coordinatesRes)
             setCoordinates({ latitude: coordinatesRes[1], longitude: coordinatesRes[0] })
             setLoading(false)
