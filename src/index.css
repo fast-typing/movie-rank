@@ -66,9 +66,18 @@ main {
   height: 100%;
 }
 
+.two-rows-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .pseudo-input {
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 9999;
   border-radius: 6px;
   gap: 8px;
 

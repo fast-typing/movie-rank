@@ -18,13 +18,6 @@
     }
 }
 
-.two-rows-text {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
 .loading {
     animation: spin .8s infinite linear;
 }

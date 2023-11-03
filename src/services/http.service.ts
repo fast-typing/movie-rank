@@ -66,7 +66,7 @@ export async function getUserIP() {
 }
 
 async function _request(path: string, method: string, body?: any) {
-  const url = "http://213.171.9.36/" + path;
+  const url = "http://dvigit.onrender.com/" + path;
   const options = { method: method };
   if (body) {
     options["body"] = JSON.stringify(body);

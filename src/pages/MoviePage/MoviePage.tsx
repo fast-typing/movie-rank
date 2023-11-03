@@ -21,6 +21,7 @@ export default function MoviePage() {
 
   useEffect(() => {
     const init = async () => {
+      setLoading(true)
       const resMovie = await getMovie(filmId);
       const resReviews = await getReviews(filmId);
       const resComments = await getAllComments(filmId);
@@ -37,7 +38,7 @@ export default function MoviePage() {
     };
 
     init();
-  }, []);
+  }, [useParams()]);
 
   function initDetailedInfo(movie: Movie) {
     const info = [];
@@ -79,7 +80,7 @@ export default function MoviePage() {
             <div className="grid gap-4">{detailedInfo}</div>
           </div>
         </div>
-        <Reviews film_id={filmId} reviews={reviews} />
+        {/* <Reviews film_id={filmId} reviews={reviews} /> */}
         <Comments comments={comments} />
       </div>
     )

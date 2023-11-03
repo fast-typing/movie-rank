@@ -9,6 +9,7 @@ import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentV
 export const AMOUNT_OF_MOVIES_ON_PAGE = 12
 export const AMOUNT_OF_COMMENTS_ON_PAGE = 12
 export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
+export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 
 export const CITY = 'ижевск' 
 

@@ -1,0 +1,13 @@
+.fast-search {
+  background-color: #212121;
+  border: 1px solid #424242;
+  height: fit-content;
+  width: 250px;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  border-radius: 8px;
+  padding: 12px;
+  display: grid;
+  gap: 16px;
+}

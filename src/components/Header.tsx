@@ -8,6 +8,7 @@ import { AuthContext } from "../context/AuthProvider";
 import { UserContext } from "../context/UserProvider";
 import { CLOSED_INPUT_STYLE, OPENED_INPUT_STYLE, SIDE_BAR_STYLE } from "../App.constants";
 import AuthModal from "./AuthModal";
+import FastSearch from "./FastSearch/FastSearch";
 
 interface Modal {
   isOpen: boolean;
@@ -20,7 +21,7 @@ export default function Header() {
   const { isAuth, setAuth } = useContext(AuthContext);
   const [search, setSearch] = useState("");
   const [modal, setModal] = useState<Modal>({ isOpen: false, type: "Вход" });
-  const [inputOpen, setInputOpen] = useState(false);
+  const [input, setInput] = useState({ open: false, focus: false });
   const [openSideBar, setOpenSideBar] = useState(false);
 
   function findBySearch(event: any, isMobile: boolean) {
@@ -28,7 +29,7 @@ export default function Header() {
     const path = search.length ? `/search?title=${search}` : '/search'
     routeTo(path);
     setSearch("");
-    setInputOpen(false);
+    setInput({ focus: false, open: false });
     if (isMobile) {
       setOpenSideBar(false);
     }
@@ -36,7 +37,9 @@ export default function Header() {
 
   function closeInput(): void {
     if (search.length) return;
-    setInputOpen(false);
+    setTimeout(() => {
+      setInput({ focus: false, open: false });
+    }, 100)
   }
 
   function openModal(type: "Вход" | "Регистрация") {
@@ -63,22 +66,21 @@ export default function Header() {
   }
 
   function onSearchClick(e, isMobile) {
-    if (inputOpen === true) {
+    if (input.open === true) {
       findBySearch(e, isMobile);
     } else {
-      setInputOpen(true);
+      setInput({ ...input, open: true });
     }
   }
 
   const nav = (isMobile: boolean): JSX.Element => {
     const buttonClass = isMobile ? "w-full" : "";
-    const inputStyle = isMobile ? { width: "100%" } : inputOpen ? OPENED_INPUT_STYLE : CLOSED_INPUT_STYLE;
+    const inputStyle = isMobile ? { width: "100%" } : input.open ? OPENED_INPUT_STYLE : CLOSED_INPUT_STYLE;
 
     return (
       <form className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"} onSubmit={(e) => findBySearch(e, isMobile)}>
-        {/* <span className="pseudo-input" onMouseEnter={() => setInputOpen(true)} onMouseLeave={closeInput} > */}
         <span className="pseudo-input">
-          {/* <span className="material-symbols-outlined" onClick={(e) => findBySearch(e, isMobile)}> */}
+          <FastSearch input={input} setInput={setInput} search={search} setSearch={setSearch} />
           <span className="material-symbols-outlined" onClick={(e) => onSearchClick(e, isMobile)}>
             search
           </span>
@@ -86,6 +88,7 @@ export default function Header() {
             value={search}
             type="text"
             onChange={(e) => setSearch(e.target.value)}
+            onFocus={() => setInput({ ...input, focus: true })}
             onBlur={closeInput}
             placeholder="Найти..."
             style={inputStyle}
