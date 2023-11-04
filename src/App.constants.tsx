@@ -11,6 +11,8 @@ export const AMOUNT_OF_COMMENTS_ON_PAGE = 12
 export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
 export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 
+export const YANDEX_API_KEY = '8f171b20-f9ec-49cb-97f2-a8e9153f25f4'
+export const HTTP_URL = "https://dvigit.onrender.com/"
 export const CITY = 'ижевск' 
 
 export const MOVIE_FIELDS = {
@@ -20,10 +22,10 @@ export const MOVIE_FIELDS = {
   director: "Режиссер",
   writers: "Сценаристы",
   producers: "Продессеры",
-  cinematographers: "Операторы",
-  composers: "Композиторы",
-  art_directors: "Художники",
-  editor: "Монтажеры",
+  // cinematographers: "Операторы",
+  // composers: "Композиторы",
+  // art_directors: "Художники",
+  // editor: "Монтажеры",
   budget: "Бюджет",
   box_office_world: "Сборы",
   age_rating: "Рейтинг в России",
@@ -50,7 +52,7 @@ export const CLOSED_INPUT_STYLE = {
 export const SIDE_BAR_STYLE = {
   width: "100%",
   height: "100%",
-  backgroundColor: "#212121",
+  backgroundColor: "#323232",
   padding: 4,
 };
 

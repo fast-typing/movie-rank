@@ -1,5 +1,11 @@
-import { environment } from "../enviroment/environment";
+import { HTTP_URL } from "../App.constants";
 import { Movie, Review, Registration, User } from "../interfaces/Interfaces";
+
+interface RateFilm {
+  user_id: string
+  rating: number
+  film_id: number
+}
 
 export function login(data) {
   return _request(`login?username=${data.username}&password=${data.password}`, "POST");
@@ -49,14 +55,17 @@ export function getAllComments(film_id: string) {
   return _request(`get_all_comments?film_id=${film_id}`, "GET");
 }
 
-export async function getCoordinates(address: string) {
-  // return fetch(`https://geocode-maps.yandex.ru/1.x/?lang=ru_RU&apikey=${environment.yandexApiKey}&geocode=${address}&format=json`);
-  const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${environment.yandexApiKey}&geocode=${address}&format=json`;
-  return await fetch(url)
-    .then((response) => response.json())
-    .then((res) => res)
-    .catch((error) => console.error(error));
+export function rateFilm(body: RateFilm) {
+  return _request(`rate_the_film`, "POST", body);
 }
+
+// export async function getCoordinates(address: string) {
+//   const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${address}&format=json`;
+//   return await fetch(url)
+//     .then((response) => response.json())
+//     .then((res) => res)
+//     .catch((error) => console.error(error));
+// }
 
 export async function getUserIP() {
   return await fetch("https://ipapi.co/json")
@@ -66,7 +75,7 @@ export async function getUserIP() {
 }
 
 async function _request(path: string, method: string, body?: any) {
-  const url = "http://dvigit.onrender.com/" + path;
+  const url = HTTP_URL + path;
   const options = { method: method };
   if (body) {
     options["body"] = JSON.stringify(body);

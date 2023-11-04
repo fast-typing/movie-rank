@@ -43,7 +43,7 @@ export default function Profile() {
               >
                 <div className="flex gap-2 items-center">
                   <h3>{type.name}</h3>
-                  <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)]" : null) + "rounded-full w-8 h-8 flex items-center justify-center"}>{getAmountOfMovieByType(type.value)}</span>
+                  <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : null)}>{getAmountOfMovieByType(type.value)}</span>
                 </div>
               </AccordionSummary>
               <AccordionDetails>

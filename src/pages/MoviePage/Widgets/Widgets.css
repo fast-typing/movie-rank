@@ -1,0 +1,26 @@
+.ratings {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+
+  & .rating {
+    padding: 8px 12px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: var(--black-2);
+
+    &:last-child {
+      cursor: pointer;
+    }
+  }
+}
+
+.modal-title {
+  text-wrap: balance;
+}
+
+@media (max-width: 550px) {
+  .rating {
+    width: 100%;
+  }
+}

@@ -165,6 +165,8 @@ export default function Search() {
 
   function clearFormValue() {
     setFilter({ title: "", year: "", country: '', genres: '', age_rating: '', })
+    setSortBy("")
+    setMovies({...movies, current: movies.old})
     for (const key of Object.keys(filter)) {
       searchParams.delete(key)
     }

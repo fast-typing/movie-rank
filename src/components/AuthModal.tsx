@@ -18,8 +18,8 @@ export default function AuthModal(props: Props) {
   async function loginInAccount() {
     const res = await login({ username: form.username, password: form.password });
     const token = res[0]?.access_token;
-    const user_id = res[1]?.user_id;
-    if (!token?.length || !user_id?.length) return;
+    const user_id = res[1];
+    if (!token?.length || !user_id) return;
     localStorage.setItem("token", token);
     localStorage.setItem("user_id", user_id);
     window.location.reload();
@@ -59,7 +59,7 @@ export default function AuthModal(props: Props) {
       slotProps={{ backdrop: { timeout: 500 } }}
     >
       <Fade in={props.open}>
-        <form className="modalContent w-[350px]" onSubmit={(e) => submit(e)}>
+        <form className="modal-content w-[350px]" onSubmit={(e) => submit(e)}>
           <div className="flex justify-between">
             <h2>{props.type}</h2>
             <CloseRoundedIcon className="cursor-pointer" onClick={close} />

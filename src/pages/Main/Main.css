@@ -12,7 +12,7 @@
   &::-webkit-scrollbar-thumb {
     width: 20px;
     border-radius: 10px;
-    background-color: #323232;
+    background-color: var(--black-2);
   }
 
   &::-webkit-scrollbar-track {
@@ -34,7 +34,7 @@
   transition: 0.3s;
 
   &:hover {
-    background-size: 350px;
+    background-size: 325px;
 
     &::after {
       background: rgba(0, 0, 0, 0.4);
@@ -63,7 +63,6 @@
     z-index: 2;
   }
 }
-
 
 @media (max-width: 768px) {
   .genres-container::-webkit-scrollbar {

@@ -134,7 +134,7 @@ export default function Header() {
         <Link to={``}>
           <div className="flex items-center gap-2">
             <MovieIcon fontSize="large" />
-            <h2>movieRank</h2>
+            <h2>Movie Rank</h2>
           </div>
         </Link>
         <div className="hidden lg:flex gap-2">{nav(false)}</div>

@@ -19,7 +19,7 @@ export default function Reviews({ film_id, reviews }) {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center flex-wrap mb-8">
         <h1>Рецензии</h1>
         <Button variant="contained" onClick={() => setEdit(!edit)}>
           {edit ? "Закрыть" : "Создать рецензию"}

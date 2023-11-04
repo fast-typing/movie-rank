@@ -94,7 +94,7 @@ export default function ReviewBlock(props: Props) {
   };
 
   return (
-    <div className="grid gap-2 p-4 rounded w-full" style={{ backgroundColor: "#424242" }}>
+    <div className="grid gap-2 p-4 rounded w-full" style={{ backgroundColor: "var(--black-3)" }}>
       <div className="flex items-center gap-2">
         {attitudeIcon[review.attitude]}
         <h3 className="text-xl">{review.title}</h3>
