@@ -60,14 +60,18 @@ export default function Search() {
   }, []);
 
   function initFilter(movies: Movie[]) {
-    // const newFilter = { ...filter };
-    // for (let key of Object.keys(filter)) {
-    //   const decoded = decodeURIComponent(searchParams.get(key));
-    //   const value = decoded === "null" ? "" : decoded;
-    //   if (!value?.length) continue;
-    //   newFilter[key] = value;
-    // }
-    // setFilter({ ...newFilter });
+    const newFilter = { ...filter };
+    for (let key of Object.keys(filter)) {
+      const decoded = decodeURIComponent(searchParams.get(key));
+      const value = decoded === "null" ? "" : decoded;
+      if (!value?.length) continue;
+      if (key === "title" || key === "year") {
+        newFilter[key] = value;
+      } else {
+        newFilter[key] = value.split(',');
+      }
+    }
+    setFilter({ ...newFilter });
 
     const moviesGenres = [];
     movies.map((movie: Movie) =>
@@ -146,7 +150,7 @@ export default function Search() {
     return allMovies.filter((movie) => {
       if (isArray) {
         const movieValue = movie[field];
-        return filterValue.filter(el => movieValue.includes(el)).length === filterValue.length ? movieValue : null
+        return filterValue.filter((el) => movieValue.includes(el)).length === filterValue.length ? movieValue : null;
         // movieValue.filter(el => filterValue.filter(item => item === el).length === filterValue.length)
       } else {
         const movieValue = typeof movie[field] == "object" ? movie[field].join(" ") : movie[field];
@@ -234,11 +238,15 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Страна</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Страна</span> : selected.join(', ')
+                selected.length === 0 ? (
+                  <span style={{ color: "rgb(150, 150, 150)" }}>Страна</span>
+                ) : (
+                  selected.join(", ")
+                )
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
@@ -260,11 +268,11 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Жанры</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected.join(', ')
+                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected.join(", ")
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
@@ -286,11 +294,15 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Возраст</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Возраст</span> : selected.join(', ')
+                selected.length === 0 ? (
+                  <span style={{ color: "rgb(150, 150, 150)" }}>Возраст</span>
+                ) : (
+                  selected.join(", ")
+                )
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
@@ -312,7 +324,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Сортировка</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
