@@ -4,18 +4,7 @@ import { Movie } from "../../interfaces/Interfaces";
 import MovieSceleton from "../../components/MovieSkeleton";
 import { getAllMovies } from "../../services/http.service";
 import { markFavorites } from "../../services/movieField.service";
-import {
-  Button,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Pagination,
-  Select,
-  Stack,
-  makeStyles,
-} from "@mui/material";
+import { Button, FormControl, MenuItem, OutlinedInput, Pagination, Select, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { AMOUNT_OF_MOVIES_ON_PAGE, FILTER_INPUTS } from "../../App.constants";
 import CasinoRoundedIcon from "@mui/icons-material/CasinoRounded";
@@ -45,9 +34,9 @@ export default function Search() {
   const [filter, setFilter] = useState({
     title: "",
     year: "",
-    country: "",
-    genres: "",
-    age_rating: "",
+    country: [],
+    genres: [],
+    age_rating: [],
   });
 
   useEffect(() => {
@@ -71,25 +60,25 @@ export default function Search() {
   }, []);
 
   function initFilter(movies: Movie[]) {
-    const newFilter = { ...filter };
-    for (let key of Object.keys(filter)) {
-      const decoded = decodeURIComponent(searchParams.get(key));
-      const value = decoded == "null" ? "" : decoded;
-      if (!value?.length) continue;
-      newFilter[key] = value;
-    }
-    setFilter({ ...newFilter });
+    // const newFilter = { ...filter };
+    // for (let key of Object.keys(filter)) {
+    //   const decoded = decodeURIComponent(searchParams.get(key));
+    //   const value = decoded === "null" ? "" : decoded;
+    //   if (!value?.length) continue;
+    //   newFilter[key] = value;
+    // }
+    // setFilter({ ...newFilter });
 
     const moviesGenres = [];
-    movies.map((movie: Movie) => {
-      movie.genres.map((genre) => (moviesGenres.includes(genre) ? null : moviesGenres.push(genre)));
-    });
+    movies.map((movie: Movie) =>
+      movie.genres.map((genre) => (moviesGenres.includes(genre) ? null : moviesGenres.push(genre)))
+    );
     setGenres(moviesGenres);
 
     const moviesCountries = [];
-    movies.map((movie: Movie) => {
-      movie.country.split(", ").map((el) => (moviesCountries.includes(el) ? null : moviesCountries.push(el)));
-    });
+    movies.map((movie: Movie) =>
+      movie.country.split(", ").map((el) => (moviesCountries.includes(el) ? null : moviesCountries.push(el)))
+    );
     setCountries(moviesCountries);
 
     const moviesAgeRatings = [];
@@ -105,31 +94,30 @@ export default function Search() {
       return value === "null" ? "" : value;
     };
 
+    const getArrValue = (field: string): string[] => {
+      const value = decodeURIComponent(searchParams.get(field));
+      return value === "null" ? [] : value.split(",");
+    };
+
     setFilter({
       ...filter,
       title: getStringValue("title").replace("+", " "),
       year: getStringValue("year"),
-      country: getStringValue("country"),
-      genres: getStringValue("genres"),
-      age_rating: getStringValue("age_rating"),
+      country: getArrValue("country"),
+      genres: getArrValue("genres"),
+      age_rating: getArrValue("age_rating"),
     });
-  }, [
-    searchParams.get("title"),
-    searchParams.get("country"),
-    searchParams.get("genres"),
-    searchParams.get("year"),
-    searchParams.get("age_rating"),
-  ]);
+  }, [searchParams]);
 
   useEffect(() => {
     if (!movies?.old?.length) return;
     setLoading(true);
     let allMovies = movies.old;
     allMovies = filterByField("title", allMovies);
-    allMovies = filterByField("country", allMovies);
-    allMovies = filterByField("genres", allMovies);
     allMovies = filterByField("year", allMovies);
-    allMovies = filterByField("age_rating", allMovies);
+    allMovies = filterByField("country", allMovies, true);
+    allMovies = filterByField("genres", allMovies, true);
+    allMovies = filterByField("age_rating", allMovies, true);
     setMoviesByFilter(allMovies);
     setLoading(false);
   }, [filter]);
@@ -151,18 +139,22 @@ export default function Search() {
     setLoading(false);
   }, [sortBy]);
 
-  function filterByField(field: string, allMovies: Movie[]): Movie[] {
+  function filterByField(field: string, allMovies: Movie[], isArray: boolean = false): Movie[] {
     const filterValue = filter[field];
 
     if (!filterValue?.length) return allMovies;
     return allMovies.filter((movie) => {
-      let movieValue = typeof movie[field] == "object" ? movie[field].join(" ") : movie[field];
-
-      if (field == "age_rating") {
-        return movieValue == filterValue;
+      if (isArray) {
+        const movieValue = movie[field];
+        return filterValue.filter(el => movieValue.includes(el)).length === filterValue.length ? movieValue : null
+        // movieValue.filter(el => filterValue.filter(item => item === el).length === filterValue.length)
+      } else {
+        const movieValue = typeof movie[field] == "object" ? movie[field].join(" ") : movie[field];
+        if (field === "age_rating") {
+          return movieValue === filterValue;
+        }
+        return String(movieValue).toLowerCase().includes(filterValue.toLowerCase());
       }
-
-      return String(movieValue).toLowerCase().includes(filterValue.toLowerCase());
     });
   }
 
@@ -176,7 +168,7 @@ export default function Search() {
     const value = e.target.value;
     const key = e.target.name;
     setSearchParams((searchParams) => {
-      if (value === "") {
+      if (value === "" || value.length === 0) {
         searchParams.delete(key);
       } else {
         searchParams.set(key, value);
@@ -191,7 +183,7 @@ export default function Search() {
   }
 
   function clearFormValue() {
-    setFilter({ title: "", year: "", country: "", genres: "", age_rating: "" });
+    setFilter({ title: "", year: "", country: [], genres: [], age_rating: [] });
     setSortBy("");
     setMovies({ ...movies, current: movies.old });
     for (const key of Object.keys(filter)) {
@@ -226,7 +218,7 @@ export default function Search() {
 
   return (
     <div className="grid sm:flex gap-8">
-      <div className="grid gap-4 w-full sm:w-[300px] h-fit">
+      <div className="grid gap-4 w-full sm:w-[260px] h-fit">
         {FILTER_INPUTS.map((el) => (
           <div className="w-full">
             <p className="ml-2">{el.name}</p>
@@ -239,25 +231,24 @@ export default function Search() {
             />
           </div>
         ))}
+
         <div className="w-full">
           <p className="ml-2">Страна</p>
-          <FormControl size="small" sx={{ width: "100%" }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Страна</span> : selected
+                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Страна</span> : selected.join(', ')
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
+              multiple
               size="small"
               MenuProps={MenuProps}
               name="country"
               onChange={onFilterChange}
               value={filter["country"]}
             >
-              <MenuItem value={""}>
-                <em>Пусто</em>
-              </MenuItem>
               {countries
                 ? countries.map((el) => {
                     return <MenuItem value={el}>{el}</MenuItem>;
@@ -269,23 +260,21 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Жанры</p>
-          <FormControl size="small" sx={{ width: "100%" }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected
+                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected.join(', ')
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
+              multiple
               size="small"
               MenuProps={MenuProps}
               name="genres"
               onChange={onFilterChange}
               value={filter["genres"]}
             >
-              <MenuItem value={""}>
-                <em>Пусто</em>
-              </MenuItem>
               {genres
                 ? genres.map((el) => {
                     return <MenuItem value={el}>{el}</MenuItem>;
@@ -297,23 +286,21 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Возраст</p>
-          <FormControl size="small" sx={{ width: "100%" }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Возраст</span> : selected
+                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Возраст</span> : selected.join(', ')
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
+              multiple
               size="small"
               MenuProps={MenuProps}
               name="age_rating"
               onChange={onFilterChange}
               value={filter["age_rating"]}
             >
-              <MenuItem value={""}>
-                <em>Пусто</em>
-              </MenuItem>
               {ageRatings
                 ? ageRatings.map((el) => {
                     return <MenuItem value={el}>{el}</MenuItem>;
@@ -325,7 +312,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Сортировка</p>
-          <FormControl size="small" sx={{ width: "100%" }}>
+          <FormControl size="small" sx={{ width: "100%", maxWidth: '208px' }}>
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
