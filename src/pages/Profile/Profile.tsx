@@ -2,19 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Badge, Skeleton } from "@mui/material";
 import AdaptiveContainer from "../../components/AdaptiveContainer";
 import MovieCard from "../../components/MovieCard/MovieCard";
-import { getUserData } from "../../services/http.service";
+import { getRecommendations, getUserData } from "../../services/http.service";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { MOVIE_TYPES } from "../../App.constants";
 
 export default function Profile() {
   const [user, setUser] = useState({ data: null, loading: true })
+  const [recommends, setRecommends] = useState()
 
   useEffect(() => {
     const init = async () => {
       const token = localStorage.getItem('token')
       if (!token) return
       const resUser = await getUserData(token)
+      const resRecommends = await getRecommendations()
       setUser({ data: resUser, loading: false })
+      setRecommends(resRecommends)
     }
 
     init()
@@ -34,6 +37,7 @@ export default function Profile() {
       : (
         <div>
           <h1 className="mb-6">Добро пожаловать, {user.data.username}!</h1>
+          {recommends}
           {MOVIE_TYPES.map((type) => {
             return <Accordion>
               <AccordionSummary

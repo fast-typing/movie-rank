@@ -59,6 +59,10 @@ export function rateFilm(body: RateFilm) {
   return _request(`rate_the_film`, "POST", body);
 }
 
+export function getRecommendations() {
+  return _request(`get_recommendations`, "GET");
+}
+
 // export async function getCoordinates(address: string) {
 //   const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${address}&format=json`;
 //   return await fetch(url)

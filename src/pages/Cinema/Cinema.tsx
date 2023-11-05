@@ -23,10 +23,6 @@ export default function Cinema() {
         init()
     }, [])
 
-    useEffect(() => {
-        console.log(loading)
-    }, [loading])
-
     return (
         loading ? null :
             <YMaps>

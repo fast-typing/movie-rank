@@ -1,11 +1,16 @@
 .ratings {
   display: flex;
-  align-items: start;
+  align-items: end;
   gap: 12px;
 
   & .rating {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 8px 12px;
+    height: 46px;
     border-radius: 4px;
+    gap: 4px;
     text-align: center;
     background-color: var(--black-2);
 
@@ -22,5 +27,7 @@
 @media (max-width: 550px) {
   .rating {
     width: 100%;
+    flex-direction: column;
+    height: auto !important;
   }
 }
