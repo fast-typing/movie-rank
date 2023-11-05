@@ -13,9 +13,10 @@ export default function Profile() {
   useEffect(() => {
     const init = async () => {
       const token = localStorage.getItem('token')
-      if (!token) return
+      const user_id = localStorage.getItem('user_id')
+      if (!token || !user_id) return
       const resUser = await getUserData(token)
-      const resRecommends = await getRecommendations()
+      const resRecommends = await getRecommendations(user_id)
       setUser({ data: resUser, loading: false })
       setRecommends(resRecommends)
     }
@@ -37,7 +38,6 @@ export default function Profile() {
       : (
         <div>
           <h1 className="mb-6">Добро пожаловать, {user.data.username}!</h1>
-          {recommends}
           {MOVIE_TYPES.map((type) => {
             return <Accordion>
               <AccordionSummary

@@ -33,14 +33,14 @@ export default function ReviewBlock(props: Props) {
 
   async function rate(action: "like" | "dislike") {
     setButtons({ ...buttons, loading: true })
-    const resRate = await rateReview(user_id, review.id, action)
-    // const resReview = await getRev
-    if (typeof resRate !== "number") return
-    setRating(resRate)
+    const resReview = await rateReview(user_id, review.id, action)
+    if (!resReview) return
+    setReview(resReview)
+    setRating(resReview.liked_by_users.length - resReview.disliked_by_users.length)
 
-    if (review.liked_by_users.includes(user_id)) {
+    if (resReview.liked_by_users.includes(user_id)) {
       setButtons({ dislike: "default", like: "primary", loading: false })
-    } else if (review.disliked_by_users.includes(user_id)) {
+    } else if (resReview.disliked_by_users.includes(user_id)) {
       setButtons({ dislike: "primary", like: "default", loading: false })
     } else {
       setButtons({ dislike: "default", like: "default", loading: false })

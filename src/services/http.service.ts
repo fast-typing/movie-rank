@@ -43,7 +43,7 @@ export function favoriteToggle(token: string, film_id: number) {
   return _request(`update_user_list?token=${token}&film_id=${film_id}&list_type=favorite`, "PATCH");
 }
 
-export function rateReview(user_id: string, review_id: number, action: "like" | "dislike") {
+export function rateReview(user_id: string, review_id: number, action: "like" | "dislike"): Promise<Review> {
   return _request(`rate_review?user_id=${user_id}&review_id=${review_id}&action=${action}`, "PATCH");
 }
 
@@ -59,8 +59,8 @@ export function rateFilm(body: RateFilm) {
   return _request(`rate_the_film`, "POST", body);
 }
 
-export function getRecommendations() {
-  return _request(`get_recommendations`, "GET");
+export function getRecommendations(user_id: string) {
+  return _request(`get_recommendations?user_id=${user_id}`, "GET");
 }
 
 // export async function getCoordinates(address: string) {
