@@ -238,7 +238,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Страна</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
+          <FormControl className="w-full md:max-w-[208px]" size="small">
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
@@ -268,7 +268,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Жанры</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
+          <FormControl size="small" className="w-full md:max-w-[208px]">
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
@@ -294,7 +294,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Возраст</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
+          <FormControl size="small" className="w-full md:max-w-[208px]">
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>
@@ -324,7 +324,7 @@ export default function Search() {
 
         <div className="w-full">
           <p className="ml-2">Сортировка</p>
-          <FormControl size="small" sx={{ width: "100%", maxWidth: "208px" }}>
+          <FormControl size="small" className="w-full md:max-w-[208px]">
             <Select
               input={<OutlinedInput />}
               renderValue={(selected) =>

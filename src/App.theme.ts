@@ -213,7 +213,7 @@ const theme = createTheme({
               // '&.MuiButtonBase-root.Mui-selected.': {
               //   backgroundColor: mainColor
               // }
-            },
+            }
           },
         },
       ],

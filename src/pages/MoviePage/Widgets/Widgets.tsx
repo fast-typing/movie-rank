@@ -110,34 +110,33 @@ export default function Widgets({ movie }) {
           </div>
         </div>
         <div className="rating" onClick={toggleModal}>
-          <div>
+          <div className="flex items-center">
             <TouchAppRoundedIcon color="primary" />
             <span>Movie Rank</span>
           </div>
           <div className="flex items-center">
             <StarIcon sx={{ color: red[500] }} />
-            <h2 className="ml-1">{movie.local_rating} </h2>
+            <h2 className="ml-1">{movie.local_rating.toFixed(1)} </h2>
           </div>
         </div>
       </div>
       <Modal open={modal.open} onClose={toggleModal}>
         <div className="modal-content w-4/5 xl:w-1/4">
-          <div className="flex justify-between items-center w-full">
-            <h2 className="modal-title">Ваша оценка фильму {movie.title}</h2>
-            <IconButton onClick={toggleModal}>
+          <div className="relative text-center">
+            <h3 className="modal-title">Ваша оценка фильму {movie.title}</h3>
+            <IconButton className="!absolute top-[-60px] right-[-20px]" onClick={toggleModal}>
               <CloseIcon />
             </IconButton>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center justify-center flex-col">
             <Rating
               onChange={(e, value) => setModal({ ...modal, rating: value })}
               className="w-fit mr-4"
               max={10}
               defaultValue={modal.rating}
-              size="large"
               readOnly={!isAuth}
             />
-            <h1>{modal.rating}</h1>
+            <h1>{modal.rating ?? 0}</h1>
           </div>
           <Button className="w-full" variant="contained" onClick={rateMovie}>
             Оценить
