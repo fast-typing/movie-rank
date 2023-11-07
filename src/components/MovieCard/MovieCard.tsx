@@ -41,7 +41,7 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
       {floatIcon}
       <div className="grid gap-2 cursor-pointer h-fit" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
         <img className="min-h-[400px] sm:min-h-fit" src={props.movie.poster} alt={props.movie.poster} />
-        <div className="flex justify-between gap-2">
+        <div className="flex justify-between gap-4">
           <h3 className="two-rows-text">{props.movie.title}</h3>
           <div className="flex gap-1">
             <span>{props.movie.average_rating}</span>

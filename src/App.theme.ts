@@ -26,6 +26,11 @@ const theme = createTheme({
             "&:hover": {
               backgroundColor: hoverColor,
             },
+            "&.Mui-disabled": {
+              backgroundColor: mainColor,
+              opacity: 0.6,
+              color: "white"
+            },
           },
         },
         {
@@ -208,7 +213,7 @@ const theme = createTheme({
               // '&.MuiButtonBase-root.Mui-selected.': {
               //   backgroundColor: mainColor
               // }
-            },
+            }
           },
         },
       ],

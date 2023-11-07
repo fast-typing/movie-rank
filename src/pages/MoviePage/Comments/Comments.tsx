@@ -53,8 +53,8 @@ export default function Comments(props: Props) {
               onChange={(e) => setComment(e.target.value)}
               placeholder="Ваш комментарий"
             />
-            <Button className="h-fit" onClick={submitComment} variant="contained">
-              Сохранить
+            <Button className="h-fit w-fit" onClick={submitComment} variant="contained">
+              Оставить комментарий
             </Button>
           </div>
         ) : null}
