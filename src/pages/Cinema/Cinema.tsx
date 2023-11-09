@@ -13,7 +13,6 @@ export default function Cinema() {
       if (!IP) {
         IP = await getUserIP();
       }
-      console.log(IP)
       // const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
       // if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
       // const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')
@@ -43,3 +42,5 @@ export default function Cinema() {
     </>
   );
 }
+
+// !!! У API киноафишы баг все сеансы (order_link) "5 ночей с мишкой фреди" перенсятся на "Черепашки-ниндзя: Погром мутантов". Хотя 2 фильм даже не идет в кино 

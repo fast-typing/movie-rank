@@ -47,37 +47,33 @@ export default function Profile() {
       ? <Skeleton />
       : (
         <>
-          <div className="grid gap-8">
-            <div>
-              <h1 className="mb-6">{user.data.username}</h1>
-              {
-                recommends?.length ?
-                  (<>
-                    <h2 className="mb-4">Рекомендации</h2><AdaptiveContainer content={recommends.map(movie => {
-                      if (!movie) return;
-                      return <MovieCard key={movie.id} movie={movie} />;
-                    })} />
-                  </>) : null
-              }
-            </div>
-            <div>
-              {MOVIE_TYPES.map((type) => {
-                return <Accordion key={type.value}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                  >
-                    <div className="flex gap-2 items-center">
-                      <h3>{type.name}</h3>
-                      <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : null)}>{getAmountOfMovieByType(type.value)}</span>
-                    </div>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <AdaptiveContainer content={getMovieJSX(type.value)} />
-                  </AccordionDetails>
-                </Accordion>
-              })}
-            </div>
+          <div>
+            <h1 className="mb-6">{user.data.username}</h1>
+            {
+              recommends?.length ?
+                (<>
+                  <h2 className="mb-4">Рекомендации</h2><AdaptiveContainer content={recommends.map(movie => {
+                    if (!movie) return;
+                    return <MovieCard key={movie.id} movie={movie} />;
+                  })} />
+                </>) : null
+            }
+            {MOVIE_TYPES.map((type) => {
+              return <Accordion key={type.value}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                >
+                  <div className="flex gap-2 items-center">
+                    <h3>{type.name}</h3>
+                    <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : null)}>{getAmountOfMovieByType(type.value)}</span>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <AdaptiveContainer content={getMovieJSX(type.value)} />
+                </AccordionDetails>
+              </Accordion>
+            })}
           </div>
         </>
       )
