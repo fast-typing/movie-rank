@@ -6,7 +6,7 @@ import SentimentNeutralRoundedIcon from '@mui/icons-material/SentimentNeutralRou
 import SentimentSatisfiedAltRoundedIcon from '@mui/icons-material/SentimentSatisfiedAltRounded';
 import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
 
-export const AMOUNT_OF_MOVIES_ON_PAGE = 12
+export const AMOUNT_OF_MOVIES_ON_PAGE = 24
 export const AMOUNT_OF_COMMENTS_ON_PAGE = 12
 export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
 export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3

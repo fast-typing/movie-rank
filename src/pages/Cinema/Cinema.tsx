@@ -13,6 +13,7 @@ export default function Cinema() {
       if (!IP) {
         IP = await getUserIP();
       }
+      console.log(IP)
       // const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
       // if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
       // const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')

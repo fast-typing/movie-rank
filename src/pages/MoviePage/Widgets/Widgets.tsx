@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import TouchAppRoundedIcon from "@mui/icons-material/TouchAppRounded";
 import "./Widgets.css";
 
-export default function Widgets({ movie }) {
+export default function Widgets({ movie, usersRatings }) {
   const [alignment, setAlignment] = useState<"postopened" | "abandoned" | "finished" | "planned">(null);
   const [loadingButtons, setLoadingButtons] = useState<boolean>(false);
   const [favorite, setFavorite] = useState({ isFavorite: movie.is_favorite, loading: false });
@@ -25,6 +25,8 @@ export default function Widgets({ movie }) {
     else if (movie.is_planned) alignment = "planned";
     else if (movie.is_postponed) alignment = "postponed";
     else if (movie.is_finished) alignment = "finished";
+    const userId = localStorage.getItem('user_id')
+    setModal({...modal, rating: usersRatings[userId] ?? 0})
     setAlignment(alignment);
   }, []);
 

@@ -34,9 +34,9 @@ export default function Search() {
   const [filter, setFilter] = useState({
     title: "",
     year: "",
+    age_rating: "",
     country: [],
     genres: [],
-    age_rating: [],
   });
 
   useEffect(() => {
@@ -107,9 +107,9 @@ export default function Search() {
       ...filter,
       title: getStringValue("title").replace("+", " "),
       year: getStringValue("year"),
+      age_rating: getStringValue("age_rating"),
       country: getArrValue("country"),
       genres: getArrValue("genres"),
-      age_rating: getArrValue("age_rating"),
     });
   }, [searchParams]);
 
@@ -119,9 +119,9 @@ export default function Search() {
     let allMovies = movies.old;
     allMovies = filterByField("title", allMovies);
     allMovies = filterByField("year", allMovies);
+    allMovies = filterByField("age_rating", allMovies);
     allMovies = filterByField("country", allMovies, true);
     allMovies = filterByField("genres", allMovies, true);
-    allMovies = filterByField("age_rating", allMovies, true);
     setMoviesByFilter(allMovies);
     setLoading(false);
   }, [filter]);
@@ -187,7 +187,7 @@ export default function Search() {
   }
 
   function clearFormValue() {
-    setFilter({ title: "", year: "", country: [], genres: [], age_rating: [] });
+    setFilter({ title: "", year: "", age_rating: '', country: [], genres: [] });
     setSortBy("");
     setMovies({ ...movies, current: movies.old });
     for (const key of Object.keys(filter)) {
@@ -222,7 +222,7 @@ export default function Search() {
 
   return (
     <div className="grid sm:flex gap-8">
-      <div className="grid gap-4 w-full sm:w-[260px] h-fit">
+      <div className="top-[24px] sm:sticky grid gap-4 w-full sm:w-[260px] h-fit">
         {FILTER_INPUTS.map((el) => (
           <div key={el.value} className="w-full">
             <p className="ml-2">{el.name}</p>
@@ -300,19 +300,19 @@ export default function Search() {
               renderValue={(selected) =>
                 selected.length === 0 ? (
                   <span style={{ color: "rgb(150, 150, 150)" }}>Возраст</span>
-                ) : (
-                  selected.join(", ")
-                )
+                ) : selected
               }
               inputProps={{ "aria-label": "Without label" }}
               displayEmpty
-              multiple
               size="small"
               MenuProps={MenuProps}
               name="age_rating"
               onChange={onFilterChange}
               value={filter["age_rating"]}
             >
+              <MenuItem value={""}>
+                <em>Пусто</em>
+              </MenuItem>
               {ageRatings
                 ? ageRatings.map((el) => {
                   return <MenuItem key={el} value={el}>{el}</MenuItem>;

@@ -70,7 +70,9 @@ export function getCinemas(): Promise<{ data: { data: CinemaMovie[] } }> {
   return _request(`api_kinoafisha/get_schedule_events?city=354`, "GET");
 }
 
-// /api_kinoafisha
+export function getUsersRating(filmId: string): Promise<{ [id: string]: number }[]> {
+  return _request(`get_ratings_for_film?film_id=${filmId}`, "GET");
+}
 
 // export async function getCoordinates(address: string) {
 //   const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${address}&format=json`;

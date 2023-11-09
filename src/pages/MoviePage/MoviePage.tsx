@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import { getAllComments, getMovie, getReviews, getUserData } from "../../services/http.service";
+import { getAllComments, getMovie, getUsersRating, getReviews, getUserData } from "../../services/http.service";
 import { MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
@@ -16,6 +16,7 @@ export default function MoviePage() {
   const [detailedInfo, setDetailedInfo] = useState(null);
   const [reviews, setReviews] = useState(null);
   const [comments, setComments] = useState(null);
+  const [usersRatings, setUsersRatings] = useState(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { filmId } = useParams();
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ export default function MoviePage() {
       const resMovie = await getMovie(filmId);
       const resReviews = await getReviews(filmId);
       const resComments = await getAllComments(filmId);
+      const resRatings = await getUsersRating(filmId);
       const token = localStorage.getItem("token") ?? "";
       const user = await getUserData(token);
       if (!resMovie) return;
@@ -35,6 +37,7 @@ export default function MoviePage() {
       setMovie(correctedMovies);
       setReviews(resReviews);
       setComments(resComments);
+      setUsersRatings(resRatings)
       setLoading(false);
     };
 
@@ -66,7 +69,7 @@ export default function MoviePage() {
     <PageSkeleton />
   ) : (
     <div className="grid gap-4 w-full">
-      <Widgets movie={movie} />
+      <Widgets movie={movie} usersRatings={usersRatings}/>
       <div className="grid gap-4 w-full">
         <div className="grid h-fit gap-4 w-full md:flex md:h-[500px]">
           <img src={movie.poster} className="rounded object-cover w-full md:w-[40%]" alt={movie.title} />

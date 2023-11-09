@@ -81,7 +81,7 @@ export default function Header() {
       <form className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"} onSubmit={(e) => findBySearch(e, isMobile)}>
         <span className="pseudo-input">
           {isMobile ? null : <FastSearch input={input} setInput={setInput} search={search} setSearch={setSearch} />}
-          <span className="material-symbols-outlined" onClick={(e) => onSearchClick(e, isMobile)}>
+          <span className="material-symbols-outlined z-1" onClick={(e) => onSearchClick(e, isMobile)}>
             search
           </span>
           <input

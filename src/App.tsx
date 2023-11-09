@@ -1,3 +1,4 @@
+import GPTDialog from "./components/GPTDialog";
 import Header from "./components/Header";
 import useRoutes from "./routes/useRoutes";
 
@@ -8,6 +9,7 @@ function App() {
     <>
       <Header />
       {routes}
+      <GPTDialog />
     </>
   );
 }

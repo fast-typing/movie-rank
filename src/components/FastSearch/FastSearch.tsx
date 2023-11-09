@@ -21,7 +21,7 @@ export default function FastSearch({ search, setSearch, input, setInput }) {
     }, []);
 
     useEffect(() => {
-        if (!search?.length) return
+        // if (!search?.length) return
         const fastfilter = movies.old.filter((movie) => movie["title"].toLowerCase().includes(search.toLowerCase()))
         setMovies({ ...movies, current: fastfilter.slice(0, AMOUNT_OF_MOVIES_ON_FAST_SEARCH) })
     }, [search])
@@ -38,7 +38,7 @@ export default function FastSearch({ search, setSearch, input, setInput }) {
             {
                 movies.current.length ? movies.current.map((movie: Movie) =>
                     <div key={movie.id} onClick={() => routeTo(movie.id)} className="flex cursor-pointer">
-                        <img src={movie.poster} className="h-[70px] rounded mr-3" />
+                        <img loading="lazy" src={movie.poster} className="h-[70px] rounded mr-3" />
                         <div>
                             <h2 className="text-base two-rows-text">{movie.title}</h2>
                             <div className="text-sm flex gap-1 items-center">

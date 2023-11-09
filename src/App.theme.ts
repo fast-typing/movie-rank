@@ -270,6 +270,19 @@ const theme = createTheme({
         },
       ],
     },
+    MuiFab: {
+      variants: [
+        {
+          props: {},
+          style: {
+            backgroundColor: mainColor,
+            "&:hover": {
+              backgroundColor: hoverColor,
+            },
+          },
+        },
+      ],
+    },
   },
   typography: {
     fontFamily: "Montserrat",
