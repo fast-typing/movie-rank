@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import useRoutes from "./hooks/useRoutes";
+import useRoutes from "./routes/useRoutes";
 
 function App() {
   const routes = useRoutes()

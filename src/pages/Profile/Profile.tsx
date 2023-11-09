@@ -37,7 +37,7 @@ export default function Profile() {
   }, [])
 
   function getMovieJSX(type: string): JSX.Element {
-    return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} hideFavorite={true} />) : 'Пусто :('
+    return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} key={movie.id} hideFavorite={true} />) : 'Пусто :('
   }
 
   function getAmountOfMovieByType(type: string): number {
@@ -54,7 +54,7 @@ export default function Profile() {
             <h2 className="mb-4">Рекомендации</h2>
             <AdaptiveContainer content={recommends.map(movie => {
               if (!movie) return
-              return <MovieCard movie={movie} />
+              return <MovieCard key={movie.id} movie={movie} />
             })} />
           </div>
           <div>

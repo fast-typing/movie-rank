@@ -22,7 +22,7 @@ const MenuProps = {
 
 export default function Search() {
   const navigate = useNavigate();
-  const skeleton = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) => <MovieSceleton />);
+  const skeleton = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />);
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState({ current: null, old: null });
   const [page, setPage] = useState({ current: 1, max: 1, content: null });
@@ -224,7 +224,7 @@ export default function Search() {
     <div className="grid sm:flex gap-8">
       <div className="grid gap-4 w-full sm:w-[260px] h-fit">
         {FILTER_INPUTS.map((el) => (
-          <div className="w-full">
+          <div key={el.value} className="w-full">
             <p className="ml-2">{el.name}</p>
             <input
               className="w-full"
@@ -259,8 +259,8 @@ export default function Search() {
             >
               {countries
                 ? countries.map((el) => {
-                    return <MenuItem value={el}>{el}</MenuItem>;
-                  })
+                  return <MenuItem key={el} value={el}>{el}</MenuItem>;
+                })
                 : null}
             </Select>
           </FormControl>
@@ -285,8 +285,8 @@ export default function Search() {
             >
               {genres
                 ? genres.map((el) => {
-                    return <MenuItem value={el}>{el}</MenuItem>;
-                  })
+                  return <MenuItem key={el} value={el}>{el}</MenuItem>;
+                })
                 : null}
             </Select>
           </FormControl>
@@ -315,8 +315,8 @@ export default function Search() {
             >
               {ageRatings
                 ? ageRatings.map((el) => {
-                    return <MenuItem value={el}>{el}</MenuItem>;
-                  })
+                  return <MenuItem key={el} value={el}>{el}</MenuItem>;
+                })
                 : null}
             </Select>
           </FormControl>
