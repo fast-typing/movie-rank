@@ -25,7 +25,11 @@ export default function Profile() {
         const resUser = await getUserData(token)
         const resRecommends = await getRecommendations(user_id)
         setUser({ data: resUser, loading: false })
-        setRecommends(resRecommends)
+        if (!Array.isArray(resRecommends)) {
+          setRecommends([])
+        } else {
+          setRecommends(resRecommends)
+        }
       }
     }
 
@@ -44,27 +48,34 @@ export default function Profile() {
     user.loading
       ? <Skeleton />
       : (
-        <div>
-          <h1 className="mb-6">{user.data.username}</h1>
-          {/* <AdaptiveContainer content={recommends.map(el => <MovieCard movie={el}/>)} /> */}
-          {MOVIE_TYPES.map((type) => {
-            return <Accordion>
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                aria-controls="panel1a-content"
-                id="panel1a-header"
-              >
-                <div className="flex gap-2 items-center">
-                  <h3>{type.name}</h3>
-                  <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : null)}>{getAmountOfMovieByType(type.value)}</span>
-                </div>
-              </AccordionSummary>
-              <AccordionDetails>
-                <AdaptiveContainer content={getMovieJSX(type.value)} />
-              </AccordionDetails>
-            </Accordion>
-          })}
-        </div>
+        <>
+          <div>
+            <h1 className="mb-6">{user.data.username}</h1>
+            <h2 className="mb-4">Рекомендации</h2>
+            <AdaptiveContainer content={recommends.map(movie => {
+              if (!movie) return
+              return <MovieCard movie={movie} />
+            })} />
+          </div>
+          <div>
+            {MOVIE_TYPES.map((type) => {
+              return <Accordion key={type.value}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                >
+                  <div className="flex gap-2 items-center">
+                    <h3>{type.name}</h3>
+                    <span className={(getAmountOfMovieByType(type.value) ? "bg-[var(--mainColor)] rounded-full w-8 h-8 flex items-center justify-center" : null)}>{getAmountOfMovieByType(type.value)}</span>
+                  </div>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <AdaptiveContainer content={getMovieJSX(type.value)} />
+                </AccordionDetails>
+              </Accordion>
+            })}
+          </div>
+        </>
       )
   )
 }

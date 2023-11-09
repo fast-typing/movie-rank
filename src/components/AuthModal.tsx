@@ -55,6 +55,7 @@ export default function AuthModal(props: Props) {
     } else {
       localStorage.setItem("token", token);
       localStorage.setItem("user_id", user_id);
+      console.log(user_id)
       window.location.reload()
       openSnackbar('Вы супешно вошли в аккаунт')
       setAuth(true);

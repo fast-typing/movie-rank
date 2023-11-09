@@ -6,8 +6,8 @@ import { getAllMovies } from "../../services/http.service";
 import { Movie } from "../../interfaces/Interfaces";
 import { markFavorites } from "../../services/movieField.service";
 import { Link } from "react-router-dom";
-import "./Main.css";
 import { Skeleton } from "@mui/material";
+import "./Main.css";
 
 export default function Main() {
   const [genres, setGenres] = useState([]);
@@ -15,7 +15,7 @@ export default function Main() {
   const [newMovies, setNewMovies] = useState([]);
   const [skeleton, setSkeleton] = useState({
     loading: true,
-    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el) => <MovieSceleton />),
+    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i}/>),
   });
 
   useEffect(() => {
@@ -65,11 +65,12 @@ export default function Main() {
                 to={`/search?genres=${el}`}
                 style={{ backgroundImage: `url(./img/${getCorrectNameOfGenre(el)}.jpg)` }}
                 className="genre"
+                key={index}
               >
                 <span key={index}>{el}</span>
               </Link>
             ))
-          : [0, 0, 0, 0].map((el) => <Skeleton variant="rounded" className="!w-[300px]" height="100%" />)}
+          : [0, 0, 0, 0].map((el, i) => <Skeleton key={i} variant="rounded" className="!w-[300px]" height="100%" />)}
       </div>
       <div>
         <h1 className="mb-3">Новинки</h1>

@@ -37,7 +37,7 @@ export default function FastSearch({ search, setSearch, input, setInput }) {
         <div className={input.focus ? "fast-search" : "hidden"}>
             {
                 movies.current.length ? movies.current.map((movie: Movie) =>
-                    <div onClick={() => routeTo(movie.id)} className="flex cursor-pointer">
+                    <div key={movie.id} onClick={() => routeTo(movie.id)} className="flex cursor-pointer">
                         <img src={movie.poster} className="h-[70px] rounded mr-3" />
                         <div>
                             <h2 className="text-base two-rows-text">{movie.title}</h2>

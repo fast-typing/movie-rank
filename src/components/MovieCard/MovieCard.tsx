@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Movie } from "../../interfaces/Interfaces";
 import StarIcon from "@mui/icons-material/Star";
 import "./MovieCard.css";
-import { Chip } from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
