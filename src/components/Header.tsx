@@ -31,8 +31,12 @@ export default function Header() {
     setSearch("");
     setInput({ focus: false, open: false });
     if (isMobile) {
-      setOpenSideBar(false);
+      toggleSideBar();
     }
+  }
+
+  function toggleSideBar() {
+    setOpenSideBar(!openSideBar)
   }
 
   function closeInput(): void {
@@ -61,7 +65,7 @@ export default function Header() {
   function routeTo(path: string, isMobile?: boolean) {
     navigate(path);
     if (isMobile) {
-      setOpenSideBar(false);
+      toggleSideBar();
     }
   }
 
@@ -94,7 +98,7 @@ export default function Header() {
             style={inputStyle}
           />
           {isMobile ? (
-            <IconButton onClick={() => setOpenSideBar(false)}>
+            <IconButton onClick={toggleSideBar}>
               <CloseRoundedIcon />
             </IconButton>
           ) : null}
@@ -139,7 +143,7 @@ export default function Header() {
         </Link>
         <div className="hidden lg:flex gap-2">{nav(false)}</div>
         <div className="block lg:hidden">
-          <IconButton color="primary" onClick={() => setOpenSideBar(true)}>
+          <IconButton color="primary" onClick={toggleSideBar}>
             <DragHandleRoundedIcon />
           </IconButton>
           <div className={openSideBar ? "absolute top-[86px] inset-x-0 bottom-0 z-50" : "hidden"}>

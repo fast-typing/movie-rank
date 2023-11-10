@@ -85,7 +85,7 @@ main {
   display: flex;
   align-items: center;
   position: relative;
-  z-index: 2;
+  z-index: 3;
   border-radius: 6px;
   gap: 8px;
 

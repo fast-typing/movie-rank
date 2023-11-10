@@ -1,7 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import AdaptiveContainer from "../../../components/AdaptiveContainer";
-import { TabContext, TabList, TabPanel } from "@mui/lab";
 import { getCinemas } from "../../../services/http.service";
 import { Cinema } from "../../../interfaces/Interfaces";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -53,10 +52,6 @@ export default function KinoAfisha() {
     setTabs(+newValue);
   }
 
-  function getIndex(cinemaName: string): string {
-    return cinemas.findIndex((el) => el.name === cinemaName).toString();
-  }
-
   function getTime(time: string): string {
     return time.toString().slice(0, 2) + ":" + time.toString().slice(2, 4);
   }
@@ -82,10 +77,11 @@ export default function KinoAfisha() {
       </Tabs>
       <div>
         {cinemas.map((cinema, index) => (
-          tabs == index ? <>
+          tabs === index ? <>
             {cinema.timetable.map((el) => (
               <div>
-                <h2 className="h-fit mb-4">{getDate(el.date)}</h2>
+                <h2 className="h-fit mb-4">Расписание сеансов в кино сегодня</h2>
+                {/* <h2 className="h-fit mb-4">{getDate(el.date)}</h2> */}
                 <AdaptiveContainer
                   content={el.movies.map((movie) => (
                     <div className="p-2 bg-[var(--black-2)] rounded h-fit">
@@ -127,65 +123,10 @@ export default function KinoAfisha() {
           </> : null
         ))}
       </div>
-      {/* <TabContext
-        value={tabs}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <TabList onChange={handleTabs} aria-label="lab API tabs example">
-            {cinemas.map((cinema) => (
-              <Tab label={cinema.name} value={getIndex(cinema.name)} />
-            ))}
-          </TabList>
-        </Box>
-        {cinemas.map((cinema) => (
-          <TabPanel value={getIndex(cinema.name)}>
-            {cinema.timetable.map((el) => (
-              <div>
-                <h2 className="h-fit mb-4">{getDate(el.date)}</h2>
-                <AdaptiveContainer
-                  content={el.movies.map((movie) => (
-                    <div className="p-2 bg-[var(--black-2)] rounded h-fit">
-                      <a href={movie.movie_link} target="_blank" rel="noreferrer">
-                        <img
-                          className="w-full h-[300px] object-cover rounded"
-                          src={movie.movie_poster}
-                          alt={movie.movie_poster}
-                        />
-                      </a>
-                      <h3 className="my-2 two-rows-text h-[54px]">{movie.movie_name}</h3>
-                      <Accordion>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                          <Typography>Сеансы</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                          <div className="flex flex-wrap gap-2">
-                            {movie.times.map((item) =>
-                              item.order_link?.length ? (
-                                <a href={item.order_link} target="_blank" rel="noreferrer">
-                                  <Chip disabled={!item.order_link?.length} label={getTime(item.time)} />
-                                </a>
-                              ) : (
-                                <Tooltip arrow placement="top" title="недоступно" >
-                                  <a href={item.order_link} target="_blank" rel="noreferrer">
-                                    <Chip disabled={!item.order_link?.length} label={getTime(item.time)} />
-                                  </a>
-                                </Tooltip>
-                              )
-                            )}
-                          </div>
-                        </AccordionDetails>
-                      </Accordion>
-                    </div>
-                  ))}
-                />
-              </div>
-            ))}
-          </TabPanel>
-        ))}
-      </TabContext> */}
-      <p className="opacity-50">
+      <p className="opacity-50 mt-8">
         Вся информация взята с api{" "}
         <a href="https://www.kinoafisha.info/" className="underline">
-          киноафишы
+          киноафиши
         </a>
       </p>
     </Box>

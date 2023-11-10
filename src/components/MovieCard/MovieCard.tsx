@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Movie } from "../../interfaces/Interfaces";
 import StarIcon from "@mui/icons-material/Star";
 import "./MovieCard.css";
