@@ -1,7 +1,7 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import AdaptiveContainer from "../../../components/AdaptiveContainer";
-import { getCinemas } from "../../../services/http.service";
+import { getCinemas, getCities } from "../../../services/http.service";
 import { Cinema } from "../../../interfaces/Interfaces";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -11,9 +11,11 @@ export default function KinoAfisha() {
 
   useEffect(() => {
     const init = async () => {
+      const resCities = await getCities();
+      console.log(resCities)
       const resCinemas = await getCinemas();
       const cinemasByKey = [];
-      resCinemas.data.data.map((movie) => {
+      resCinemas.data.map((movie) => {
         const isCinemaExist = cinemasByKey[movie.cinema_name];
         if (isCinemaExist) {
           cinemasByKey[movie.cinema_name].push(movie);

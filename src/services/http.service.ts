@@ -66,12 +66,20 @@ export function getRecommendations(user_id: string) {
   return _request(`get_recommendations?user_id=${user_id}`, "GET");
 }
 
-export function getCinemas(): Promise<{ data: { data: CinemaMovie[] } }> {
+export function getCinemas(): Promise<{ data: CinemaMovie[] }> {
   return _request(`api_kinoafisha/get_schedule_events?city=354`, "GET");
+}
+
+export function getCities(): Promise<{ data: { data: CinemaMovie[] } }> {
+  return _request(`api_kinoafisha/get_all_cities`, "GET");
 }
 
 export function getUsersRating(filmId: string): Promise<{ [id: string]: number }[]> {
   return _request(`get_ratings_for_film?film_id=${filmId}`, "GET");
+}
+
+export function getAIAdvice(content: string): Promise<string> {
+  return _request(`gigachat/create_prompt?prompt=${content}`, "GET");
 }
 
 // export async function getCoordinates(address: string) {

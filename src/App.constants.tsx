@@ -12,7 +12,8 @@ export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
 export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 
 export const YANDEX_API_KEY = '8f171b20-f9ec-49cb-97f2-a8e9153f25f4'
-export const HTTP_URL = "https://dvigit.onrender.com/"
+export const HTTP_URL = "http://213.171.9.36/"
+// export const HTTP_URL = "https://dvigit.onrender.com/"
 export const CITY = 'ижевск' 
 
 export const MOVIE_FIELDS = {

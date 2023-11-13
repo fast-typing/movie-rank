@@ -1,6 +1,5 @@
 import { YMaps, Map, FullscreenControl } from "@pbe/react-yandex-maps";
 import { useEffect, useState } from "react";
-import { getUserIP } from "../../services/http.service";
 import KinoAfisha from "./KinoAfisha/KinoAfisha";
 
 export default function Cinema() {
@@ -9,16 +8,17 @@ export default function Cinema() {
 
   useEffect(() => {
     const init = async () => {
-      let IP = JSON.parse(localStorage.getItem("ip"));
-      if (!IP) {
-        IP = await getUserIP();
-      }
-      // const yandexRes = await getCoordinates('Ижевск, кинотеатр Дядя Фёдор')
-      // if (!yandexRes?.response?.GeoObjectCollection?.featureMember?.[0]?.GeoObject?.Point?.pos) return
-      // const coordinatesRes = yandexRes.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos(' ')
-      // console.log(yandexRes, coordinatesRes)
-      // setCoordinates({ latitude: coordinatesRes[1], longitude: coordinatesRes[0] })
-      setCoordinates({ latitude: IP.latitude, longitude: IP.longitude });
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const location = position.coords
+        setCoordinates({ latitude: location.latitude, longitude: location.longitude });
+        localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }))
+        fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`)
+          .then(res => res.json())
+          .then(res => {
+            const city = res.address.city.replace('городской округ', '').trim()
+            console.log(city)
+          })
+      });
       setLoading(false);
     };
 
