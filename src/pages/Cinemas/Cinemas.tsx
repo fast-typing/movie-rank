@@ -1,7 +1,7 @@
 import { YMaps, Map, FullscreenControl } from "@pbe/react-yandex-maps";
 import { useEffect, useState } from "react";
 import KinoAfisha from "./KinoAfisha/KinoAfisha";
-import { getCinemasByCity, getCities, getUserCity } from "../../services/http.service";
+import { getCinemasByCity, getCities, getUserCity, getUserIP } from "../../services/http.service";
 import { Cinema } from "../../interfaces/Interfaces";
 
 export default function Cinemas() {
@@ -11,47 +11,45 @@ export default function Cinemas() {
 
   useEffect(() => {
     const init = async () => {
-      navigator.geolocation.getCurrentPosition(async function (position) {
-        const location = position.coords
-        setCoordinates({ latitude: location.latitude, longitude: location.longitude });
-        localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }))
+      const location = await getUserIP()
+      setCoordinates({ latitude: location.latitude, longitude: location.longitude });
+      localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }))
 
-        const resCities = await getCities();
-        const city = await getUserCity(location)
-        const city_id = resCities.data[city]
-        const resCinemas = await getCinemasByCity(city_id ?? '354');
+      const resCities = await getCities();
+      const city = await getUserCity(location)
+      const city_id = resCities.data[city]
+      const resCinemas = await getCinemasByCity(city_id ?? '354');
 
-        const cinemasByKey = [];
-        resCinemas.data.map((movie) => {
-          const isCinemaExist = cinemasByKey[movie.cinema_name];
-          if (isCinemaExist) {
-            cinemasByKey[movie.cinema_name].push(movie);
+      const cinemasByKey = [];
+      resCinemas.data.map((movie) => {
+        const isCinemaExist = cinemasByKey[movie.cinema_name];
+        if (isCinemaExist) {
+          cinemasByKey[movie.cinema_name].push(movie);
+        } else {
+          cinemasByKey[movie.cinema_name] = [movie];
+        }
+      });
+      const formattedCinemas = [];
+      for (const key of Object.keys(cinemasByKey)) {
+        const timetable = [];
+        cinemasByKey[key].map((movie) => {
+          if (timetable.find((item) => item.date === movie.date)) {
+            const index = timetable.findIndex((el) => el.date === movie.date);
+            const index2 = timetable[index].movies.findIndex((el) => el.movie_name === movie.movie_name);
+            if (index2 !== -1) {
+              timetable[index].movies[index2].times.push({ time: movie.time, order_link: movie.order_link });
+            } else {
+              timetable[index].movies.push({ ...movie, times: [{ time: movie.time, order_link: movie.order_link }] });
+            }
           } else {
-            cinemasByKey[movie.cinema_name] = [movie];
+            const newMovie = { ...movie, times: [{ time: movie.time, order_link: movie.order_link }] };
+            const movieOnNewDate = { date: movie.date, movies: [newMovie] };
+            timetable.push(movieOnNewDate);
           }
         });
-        const formattedCinemas = [];
-        for (const key of Object.keys(cinemasByKey)) {
-          const timetable = [];
-          cinemasByKey[key].map((movie) => {
-            if (timetable.find((item) => item.date === movie.date)) {
-              const index = timetable.findIndex((el) => el.date === movie.date);
-              const index2 = timetable[index].movies.findIndex((el) => el.movie_name === movie.movie_name);
-              if (index2 !== -1) {
-                timetable[index].movies[index2].times.push({ time: movie.time, order_link: movie.order_link });
-              } else {
-                timetable[index].movies.push({ ...movie, times: [{ time: movie.time, order_link: movie.order_link }] });
-              }
-            } else {
-              const newMovie = { ...movie, times: [{ time: movie.time, order_link: movie.order_link }] };
-              const movieOnNewDate = { date: movie.date, movies: [newMovie] };
-              timetable.push(movieOnNewDate);
-            }
-          });
-          formattedCinemas.push({ name: key, timetable: timetable });
-        }
-        setCinemas(formattedCinemas);
-      });
+        formattedCinemas.push({ name: key, timetable: timetable });
+      }
+      setCinemas(formattedCinemas);
       setLoading(false);
     };
 

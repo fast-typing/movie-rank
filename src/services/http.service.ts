@@ -90,12 +90,12 @@ export function getAIAdvice(content: string): Promise<string> {
 //     .catch((error) => console.error(error));
 // }
 
-// export async function getUserIP() {
-//   return await fetch("https://ipapi.co/json")
-//     .then((response) => response.json())
-//     .then((res) => res)
-//     .catch((error) => console.error(error));
-// }
+export async function getUserIP() {
+  return await fetch("https://ipapi.co/json")
+    .then((response) => response.json())
+    .then((res) => res)
+    .catch((error) => console.error(error));
+}
 
 export async function getUserCity(location): Promise<string> {
   return await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`)
