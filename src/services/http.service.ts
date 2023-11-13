@@ -66,11 +66,11 @@ export function getRecommendations(user_id: string) {
   return _request(`get_recommendations?user_id=${user_id}`, "GET");
 }
 
-export function getCinemas(): Promise<{ data: CinemaMovie[] }> {
-  return _request(`api_kinoafisha/get_schedule_events?city=354`, "GET");
+export function getCinemasByCity(city_id: string): Promise<{ data: CinemaMovie[] }> {
+  return _request(`api_kinoafisha/get_schedule_events?city=${city_id}`, "GET");
 }
 
-export function getCities(): Promise<{ data: { data: CinemaMovie[] } }> {
+export function getCities(): Promise<{ data: {} }> {
   return _request(`api_kinoafisha/get_all_cities`, "GET");
 }
 
@@ -90,10 +90,17 @@ export function getAIAdvice(content: string): Promise<string> {
 //     .catch((error) => console.error(error));
 // }
 
-export async function getUserIP() {
-  return await fetch("https://ipapi.co/json")
+// export async function getUserIP() {
+//   return await fetch("https://ipapi.co/json")
+//     .then((response) => response.json())
+//     .then((res) => res)
+//     .catch((error) => console.error(error));
+// }
+
+export async function getUserCity(location): Promise<string> {
+  return await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`)
     .then((response) => response.json())
-    .then((res) => res)
+    .then((res) => res.address.city.replace('городской округ', '').trim())
     .catch((error) => console.error(error));
 }
 
