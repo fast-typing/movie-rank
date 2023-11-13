@@ -14,7 +14,6 @@ interface Props {
 
 export default function AuthModal(props: Props) {
   const { setAuth } = useContext(AuthContext);
-  const navigate = useNavigate()
   const [form, setForm] = useState({ username: "", password: "", email: "" });
   const [snackbar, setSnackbar] = useState({ open: false, message: null })
   const [loading, setLoading] = useState(false)
@@ -22,6 +21,7 @@ export default function AuthModal(props: Props) {
   function close() {
     props.onClose();
     setForm({ username: "", password: "", email: "" });
+    setLoading(false)
   }
 
   function handleChange(e: any) {

@@ -23,10 +23,6 @@ export function getMovie(id: string): Promise<Movie> {
   return _request(`get_film?film_id=${id}`, "GET");
 }
 
-export function getReviews(movieId: string): Promise<Review[]> {
-  return _request(`get_all_reviews?film_id=${movieId}`, "GET");
-}
-
 export function getUserData(token?: string, username?: string): Promise<User> {
   let path = "get_user";
   if (token) path += `?token=${token}`;
@@ -54,8 +50,12 @@ export function createComment(token: string, body: any) {
   return _request(`create_comment?token=${token}`, "POST", body);
 }
 
-export function getAllComments(film_id: string) {
-  return _request(`get_all_comments?film_id=${film_id}`, "GET");
+export function getAllComments(film_id: string, limit?: number) {
+  return _request(`get_all_comments?film_id=${film_id}&limit=${limit}`, "GET");
+}
+
+export function getAllReviews(movieId: string, limit?: number): Promise<Review[]> {
+  return _request(`get_all_reviews?film_id=${movieId}&limit=${limit}`, "GET");
 }
 
 export function rateFilm(body: RateFilm) {

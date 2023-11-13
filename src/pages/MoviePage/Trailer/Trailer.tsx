@@ -33,11 +33,11 @@ export default function Trailer({ movie }) {
               <CloseIcon />
             </IconButton>
           </div>
-          {/* <video className="rounded w-full" controls>
+          <video className="rounded w-full" controls>
             <source src={movie.trailer} type="video/mp4" />
             Your browser doesn't support HTML5 video tag.
-          </video> */}
-          <VideoPlayer id={"dQw4w9WgXcQ"} />
+          </video>
+          {/* <VideoPlayer id={"dQw4w9WgXcQ"} /> */}
         </div>
       </Modal>
     </>

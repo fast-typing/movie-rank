@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import { getAllComments, getMovie, getUsersRating, getReviews, getUserData } from "../../services/http.service";
-import { MOVIE_FIELDS } from "../../App.constants";
+import { getAllComments, getMovie, getUsersRating, getUserData, getAllReviews } from "../../services/http.service";
+import { LIMIT_OF_COMMENT_BY_DEFAULT, LIMIT_OF_REVIEW_BY_DEFAULT, MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
@@ -25,8 +25,8 @@ export default function MoviePage() {
     const init = async () => {
       setLoading(true);
       const resMovie = await getMovie(filmId);
-      const resReviews = await getReviews(filmId);
-      const resComments = await getAllComments(filmId);
+      const resReviews = await getAllReviews(filmId, LIMIT_OF_REVIEW_BY_DEFAULT);
+      const resComments = await getAllComments(filmId, LIMIT_OF_COMMENT_BY_DEFAULT);
       const resRatings = await getUsersRating(filmId);
       const token = localStorage.getItem("token") ?? "";
       const user = await getUserData(token);

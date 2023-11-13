@@ -28,6 +28,7 @@ export default function Reviews({ film_id, reviews }) {
       <div className="grid gap-8 mb-4">
         {edit ? <ReviewForm film_id={film_id} /> : null}
         {page.content.length ? page.content.map(review => <ReviewBlock review={review} />) : "Рецензий нема :("}
+        <Button variant="contained">Показать еще</Button>
       </div>
       {page.max > 1 ? (
         <Stack spacing={2}>
