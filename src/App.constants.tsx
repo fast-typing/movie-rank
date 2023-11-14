@@ -7,11 +7,10 @@ import SentimentSatisfiedAltRoundedIcon from '@mui/icons-material/SentimentSatis
 import SentimentVeryDissatisfiedRoundedIcon from '@mui/icons-material/SentimentVeryDissatisfiedRounded';
 
 export const AMOUNT_OF_MOVIES_ON_PAGE = 24
-export const AMOUNT_OF_COMMENTS_ON_PAGE = 12
+export const AMOUNT_OF_COMMENTS_ON_PAGE = 6
 export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
 export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 export const LIMIT_OF_REVIEW_BY_DEFAULT = 3
-export const LIMIT_OF_COMMENT_BY_DEFAULT = 10
 
 export const YANDEX_API_KEY = '8f171b20-f9ec-49cb-97f2-a8e9153f25f4'
 export const HTTP_URL = "https://backend.movie-rank.ru/"

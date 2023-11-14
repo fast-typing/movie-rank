@@ -46,6 +46,29 @@ const theme = createTheme({
         },
       ],
     },
+    MuiLinearProgress: {
+      variants: [
+        {
+          props: {},
+          style: {
+            backgroundColor: '#222222',
+            '& .MuiLinearProgress-bar': {
+              backgroundColor: mainColor,
+            }
+          },
+        },
+      ],
+    },
+    MuiCircularProgress: {
+      variants: [
+        {
+          props: {},
+          style: {
+            color: mainColor
+          },
+        },
+      ],
+    },
     MuiToggleButton: {
       variants: [
         {

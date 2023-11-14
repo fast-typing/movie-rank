@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import { getAllComments, getMovie, getUsersRating, getUserData, getAllReviews } from "../../services/http.service";
-import { LIMIT_OF_COMMENT_BY_DEFAULT, LIMIT_OF_REVIEW_BY_DEFAULT, MOVIE_FIELDS } from "../../App.constants";
+import { getAllComments, getMovie, getUsersRating, getUserData, getReviews, getReplies } from "../../services/http.service";
+import { LIMIT_OF_REVIEW_BY_DEFAULT, MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
@@ -25,13 +25,19 @@ export default function MoviePage() {
     const init = async () => {
       setLoading(true);
       const resMovie = await getMovie(filmId);
-      const resReviews = await getAllReviews(filmId, LIMIT_OF_REVIEW_BY_DEFAULT);
-      const resComments = await getAllComments(filmId, LIMIT_OF_COMMENT_BY_DEFAULT);
+      const resReviews = await getReviews(filmId, LIMIT_OF_REVIEW_BY_DEFAULT);
+      const resComments = await getAllComments(filmId);
       const resRatings = await getUsersRating(filmId);
       const token = localStorage.getItem("token") ?? "";
       const user = await getUserData(token);
       if (!resMovie) return;
       const correctedMovies = changeBooleanTypesOfMovies([resMovie], user)[0];
+      for (let i = 0; i < resComments.length; i++) {
+        const replies = await getReplies(null, resComments[i].id)
+        if (!replies.length) continue
+        console.log(replies)
+        resComments[i] = { ...resComments[i], replies: replies }
+      }
 
       initDetailedInfo(correctedMovies);
       setMovie(correctedMovies);
@@ -69,7 +75,7 @@ export default function MoviePage() {
     <PageSkeleton />
   ) : (
     <div className="grid gap-4 w-full">
-      <Widgets movie={movie} usersRatings={usersRatings}/>
+      <Widgets movie={movie} usersRatings={usersRatings} />
       <div className="grid gap-4 w-full">
         <div className="grid h-fit gap-4 w-full md:flex md:h-[500px]">
           <img src={movie.poster} className="rounded object-cover w-full md:w-[40%]" alt={movie.title} />
@@ -88,7 +94,7 @@ export default function MoviePage() {
         </div>
       </div>
       <hr />
-      <Reviews film_id={filmId} reviews={reviews} />
+      <Reviews film_id={filmId} propReviews={reviews} />
       <hr />
       <Comments film_id={filmId} comments={comments} />
     </div>

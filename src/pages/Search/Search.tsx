@@ -26,7 +26,7 @@ export default function Search() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState({ current: null, old: null });
   const [page, setPage] = useState({ current: 1, max: 1, content: null });
-  const [sortBy, setSortBy] = useState<"old" | "new" | "rating" | "">("");
+  const [sortBy, setSortBy] = useState<"Старые" | "Новые" | "По рейтенгу" | "">("");
   const [genres, setGenres] = useState([]);
   const [countries, setCountries] = useState([]);
   const [ageRatings, setAgeRatings] = useState([]);
@@ -131,11 +131,11 @@ export default function Search() {
     setLoading(true);
     const sortedMovies = movies.current.sort((curr, prev) => {
       switch (sortBy) {
-        case "new":
+        case "Новые":
           return prev.year - curr.year;
-        case "old":
+        case "Старые":
           return curr.year - prev.year;
-        case "rating":
+        case "По рейтенгу":
           return prev.average_rating - curr.average_rating;
       }
     });
@@ -340,9 +340,9 @@ export default function Search() {
               <MenuItem value={""}>
                 <em>Пусто</em>
               </MenuItem>
-              <MenuItem value={"old"}>Сначала старые</MenuItem>
-              <MenuItem value={"new"}>Сначала новые</MenuItem>
-              <MenuItem value={"rating"}>Наибольший рейтинг</MenuItem>
+              <MenuItem value={"Старые"}>Сначала старые</MenuItem>
+              <MenuItem value={"Новые"}>Сначала новые</MenuItem>
+              <MenuItem value={"По рейтенгу"}>Наибольший рейтинг</MenuItem>
             </Select>
           </FormControl>
         </div>

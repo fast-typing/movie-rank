@@ -92,7 +92,7 @@ export default function ReviewBlock(props: Props) {
         </IconButton>
         <span>{(rating > 0 ? '+' : '') + rating.toString()}</span>
       </div>
-      <LeaveCommentToParent type={"comment"} parent_id={props.review.id} movie_id={props.review.film_id} />
+      {/* <LeaveCommentToParent type={"comment"} parent_id={props.review.id} movie_id={props.review.film_id} /> */}
     </div>
   );
 }

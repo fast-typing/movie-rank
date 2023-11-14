@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
-import { createComment } from "../../../services/http.service";
+import { createComment, getReplies } from "../../../services/http.service";
 import { Comment } from "../../../interfaces/Interfaces";
 
 interface Props {
-    comments: Comment[]
-    film_id: string
+  comments: Comment[]
+  film_id: string
 }
 
 export default function Comments(props: Props) {
@@ -23,14 +23,14 @@ export default function Comments(props: Props) {
     });
   }, []);
 
-  const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+  const changePage = async (event: React.ChangeEvent<unknown>, value: number) => {
     const content = props.comments?.slice((value - 1) * AMOUNT_OF_COMMENTS_ON_PAGE, value * AMOUNT_OF_COMMENTS_ON_PAGE);
     setPage({ ...page, current: value, content: content });
   };
 
   async function submitComment() {
     const token = localStorage.getItem("token");
-    const res = await createComment(token, { message: comment, film_id: props.film_id});
+    const res = await createComment(token, { message: comment, film_id: props.film_id });
     if (!res.film_id) return
     window.location.reload()
   }
@@ -59,7 +59,7 @@ export default function Comments(props: Props) {
           </div>
         ) : null}
         {page.content.length
-          ? page.content.map((comment) => <CommentBlock comment={comment} />)
+          ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />)
           : "Комментарии отсутствуют :("}
       </div>
       {page.max > 1 ? (

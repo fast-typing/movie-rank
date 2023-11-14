@@ -50,12 +50,21 @@ export function createComment(token: string, body: any) {
   return _request(`create_comment?token=${token}`, "POST", body);
 }
 
-export function getAllComments(film_id: string, limit?: number) {
-  return _request(`get_all_comments?film_id=${film_id}&limit=${limit}`, "GET");
+export function getAllComments(film_id: string) {
+  return _request(`get_all_comments?film_id=${film_id}&limit=99999`, "GET");
 }
 
-export function getAllReviews(movieId: string, limit?: number): Promise<Review[]> {
-  return _request(`get_all_reviews?film_id=${movieId}&limit=${limit}`, "GET");
+export function getReplies(parent_review_id?: number, parent_comment_id?: number) {
+  let url = `get_all_replies?`;
+  if (parent_review_id) url += `parent_review_id=${parent_review_id}`;
+  if (parent_comment_id) url += `parent_comment_id=${parent_comment_id}`;
+  return _request(url, "GET");
+}
+
+export function getReviews(movieId: string, amount: number = 3, start?: number): Promise<Review[]> {
+  let url = `get_all_reviews?film_id=${movieId}&limit=${amount}`;
+  if (start) url += `&offset=${start}`;
+  return _request(url, "GET");
 }
 
 export function rateFilm(body: RateFilm) {
@@ -78,8 +87,8 @@ export function getUsersRating(filmId: string): Promise<{ [id: string]: number }
   return _request(`get_ratings_for_film?film_id=${filmId}`, "GET");
 }
 
-export function getAIAdvice(content: string): Promise<string> {
-  return _request(`gigachat/create_prompt?prompt=${content}`, "GET");
+export function getAIAdvice(content: string): Promise<{ content: string }> {
+  return _request(`gigachat/create_prompt?content=${content}`, "POST");
 }
 
 // export async function getCoordinates(address: string) {
@@ -98,9 +107,11 @@ export async function getUserIP() {
 }
 
 export async function getUserCity(location): Promise<string> {
-  return await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`)
+  return await fetch(
+    `https://nominatim.openstreetmap.org/reverse?lat=${location.latitude}&lon=${location.longitude}&format=json`
+  )
     .then((response) => response.json())
-    .then((res) => res.address.city.replace('городской округ', '').trim())
+    .then((res) => res.address.city.replace("городской округ", "").trim())
     .catch((error) => console.error(error));
 }
 

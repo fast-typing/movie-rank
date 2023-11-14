@@ -66,7 +66,8 @@ export interface Comment {
   parent_comment_id: number | null
   parent_review_id: number | null
   username: string
-  id: number
+  id: number,
+  replies?: Comment[]
 }
 
 export interface Cinema {
