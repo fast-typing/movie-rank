@@ -14,7 +14,7 @@ export async function markFavorites(movies: Movie[]): Promise<Movie[]> {
     })
 }
 
-export function changeBooleanTypesOfMovies(movies: Movie[], user: User): Movie[] {
+export function changeBooleanTypesOfMovies(movies: Movie[], user: User | null): Movie[] {
     let newMoviesArr = movies
     if (!user) return movies
     newMoviesArr = changeMovieField(newMoviesArr, user, 'is_abandoned', 'abandoned_films')

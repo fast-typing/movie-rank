@@ -7,53 +7,28 @@ import { Cinema } from "../../interfaces/Interfaces";
 export default function Cinemas() {
   const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
   const [loading, setLoading] = useState(true);
-  const [cinemas, setCinemas] = useState<Cinema[]>()
-  const [addresses, setAddresses] = useState<{ name: string, coordinates: number[] }[]>([])
+  const [cinemas, setCinemas] = useState<Cinema[]>();
+  const [addresses, setAddresses] = useState<{ name: string, coordinates: number[] }[]>([]);
 
   useEffect(() => {
     const init = async () => {
-      await initCinemas()
+      await initCinemas();
       setLoading(false);
     };
 
     init();
   }, []);
 
-  useEffect(() => {
-    if (!cinemas) return
-    
-    const initAddresses = async () => {
-      const cinemasWithCoord = []
-  
-      const getData = async (name) => {
-        const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр${name},Ижевск&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
-        const res = await fetch(url);
-        const data = await res.text();
-        return data;
-      };
-  
-      await cinemas.map(async (cinema) => {
-        const data = await getData(cinema.name);
-        const cinemaCoordinates = JSON.parse(data)["features"][0]["geometry"]["coordinates"];
-        cinemasWithCoord.push({ name: cinema.name, coordinates: cinemaCoordinates.reverse() })
-      });
-  
-      setAddresses(cinemasWithCoord)
-    }
-
-    initAddresses()
-  }, [cinemas])
-
   async function initCinemas() {
-    const localStorageLocation = JSON.parse(localStorage.getItem('location'))
-    const location = localStorageLocation ? localStorageLocation : await getUserIP()
+    const localStorageLocation = JSON.parse(localStorage.getItem("location"));
+    const location = localStorageLocation ? localStorageLocation : await getUserIP();
     setCoordinates({ latitude: location.latitude, longitude: location.longitude });
-    localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }))
+    localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }));
 
     const resCities = await getCities();
-    const city = await getUserCity(location)
-    const city_id = resCities.data[city]
-    const resCinemas = await getCinemasByCity(city_id ?? '354');
+    const city = await getUserCity(location);
+    const city_id = resCities.data[city];
+    const resCinemas = await getCinemasByCity(city_id ?? "354");
 
     const cinemasByKey = [];
     resCinemas.data.map((movie) => {
@@ -86,7 +61,27 @@ export default function Cinemas() {
       formattedCinemas.push({ name: key, timetable: timetable });
     }
 
+    await initAddresses(formattedCinemas, city);
     setCinemas(formattedCinemas);
+  }
+
+  async function initAddresses(inputCinemas, city: string) {
+    const cinemasWithCoord = [];
+
+    const getData = async (name) => {
+      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр${name},${city}&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
+      const res = await fetch(url);
+      const data = await res.text();
+      return data;
+    };
+
+    for (let i = 0; i < inputCinemas.length; i++) {
+      const data = await getData(inputCinemas.name);
+      const cinemaCoordinates = JSON.parse(data)["features"][0]["geometry"]["coordinates"];
+      cinemasWithCoord.push({ name: inputCinemas.name, coordinates: cinemaCoordinates.reverse() });
+    }
+
+    setAddresses(cinemasWithCoord);
   }
 
   return loading ? null : (
@@ -98,7 +93,11 @@ export default function Cinemas() {
         >
           <FullscreenControl />
           {addresses.map((cinema) => (
-            <Placemark geometry={cinema.coordinates} properties={{ iconCaption: cinema.name }} options={{ iconColor: "#d32f2f" }} />
+            <Placemark
+              geometry={cinema.coordinates}
+              properties={{ iconCaption: cinema.name }}
+              options={{ iconColor: "#d32f2f" }}
+            />
           ))}
         </Map>
       </YMaps>

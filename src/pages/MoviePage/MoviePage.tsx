@@ -1,7 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import { getAllComments, getMovie, getUsersRating, getUserData, getReviews, getReplies } from "../../services/http.service";
+import {
+  getAllComments,
+  getMovie,
+  getUsersRating,
+  getUserData,
+  getReviews,
+  getReplies,
+} from "../../services/http.service";
 import { LIMIT_OF_REVIEW_BY_DEFAULT, MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
@@ -28,22 +35,23 @@ export default function MoviePage() {
       const resReviews = await getReviews(filmId, LIMIT_OF_REVIEW_BY_DEFAULT);
       const resComments = await getAllComments(filmId);
       const resRatings = await getUsersRating(filmId);
-      const token = localStorage.getItem("token") ?? "";
-      const user = await getUserData(token);
+      const token = localStorage.getItem("token");
+      console.log(token)
+      const user = token ? await getUserData(token) : null;
       if (!resMovie) return;
       const correctedMovies = changeBooleanTypesOfMovies([resMovie], user)[0];
       for (let i = 0; i < resComments.length; i++) {
-        const replies = await getReplies(null, resComments[i].id)
-        if (!replies.length) continue
-        console.log(replies)
-        resComments[i] = { ...resComments[i], replies: replies }
+        const replies = await getReplies(null, resComments[i].id);
+        if (!replies.length) continue;
+        console.log(replies);
+        resComments[i] = { ...resComments[i], replies: replies };
       }
 
       initDetailedInfo(correctedMovies);
       setMovie(correctedMovies);
       setReviews(resReviews);
       setComments(resComments);
-      setUsersRatings(resRatings)
+      setUsersRatings(resRatings);
       setLoading(false);
     };
 

@@ -15,7 +15,7 @@ export default function Main() {
   const [newMovies, setNewMovies] = useState([]);
   const [skeleton, setSkeleton] = useState({
     loading: true,
-    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i}/>),
+    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />),
   });
 
   useEffect(() => {
@@ -65,12 +65,13 @@ export default function Main() {
                 to={`/search?genres=${el}`}
                 style={{ backgroundImage: `url(./img/${getCorrectNameOfGenre(el)}.jpg)` }}
                 className="genre"
-                key={index}
               >
                 <span key={index}>{el}</span>
               </Link>
             ))
-          : [0, 0, 0, 0, 0, 0].map((el, i) => <Skeleton key={i} variant="rounded" className="min-w-[300px]" height="100%" />)}
+          : [0, 0, 0, 0, 0, 0].map((el, i) => (
+              <Skeleton key={i} variant="rounded" className="min-w-[300px]" height="100%" />
+            ))}
       </div>
       <div>
         <h1 className="mb-3">Новинки</h1>

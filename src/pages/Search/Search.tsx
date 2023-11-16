@@ -153,7 +153,7 @@ export default function Search() {
         return filterValue.filter((el) => movieValue.includes(el)).length === filterValue.length ? movieValue : null;
         // movieValue.filter(el => filterValue.filter(item => item === el).length === filterValue.length)
       } else {
-        const movieValue = typeof movie[field] == "object" ? movie[field].join(" ") : movie[field];
+        const movieValue = typeof movie[field] == "object" ? movie[field]?.join(" ") : movie[field];
         if (field === "age_rating") {
           return movieValue === filterValue;
         }

@@ -29,7 +29,7 @@ export default function GPTDialog() {
                 <form className="modal-content w-full sm:h-fit sm:w-[600px]" onSubmit={submit}>
                     <p>В этом окне вы можете задать любой вопрос ИИ</p>
                     <textarea placeholder="Ваш запрос" className="h-[120px]" value={input} onChange={(e) => setInput(e.target.value)} />
-                    {loading ? <LinearProgress /> : <p>{aiAdvice}</p>}
+                    {loading ? <LinearProgress /> : aiAdvice}
                     <Button disabled={!input.length} variant="contained" onClick={submit}>Получить ответ</Button>
                 </form>
             </Modal>

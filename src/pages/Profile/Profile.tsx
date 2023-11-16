@@ -17,6 +17,7 @@ export default function Profile() {
     const init = async () => {
       if (username) {
         const resUser = await getUserData(null, username);
+        document.title = `Профиль ${resUser.username}`;
         setUser({ data: resUser, loading: false });
       } else {
         const token = localStorage.getItem("token");

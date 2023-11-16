@@ -46,6 +46,39 @@ const theme = createTheme({
         },
       ],
     },
+    MuiPaper: {
+      variants: [
+        {
+          props: {},
+          style: {
+            color: "white",
+            backgroundColor: '#323232',
+          },
+        },
+      ],
+    },
+    MuiMenuItem: {
+      variants: [
+        {
+          props: {},
+          style: {
+            // backgroundColor: mainColor,
+            '&.Mui-selected': {
+              backgroundColor: mainColor,
+              '&:hover': {
+                backgroundColor: hoverColor,
+              },
+            },
+            '&:hover': {
+              backgroundColor: hoverColor,
+            },
+            '&.Mui-focus': {
+              backgroundColor: mainColor,
+            },
+          },
+        },
+      ],
+    },
     MuiLinearProgress: {
       variants: [
         {
