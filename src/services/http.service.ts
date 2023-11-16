@@ -16,7 +16,7 @@ export function registration(data): Promise<Registration> {
 }
 
 export function getAllMovies(): Promise<Movie[]> {
-  return _request(`get_all_films?limit=500`, "GET");
+  return _request(`get_all_films?limit=1000`, "GET");
 }
 
 export function getMovie(id: string): Promise<Movie> {
