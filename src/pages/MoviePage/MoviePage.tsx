@@ -32,6 +32,8 @@ export default function MoviePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0)
+
     const init = async () => {
       setLoading(true);
       const resMovie = await getMovie(filmId);
@@ -42,11 +44,11 @@ export default function MoviePage() {
       const user = token ? await getUserData(token) : null;
       if (!resMovie) return;
       const correctedMovie = changeBooleanTypesOfMovies([resMovie], user)[0];
-      for (let i = 0; i < resComments.length; i++) {
-        const replies = await getReplies(null, resComments[i].id);
-        if (!replies.length) continue;
-        resComments[i] = { ...resComments[i], replies: replies };
-      }
+      // for (let i = 0; i < resComments.length; i++) {
+      //   const replies = await getReplies(null, resComments[i].id);
+      //   if (!replies.length) continue;
+      //   resComments[i] = { ...resComments[i], replies: replies };
+      // }
 
       document.title = correctedMovie.title
       initDetailedInfo(correctedMovie);

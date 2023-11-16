@@ -46,7 +46,10 @@ export default function Profile() {
   }
 
   return user.loading ? (
-    <Skeleton />
+    <div>
+      <Skeleton variant="rounded" className="w-full mb-6" height={43}/>
+      <Skeleton variant="rounded" className="w-full" height={280}/>
+    </div>
   ) : (
     <>
       <div>
@@ -59,7 +62,11 @@ export default function Profile() {
               </div>
             </AccordionSummary>
             <AccordionDetails>
-              <AdaptiveContainer content={recommends.map((movie) => <MovieCard key={movie.id} movie={movie} />)} />
+              <AdaptiveContainer
+                content={recommends.map((movie) => (
+                  <MovieCard key={movie.id} movie={movie} />
+                ))}
+              />
             </AccordionDetails>
           </Accordion>
         ) : null}

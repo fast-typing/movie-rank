@@ -60,6 +60,7 @@ export interface Registration {
 }
 
 export interface Comment {
+  user_id: string
   created_at: string
   film_id: number
   message: string
