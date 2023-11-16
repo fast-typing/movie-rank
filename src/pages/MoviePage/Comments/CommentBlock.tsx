@@ -18,7 +18,7 @@ export default function CommentBlock(props: Props) {
         <Link className="underline" to={"/profile/" + props.comment.username}>{props.comment.username}</Link> — {getDate()}
       </span>
       <p>{props.comment.message}</p>
-      <LeaveCommentToParent type={"comment"} parent_id={props.comment.id} movie_id={props.comment.film_id} />
+      {/* <LeaveCommentToParent type={"comment"} parent_id={props.comment.id} movie_id={props.comment.film_id} /> */}
     </div>
   );
 }

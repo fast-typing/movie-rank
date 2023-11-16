@@ -6,13 +6,13 @@ import SentimentSatisfiedAltRoundedIcon from "@mui/icons-material/SentimentSatis
 import SentimentVeryDissatisfiedRoundedIcon from "@mui/icons-material/SentimentVeryDissatisfiedRounded";
 import { Review } from "../../../interfaces/Interfaces";
 import { rateReview } from "../../../services/http.service";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { REVIEW_RATING_OPTIONS } from "../../../App.constants";
-import LeaveCommentToParent from "../../../components/LeaveCommentToParent";
 import { Link } from "react-router-dom";
 
 interface Props {
   review: Review;
+  checkIsAuth: () => boolean
 }
 
 interface Buttons {
@@ -34,6 +34,7 @@ export default function ReviewBlock(props: Props) {
   )
 
   async function rate(action: "like" | "dislike") {
+    if (!props.checkIsAuth()) { return }
     setButtons({ ...buttons, loading: true })
     const resReview = await rateReview(user_id, review.id, action)
     if (!resReview) return

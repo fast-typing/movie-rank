@@ -7,17 +7,15 @@ import { favoriteToggle, markFilm, rateFilm } from "../../../services/http.servi
 import { TOGGLE_BUTTONS } from "../../../App.constants";
 import StarIcon from "@mui/icons-material/Star";
 import { red } from "@mui/material/colors";
-import { AuthContext } from "../../../context/AuthProvider";
 import CloseIcon from "@mui/icons-material/Close";
 import TouchAppRoundedIcon from "@mui/icons-material/TouchAppRounded";
 import "./Widgets.css";
 
-export default function Widgets({ movie, usersRatings }) {
+export default function Widgets({ movie, usersRatings, checkIsAuth }) {
   const [alignment, setAlignment] = useState<"postopened" | "abandoned" | "finished" | "planned">(null);
   const [loadingButtons, setLoadingButtons] = useState<boolean>(false);
   const [favorite, setFavorite] = useState({ isFavorite: movie.is_favorite, loading: false });
   const [modal, setModal] = useState({ open: false, rating: 0 });
-  const { isAuth } = useContext(AuthContext);
 
   useEffect(() => {
     let alignment = null;
@@ -26,7 +24,7 @@ export default function Widgets({ movie, usersRatings }) {
     else if (movie.is_postponed) alignment = "postponed";
     else if (movie.is_finished) alignment = "finished";
     const userId = localStorage.getItem('user_id')
-    setModal({...modal, rating: usersRatings[userId] ?? 0})
+    setModal({ ...modal, rating: usersRatings[userId] ?? 0 })
     setAlignment(alignment);
   }, []);
 
@@ -34,8 +32,9 @@ export default function Widgets({ movie, usersRatings }) {
     event: React.MouseEvent<HTMLElement>,
     newAlignment: "postopened" | "abandoned" | "finished" | "planned"
   ) => {
+    if (!checkIsAuth()) return
     setLoadingButtons(true);
-    const token = localStorage.getItem("token") ?? "";
+    const token = localStorage.getItem("token");
     if (newAlignment === null) {
       const res = await markFilm(token, movie.id, alignment);
       if (res.Message) setAlignment(null);
@@ -55,8 +54,9 @@ export default function Widgets({ movie, usersRatings }) {
   );
 
   async function toggleFavorite() {
+    if (!checkIsAuth()) return
     setFavorite({ ...favorite, loading: true });
-    const token = localStorage.getItem("token") ?? "";
+    const token = localStorage.getItem("token");
     const res = await favoriteToggle(token, movie.id);
     if (res.Message) {
       setFavorite({ isFavorite: !favorite.isFavorite, loading: false });
@@ -65,7 +65,12 @@ export default function Widgets({ movie, usersRatings }) {
     }
   }
 
+  function changeMovieRating(e, value) {
+    setModal({ ...modal, rating: value })
+  }
+
   async function rateMovie() {
+    if (!checkIsAuth()) return
     const user_id = localStorage.getItem("user_id");
     const res = await rateFilm({ user_id: user_id, film_id: movie.id, rating: modal.rating });
     if (!res.Message) return;
@@ -78,7 +83,7 @@ export default function Widgets({ movie, usersRatings }) {
 
   const toggleButtons = TOGGLE_BUTTONS.map((item) => {
     return (
-      <ToggleButton className="w-full grid md:w-fit md:flex" value={item.value}>
+      <ToggleButton key={item.value} className="w-full grid md:w-fit md:flex" value={item.value}>
         {item.icon} <span className="ml-1 hidden md:block">{item.text}</span>
       </ToggleButton>
     );
@@ -132,11 +137,10 @@ export default function Widgets({ movie, usersRatings }) {
           </div>
           <div className="flex items-center justify-center flex-col">
             <Rating
-              onChange={(e, value) => setModal({ ...modal, rating: value })}
+              onChange={changeMovieRating}
               className="w-fit mr-4"
               max={10}
               defaultValue={modal.rating}
-              readOnly={!isAuth}
             />
             <h1>{modal.rating ?? 0}</h1>
           </div>

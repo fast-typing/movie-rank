@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
 import {
@@ -14,11 +14,13 @@ import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
 import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
-import { Chip, Divider } from "@mui/material";
+import { Chip, Divider, Slide, Snackbar } from "@mui/material";
 import Widgets from "./Widgets/Widgets";
 import Comments from "./Comments/Comments";
+import { AuthContext } from "../../context/AuthProvider";
 
 export default function MoviePage() {
+  const [openSnackBar, setOpenSnackBar] = useState(false)
   const [movie, setMovie] = useState<Movie>(null);
   const [detailedInfo, setDetailedInfo] = useState(null);
   const [reviews, setReviews] = useState(null);
@@ -26,6 +28,7 @@ export default function MoviePage() {
   const [usersRatings, setUsersRatings] = useState(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { filmId } = useParams();
+  const { isAuth } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -36,19 +39,18 @@ export default function MoviePage() {
       const resComments = await getAllComments(filmId);
       const resRatings = await getUsersRating(filmId);
       const token = localStorage.getItem("token");
-      console.log(token)
       const user = token ? await getUserData(token) : null;
       if (!resMovie) return;
-      const correctedMovies = changeBooleanTypesOfMovies([resMovie], user)[0];
+      const correctedMovie = changeBooleanTypesOfMovies([resMovie], user)[0];
       for (let i = 0; i < resComments.length; i++) {
         const replies = await getReplies(null, resComments[i].id);
         if (!replies.length) continue;
-        console.log(replies);
         resComments[i] = { ...resComments[i], replies: replies };
       }
 
-      initDetailedInfo(correctedMovies);
-      setMovie(correctedMovies);
+      document.title = correctedMovie.title
+      initDetailedInfo(correctedMovie);
+      setMovie(correctedMovie);
       setReviews(resReviews);
       setComments(resComments);
       setUsersRatings(resRatings);
@@ -79,32 +81,49 @@ export default function MoviePage() {
     setDetailedInfo(info);
   }
 
+  function checkIsAuth(): boolean {
+    setOpenSnackBar(false)
+    if (isAuth) return true
+    setOpenSnackBar(true)
+    return false
+  }
+
   return loading ? (
     <PageSkeleton />
   ) : (
-    <div className="grid gap-4 w-full">
-      <Widgets movie={movie} usersRatings={usersRatings} />
+    <>
       <div className="grid gap-4 w-full">
-        <div className="grid h-fit gap-4 w-full md:flex md:h-[500px]">
-          <img src={movie.poster} className="rounded object-cover w-full md:w-[40%]" alt={movie.title} />
-          <Trailer movie={movie} />
+        <Widgets movie={movie} usersRatings={usersRatings} checkIsAuth={checkIsAuth}/>
+        <div className="grid gap-4 w-full">
+          <div className="grid h-fit gap-4 w-full md:flex md:h-[500px]">
+            <img src={movie.poster} className="rounded object-cover w-full md:w-[40%]" alt={movie.title} />
+            <Trailer movie={movie} />
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            {movie.genres.map((genre) => (
+              <Chip key={genre} label={genre} onClick={() => navigate(`/search?genres=${genre}`)} variant="outlined" />
+            ))}
+          </div>
+          <div className="w-full">
+            <Divider className="!mt-0" />
+            <p>{movie.description}</p>
+            <Divider />
+            <div className="grid gap-4">{detailedInfo}</div>
+          </div>
         </div>
-        <div className="flex gap-2 flex-wrap">
-          {movie.genres.map((genre) => (
-            <Chip label={genre} onClick={() => navigate(`/search?genres=${genre}`)} variant="outlined" />
-          ))}
-        </div>
-        <div className="w-full">
-          <Divider className="!mt-0" />
-          <p>{movie.description}</p>
-          <Divider />
-          <div className="grid gap-4">{detailedInfo}</div>
-        </div>
+        <hr />
+        <Reviews film_id={filmId} propReviews={reviews} checkIsAuth={checkIsAuth}/>
+        <hr />
+        <Comments film_id={filmId} comments={comments} checkIsAuth={checkIsAuth}/>
       </div>
-      <hr />
-      <Reviews film_id={filmId} propReviews={reviews} />
-      <hr />
-      <Comments film_id={filmId} comments={comments} />
-    </div>
+      <Snackbar
+        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+        TransitionComponent={Slide}
+        autoHideDuration={3000}
+        onClose={() => setOpenSnackBar(false)}
+        open={openSnackBar}
+        message="Войдите в аккаунт для данного действия"
+      />
+    </>
   );
 }

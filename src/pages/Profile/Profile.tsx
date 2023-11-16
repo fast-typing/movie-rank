@@ -52,15 +52,16 @@ export default function Profile() {
       <div>
         <h1 className="mb-6">{user.data.username}</h1>
         {recommends?.length ? (
-          <div className="mb-8">
-            <h2 className="mb-4">Рекомендации</h2>
-            <AdaptiveContainer
-              content={recommends.map((movie) => {
-                if (!movie) return;
-                return <MovieCard key={movie.id} movie={movie} />;
-              })}
-            />
-          </div>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
+              <div className="flex gap-2 items-center">
+                <h3>Рекомендации</h3>
+              </div>
+            </AccordionSummary>
+            <AccordionDetails>
+              <AdaptiveContainer content={recommends.map((movie) => <MovieCard key={movie.id} movie={movie} />)} />
+            </AccordionDetails>
+          </Accordion>
         ) : null}
         {MOVIE_TYPES.map((type) => {
           return (

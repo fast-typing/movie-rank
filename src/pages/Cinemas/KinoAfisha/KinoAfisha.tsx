@@ -1,24 +1,17 @@
 import { SyntheticEvent, useEffect, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Chip, Tab, Tabs, Tooltip, Typography } from "@mui/material";
 import AdaptiveContainer from "../../../components/AdaptiveContainer";
-import { getCinemasByCity, getCities } from "../../../services/http.service";
-import { Cinema } from "../../../interfaces/Interfaces";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function KinoAfisha({cinemas}) {
   const [tabs, setTabs] = useState(0);
 
   function handleTabs(event: SyntheticEvent, newValue: string) {
-    console.log(newValue)
     setTabs(+newValue);
   }
 
   function getTime(time: string): string {
     return time.toString().slice(0, 2) + ":" + time.toString().slice(2, 4);
-  }
-
-  function getDate(date: string): string {
-    return new Date(date).toLocaleDateString().replaceAll("/", ".");
   }
 
   return cinemas ? (
@@ -27,7 +20,7 @@ export default function KinoAfisha({cinemas}) {
         value={tabs}
         className="mb-4"
         onChange={handleTabs}
-        sx={{ maxWidth: { xs: "90vw" }, }}
+        sx={{ maxWidth: { xs: "1200px" }, width: '90vw' }}
         variant="scrollable"
         scrollButtons="auto"
         aria-label="scrollable auto tabs example"
@@ -42,7 +35,6 @@ export default function KinoAfisha({cinemas}) {
             {cinema.timetable.map((el) => (
               <div>
                 <h2 className="h-fit mb-4">Расписание сеансов в кино сегодня</h2>
-                {/* <h2 className="h-fit mb-4">{getDate(el.date)}</h2> */}
                 <AdaptiveContainer
                   content={el.movies.map((movie) => (
                     <div className="p-2 bg-[var(--black-2)] rounded h-fit">

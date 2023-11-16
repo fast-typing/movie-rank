@@ -15,8 +15,15 @@ export default function GPTDialog() {
 
     async function submit() {
         setLoading(true)
+        setAiAdvice('')
         const resAiAdvice = await getAIAdvice(input)
-        setAiAdvice(resAiAdvice.content)
+        let timeout = 0
+        resAiAdvice.content.split('').map(word => {
+            setTimeout(() => {
+                setAiAdvice((prev) => prev + word)
+            }, timeout)
+            timeout += 30
+        })
         setLoading(false)
     }
 

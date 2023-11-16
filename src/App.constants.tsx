@@ -86,3 +86,10 @@ export const REVIEW_RATING_OPTIONS = [
   { value: "neutral", text: "Средне", icon: <SentimentNeutralRoundedIcon /> },
   { value: "negative", text: "Ужасно...", icon: <SentimentVeryDissatisfiedRoundedIcon /> },
 ]
+
+export const PAGE_TITLE_TO_PATH = {
+  '/': 'Главная',
+  '/cinema': 'Кинотетры',
+  '/search': 'Поиск',
+  '/profile': 'Профиль',
+}

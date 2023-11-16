@@ -16,7 +16,7 @@ export function registration(data): Promise<Registration> {
 }
 
 export function getAllMovies(): Promise<Movie[]> {
-  return _request(`get_all_films?limit=500`, "GET");
+  return _request(`get_all_films?limit=99999`, "GET");
 }
 
 export function getMovie(id: string): Promise<Movie> {
@@ -46,8 +46,10 @@ export function rateReview(user_id: string, review_id: number, action: "like" | 
   return _request(`rate_review?user_id=${user_id}&review_id=${review_id}&action=${action}`, "PATCH");
 }
 
-export function createComment(token: string, body: any) {
-  return _request(`create_comment?token=${token}`, "POST", body);
+export function createComment(body: any, token?: string) {
+  let url = 'create_comment'
+  if (token) url += `?token=${token}`
+  return _request(url, "POST", body);
 }
 
 export function getAllComments(film_id: string) {

@@ -25,7 +25,6 @@ export default function LeaveCommentToParent(props: Props) {
             body.parent_review_id = props.parent_id
         }
         const res = await createComment(token, body)
-        console.log(res)
     }
 
     return (

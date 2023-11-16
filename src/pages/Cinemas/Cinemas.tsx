@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import KinoAfisha from "./KinoAfisha/KinoAfisha";
 import { getCinemasByCity, getCities, getUserCity, getUserIP } from "../../services/http.service";
 import { Cinema } from "../../interfaces/Interfaces";
+import { CircularProgress } from "@mui/material";
 
 export default function Cinemas() {
   const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
@@ -61,30 +62,40 @@ export default function Cinemas() {
       formattedCinemas.push({ name: key, timetable: timetable });
     }
 
-    await initAddresses(formattedCinemas, city);
+    initAddresses(formattedCinemas, city);
     setCinemas(formattedCinemas);
   }
 
   async function initAddresses(inputCinemas, city: string) {
+    const localCinemasCoords = localStorage.getItem('cinemas_coordinates')
+    if (localCinemasCoords && city === localStorage.getItem('city')) {
+      setAddresses(JSON.parse(localCinemasCoords))
+      return
+    } else {
+      localStorage.setItem("city", city)
+    }
+
     const cinemasWithCoord = [];
 
     const getData = async (name) => {
-      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр${name},${city}&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
+      const correctedName = name.replace('&', 'и')
+      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
       const res = await fetch(url);
       const data = await res.text();
       return data;
     };
 
     for (let i = 0; i < inputCinemas.length; i++) {
-      const data = await getData(inputCinemas.name);
+      const data = await getData(inputCinemas[i].name);
       const cinemaCoordinates = JSON.parse(data)["features"][0]["geometry"]["coordinates"];
-      cinemasWithCoord.push({ name: inputCinemas.name, coordinates: cinemaCoordinates.reverse() });
+      cinemasWithCoord.push({ name: inputCinemas[i].name, coordinates: cinemaCoordinates.reverse() });
     }
 
+    localStorage.setItem('cinemas_coordinates', JSON.stringify(cinemasWithCoord))
     setAddresses(cinemasWithCoord);
   }
 
-  return loading ? null : (
+  return loading ? <div className="text-center"><CircularProgress /></div> : (
     <>
       <YMaps>
         <Map
@@ -95,7 +106,7 @@ export default function Cinemas() {
           {addresses.map((cinema) => (
             <Placemark
               geometry={cinema.coordinates}
-              properties={{ iconCaption: cinema.name }}
+              properties={{ iconCaption: 'Кинотеатр ' + cinema.name }}
               options={{ iconColor: "#d32f2f" }}
             />
           ))}

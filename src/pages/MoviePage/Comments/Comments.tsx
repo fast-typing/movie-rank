@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
-import { createComment, getReplies } from "../../../services/http.service";
+import { createComment } from "../../../services/http.service";
 import { Comment } from "../../../interfaces/Interfaces";
 
 interface Props {
   comments: Comment[]
   film_id: string
+  checkIsAuth: () => boolean
 }
 
 export default function Comments(props: Props) {
@@ -30,16 +31,21 @@ export default function Comments(props: Props) {
 
   async function submitComment() {
     const token = localStorage.getItem("token");
-    const res = await createComment(token, { message: comment, film_id: props.film_id });
+    const res = await createComment({ message: comment, film_id: props.film_id }, token ?? null);
     if (!res.film_id) return
     window.location.reload()
+  }
+
+  function openEditForm() {
+    // if (!props.checkIsAuth()) return
+    setEdit(!edit)
   }
 
   return (
     <div>
       <div className="flex justify-between items-center flex-wrap mb-8">
         <h1>Комментарии</h1>
-        <Button variant="contained" onClick={() => setEdit(!edit)}>
+        <Button variant="contained" onClick={openEditForm}>
           {edit ? "Закрыть" : "Написать комментарий"}
         </Button>
       </div>
