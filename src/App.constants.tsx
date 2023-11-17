@@ -92,4 +92,5 @@ export const PAGE_TITLE_TO_PATH = {
   '/cinema': 'Кинотетры',
   '/search': 'Поиск',
   '/profile': 'Профиль',
+  '/me': 'Ваш профиль',
 }

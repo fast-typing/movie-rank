@@ -92,6 +92,21 @@ const theme = createTheme({
         },
       ],
     },
+    MuiPaginationItem: {
+      variants: [
+        {
+          props: {},
+          style: {
+            '&.Mui-selected': {
+              backgroundColor: '#323232',
+            },
+            '&:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.12)',
+            }
+          },
+        },
+      ],
+    },
     MuiCircularProgress: {
       variants: [
         {

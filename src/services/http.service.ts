@@ -1,17 +1,11 @@
 import { HTTP_URL } from "../App.constants";
-import { Movie, Review, Registration, User, CinemaMovie } from "../interfaces/Interfaces";
-
-interface RateFilm {
-  user_id: string;
-  rating: number;
-  film_id: number;
-}
+import { Movie, Review, RateFilm, User, CinemaMovie } from "../interfaces/Interfaces";
 
 export function login(data) {
   return _request(`login?username=${data.username}&password=${data.password}`, "POST");
 }
 
-export function registration(data): Promise<Registration> {
+export function registration(data) {
   return _request(`registration`, "POST", data);
 }
 

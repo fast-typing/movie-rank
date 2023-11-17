@@ -1,10 +1,10 @@
 import { useContext, useState } from "react";
-import { Backdrop, Button, Fade, Modal, Slide, Snackbar } from "@mui/material";
+import { Backdrop, Button, Fade, IconButton, Modal, Slide, Snackbar } from "@mui/material";
 import { login, registration } from "../services/http.service";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Registration } from "../interfaces/Interfaces";
 import { AuthContext } from "../context/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import CloseIcon from '@mui/icons-material/Close';
+import Toast from "./Toast";
 
 interface Props {
   open: boolean;
@@ -38,8 +38,12 @@ export default function AuthModal(props: Props) {
       loginInAccount();
     } else {
       const res = await registration(form);
-      if (!(res as Registration)?.id) return;
-      loginInAccount();
+      if (res.detail === 'User already exists') {
+        openSnackbar('Пользователь с таким ником или почтой уже существует')
+        setLoading(false)
+      } else if (res.id) {
+        loginInAccount();
+      };
     }
   }
 
@@ -66,12 +70,7 @@ export default function AuthModal(props: Props) {
 
   return (
     <>
-      <Snackbar
-        open={snackbar.open}
-        onClose={() => setSnackbar({ ...snackbar, open: false })}
-        TransitionComponent={Slide}
-        message={snackbar.message}
-      />
+      <Toast open={snackbar.open} onClose={() => setSnackbar({ ...snackbar, open: false })} message={snackbar.message} />
       <Modal
         open={props.open}
         onClose={close}

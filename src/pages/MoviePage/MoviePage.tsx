@@ -14,10 +14,11 @@ import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
 import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
-import { Chip, Divider, Slide, Snackbar } from "@mui/material";
+import { Chip, Divider, IconButton, Slide, Snackbar } from "@mui/material";
 import Widgets from "./Widgets/Widgets";
 import Comments from "./Comments/Comments";
 import { AuthContext } from "../../context/AuthProvider";
+import Toast from "../../components/Toast";
 
 export default function MoviePage() {
   const [openSnackBar, setOpenSnackBar] = useState(false)
@@ -95,7 +96,7 @@ export default function MoviePage() {
   ) : (
     <>
       <div className="grid gap-4 w-full">
-        <Widgets movie={movie} usersRatings={usersRatings} checkIsAuth={checkIsAuth}/>
+        <Widgets movie={movie} usersRatings={usersRatings} checkIsAuth={checkIsAuth} />
         <div className="grid gap-4 w-full">
           <div className="grid h-fit gap-4 w-full md:flex md:h-[500px]">
             <img src={movie.poster} className="rounded object-cover w-full md:w-[40%]" alt={movie.title} />
@@ -114,18 +115,11 @@ export default function MoviePage() {
           </div>
         </div>
         <hr />
-        <Reviews film_id={filmId} propReviews={reviews} checkIsAuth={checkIsAuth}/>
+        <Reviews film_id={filmId} propReviews={reviews} checkIsAuth={checkIsAuth} />
         <hr />
-        <Comments film_id={filmId} comments={comments} checkIsAuth={checkIsAuth}/>
+        <Comments film_id={filmId} comments={comments} checkIsAuth={checkIsAuth} />
       </div>
-      <Snackbar
-        anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-        TransitionComponent={Slide}
-        autoHideDuration={3000}
-        onClose={() => setOpenSnackBar(false)}
-        open={openSnackBar}
-        message="Войдите в аккаунт для данного действия"
-      />
+      <Toast open={openSnackBar} onClose={() => setOpenSnackBar(false)} message={"Войдите в аккаунт для данного действия"} />
     </>
   );
 }

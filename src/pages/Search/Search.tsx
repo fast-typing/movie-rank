@@ -45,15 +45,14 @@ export default function Search() {
       if (!res) return;
       const markedMovies = await markFavorites(res);
       setMovies({ old: markedMovies, current: markedMovies });
-
       const jsxMovies = markedMovies.map((movie) => <MovieCard key={movie.id} movie={movie} />);
       setPage({
         current: 1,
         max: Math.ceil(res.length / AMOUNT_OF_MOVIES_ON_PAGE),
         content: jsxMovies.slice(0, AMOUNT_OF_MOVIES_ON_PAGE),
       });
-      setLoading(false);
       initFilter(res);
+      setLoading(false);
     };
 
     init();
@@ -87,7 +86,7 @@ export default function Search() {
 
     const moviesAgeRatings = [];
     movies.map((movie: Movie) =>
-      moviesAgeRatings.includes(movie.age_rating) ? null : moviesAgeRatings.push(movie.age_rating)
+      moviesAgeRatings.includes(movie.age_rating) && movie.age_rating ? null : moviesAgeRatings.push(movie.age_rating)
     );
     setAgeRatings(moviesAgeRatings);
   }
@@ -111,19 +110,17 @@ export default function Search() {
       country: getArrValue("country"),
       genres: getArrValue("genres"),
     });
-  }, [searchParams]);
+  }, [searchParams.get("title"), searchParams.get("year"), searchParams.get("age_rating"), searchParams.get("country"), searchParams.get("genres")]);
 
   useEffect(() => {
     if (!movies?.old?.length) return;
-    setLoading(true);
     let allMovies = movies.old;
     allMovies = filterByField("title", allMovies);
     allMovies = filterByField("year", allMovies);
     allMovies = filterByField("age_rating", allMovies);
     allMovies = filterByField("country", allMovies, true);
     allMovies = filterByField("genres", allMovies, true);
-    setMoviesByFilter(allMovies);
-    setLoading(false);
+    setMoviesByFilter(allMovies)
   }, [filter]);
 
   useEffect(() => {
@@ -151,7 +148,6 @@ export default function Search() {
       if (isArray) {
         const movieValue = movie[field];
         return filterValue.filter((el) => movieValue.includes(el)).length === filterValue.length ? movieValue : null;
-        // movieValue.filter(el => filterValue.filter(item => item === el).length === filterValue.length)
       } else {
         const movieValue = typeof movie[field] == "object" ? movie[field]?.join(" ") : movie[field];
         if (field === "age_rating") {
@@ -179,11 +175,13 @@ export default function Search() {
       }
       return searchParams;
     });
+
     setFilter({ ...filter, [key]: value });
   }
 
   function onSortChange(e) {
-    setSortBy(e.target.value);
+    const value = e.target.value
+    setSortBy(value);
   }
 
   function clearFormValue() {
@@ -214,8 +212,8 @@ export default function Search() {
 
   const pagination = (className: string) => {
     return page.max > 1 ? (
-      <Stack spacing={2} className={className}>
-        <Pagination size="large" count={page.max} shape="rounded" page={page.current} onChange={changePage} />
+      <Stack spacing={1} className={className}>
+        <Pagination size="large" count={page.max} page={page.current} onChange={changePage} />
       </Stack>
     ) : null;
   };
@@ -235,6 +233,32 @@ export default function Search() {
             />
           </div>
         ))}
+
+        <div className="w-full">
+          <p className="ml-2">Жанры</p>
+          <FormControl size="small" className="w-full md:max-w-[208px]">
+            <Select
+              input={<OutlinedInput />}
+              renderValue={(selected) =>
+                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected.join(", ")
+              }
+              inputProps={{ "aria-label": "Without label" }}
+              displayEmpty
+              multiple
+              size="small"
+              MenuProps={MenuProps}
+              name="genres"
+              onChange={onFilterChange}
+              value={filter["genres"]}
+            >
+              {genres
+                ? genres.map((el) => {
+                  return <MenuItem key={el} value={el}>{el}</MenuItem>;
+                })
+                : null}
+            </Select>
+          </FormControl>
+        </div>
 
         <div className="w-full">
           <p className="ml-2">Страна</p>
@@ -259,32 +283,6 @@ export default function Search() {
             >
               {countries
                 ? countries.map((el) => {
-                  return <MenuItem key={el} value={el}>{el}</MenuItem>;
-                })
-                : null}
-            </Select>
-          </FormControl>
-        </div>
-
-        <div className="w-full">
-          <p className="ml-2">Жанры</p>
-          <FormControl size="small" className="w-full md:max-w-[208px]">
-            <Select
-              input={<OutlinedInput />}
-              renderValue={(selected) =>
-                selected.length === 0 ? <span style={{ color: "rgb(150, 150, 150)" }}>Жанры</span> : selected.join(", ")
-              }
-              inputProps={{ "aria-label": "Without label" }}
-              displayEmpty
-              multiple
-              size="small"
-              MenuProps={MenuProps}
-              name="genres"
-              onChange={onFilterChange}
-              value={filter["genres"]}
-            >
-              {genres
-                ? genres.map((el) => {
                   return <MenuItem key={el} value={el}>{el}</MenuItem>;
                 })
                 : null}

@@ -84,7 +84,7 @@ export default function ReviewBlock(props: Props) {
       </div>
       <span className="text-stone-400"><Link className="underline" to={"/profile/" + review.username}>{review.username}</Link> — {getDate()}</span>
       <p>{review.message}</p>
-      <div className="flex gap-2 items-center my-2">
+      <div className="flex gap-2 items-center mt-2">
         <IconButton disabled={buttons.loading} onClick={() => rate("like")} color={buttons.like}>
           <ThumbUpRoundedIcon />
         </IconButton>

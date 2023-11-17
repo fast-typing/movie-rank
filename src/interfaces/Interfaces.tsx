@@ -94,3 +94,9 @@ export interface CinemaMovie {
   movie_poster: string;
   order_link: string | undefined;
 }
+
+export interface RateFilm {
+  user_id: string;
+  rating: number;
+  film_id: number;
+}

@@ -53,14 +53,9 @@ export default function Reviews(props: Props) {
       </div>
       <div className="grid gap-8 mb-4">
         {edit ? <ReviewForm film_id={props.film_id} /> : null}
-        {reviews.length ? reviews.map(review => <ReviewBlock checkIsAuth={props.checkIsAuth} review={review} />) : "Рецензий нема :("}
+        {reviews.length ? reviews.map(review => <ReviewBlock key={review.id} checkIsAuth={props.checkIsAuth} review={review} />) : "Рецензий нема :("}
         {loading ? <div className="text-center"><CircularProgress /></div> : reviews.length % 3 == 0 && reviews.length !== 0 && !isAllReviewsLoaded ? <Button variant="contained" onClick={loadMore}>Показать еще</Button> : null}
       </div>
-      {/* {page.max > 1 ? (
-        <Stack spacing={2}>
-          <Pagination size="large" count={page.max} shape="rounded" page={page.current} onChange={changePage} />
-        </Stack>
-      ) : null} */}
     </div>
   );
 }
