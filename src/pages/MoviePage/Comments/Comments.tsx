@@ -21,10 +21,10 @@ export default function Comments(props: Props) {
   const [page, setPage] = useState({ current: 1, max: 1, content: [] });
   const [comment, setComment] = useState("");
 
-  useWebSocket('ws://www.backend.movie-rank.ru/ws/comment/create', {
-    onOpen: () => console.log('WebSocket connection established.'),
-    onClose: () => console.log('WebSocket connection closed.'),
-  });
+  // useWebSocket('ws://www.backend.movie-rank.ru/ws/comment/create', {
+  //   onOpen: () => console.log('WebSocket connection established.'),
+  //   onClose: () => console.log('WebSocket connection closed.'),
+  // });
 
   // socket.on('connect', function() {
   //   console.log('Соединение установлено');
