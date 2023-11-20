@@ -14,7 +14,7 @@ interface Props {
 }
 
 // const socket = io('<wss://www.backend.movie-rank.ru/ws/comment/create>')
-const socket = new WebSocket('ws://www.backend.movie-rank.ru/ws/comment/create')
+// const socket = new WebSocket('ws://www.backend.movie-rank.ru/ws/comment/create')
 
 export default function Comments(props: Props) {
   const [edit, setEdit] = useState<boolean>(false);
@@ -43,15 +43,15 @@ export default function Comments(props: Props) {
   // });
 
   useEffect(() => {
-    socket.onopen = (event) => {
-      console.log(event)
-    };
+    // socket.onopen = (event) => {
+    //   console.log(event)
+    // };
   
-    socket.onclose = (data) => {
-      console.log(data);
-      console.log('asd')
-    }
-    
+    // socket.onclose = (data) => {
+    //   console.log(data);
+    //   console.log('asd')
+    // }
+
     setPage({
       ...page,
       max: Math.ceil(props.comments.length / AMOUNT_OF_COMMENTS_ON_PAGE),
@@ -59,14 +59,14 @@ export default function Comments(props: Props) {
     });
   }, []);
 
-  socket.onopen = (event) => {
-    console.log(event)
-  };
+  // socket.onopen = (event) => {
+  //   console.log(event)
+  // };
 
-  socket.onclose = (data) => {
-    console.log(data);
-    console.log('asd')
-  }
+  // socket.onclose = (data) => {
+  //   console.log(data);
+  //   console.log('asd')
+  // }
 
   const changePage = async (event: React.ChangeEvent<unknown>, value: number) => {
     const content = props.comments?.slice((value - 1) * AMOUNT_OF_COMMENTS_ON_PAGE, value * AMOUNT_OF_COMMENTS_ON_PAGE);
