@@ -4,9 +4,9 @@ import { Movie } from "../../interfaces/Interfaces";
 import MovieSceleton from "../../components/MovieSkeleton";
 import { getAllMovies } from "../../services/http.service";
 import { markFavorites } from "../../services/movieField.service";
-import { Button, FormControl, MenuItem, OutlinedInput, Pagination, Select, Stack } from "@mui/material";
+import { Button, FormControl, MenuItem, OutlinedInput, Pagination, Select, Skeleton, Stack } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { AMOUNT_OF_MOVIES_ON_PAGE, FILTER_INPUTS } from "../../App.constants";
+import { AMOUNT_OF_MOVIES_ON_PAGE, FILTER_INPUTS_STR } from "../../App.constants";
 import CasinoRoundedIcon from "@mui/icons-material/CasinoRounded";
 import LayersClearRoundedIcon from "@mui/icons-material/LayersClearRounded";
 
@@ -18,26 +18,46 @@ const MenuProps = {
       OverflowY: "auto",
     },
   },
-};
+}
+
+const skeleton = (
+  <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+    {[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />)}
+  </div>
+)
 
 export default function Search() {
+  console.log(1)
   const navigate = useNavigate();
-  const skeleton = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />);
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState({ current: null, old: null });
   const [page, setPage] = useState({ current: 1, max: 1, content: null });
-  const [sortBy, setSortBy] = useState<"Старые" | "Новые" | "По рейтенгу" | "">("");
+  const [sortBy, setSortBy] = useState<"Старые" | "Новые" | "По рейтенгу" | "">(getQueryStringValue('sortBy') as '' | 'Старые' | 'Новые' | 'По рейтенгу');
   const [genres, setGenres] = useState([]);
   const [countries, setCountries] = useState([]);
   const [ageRatings, setAgeRatings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(3);
   const [filter, setFilter] = useState({
-    title: "",
-    year: "",
-    age_rating: "",
-    country: [],
-    genres: [],
+    title: getQueryStringValue('title'),
+    year: getQueryStringValue('year'),
+    age_rating: getQueryStringValue('age_rating'),
+    country: getQueryArrValue('country'),
+    genres: getQueryArrValue('genres'),
   });
+
+  function getQueryStringValue(key: string): string {
+    const value = decodeURIComponent(searchParams.get(key))?.replace('+', ' ')
+    if (key === 'sortBy') {
+      const isValueCorrect = value == 'Старые' || value == 'Новые' || value == 'По рейтенгу'
+      return isValueCorrect ? value : ''
+    }
+    return value === 'null' ? '' : value
+  }
+
+  function getQueryArrValue(key: string): string[] {
+    const value = decodeURIComponent(searchParams.get(key));
+    return value === "null" ? [] : value.split(",").map(el => el.replace('+', ' '));
+  }
 
   useEffect(() => {
     const init = async () => {
@@ -46,32 +66,14 @@ export default function Search() {
       const markedMovies = await markFavorites(res);
       setMovies({ old: markedMovies, current: markedMovies });
       const jsxMovies = markedMovies.map((movie) => <MovieCard key={movie.id} movie={movie} />);
-      setPage({
-        current: 1,
-        max: Math.ceil(res.length / AMOUNT_OF_MOVIES_ON_PAGE),
-        content: jsxMovies.slice(0, AMOUNT_OF_MOVIES_ON_PAGE),
-      });
-      initFilter(res);
-      setLoading(false);
+      setPage({ current: 1, max: Math.ceil(res.length / AMOUNT_OF_MOVIES_ON_PAGE), content: jsxMovies.slice(0, AMOUNT_OF_MOVIES_ON_PAGE), });
+      initFilterVariables(res);
     };
 
     init();
   }, []);
 
-  function initFilter(movies: Movie[]) {
-    const newFilter = { ...filter };
-    for (let key of Object.keys(filter)) {
-      const decoded = decodeURIComponent(searchParams.get(key));
-      const value = decoded === "null" ? "" : decoded;
-      if (!value?.length) continue;
-      if (key === "title" || key === "year") {
-        newFilter[key] = value;
-      } else {
-        newFilter[key] = value.split(',');
-      }
-    }
-    setFilter({ ...newFilter });
-
+  function initFilterVariables(movies: Movie[]) {
     const moviesGenres = [];
     movies.map((movie: Movie) =>
       movie.genres.map((genre) => (moviesGenres.includes(genre) ? null : moviesGenres.push(genre)))
@@ -92,113 +94,86 @@ export default function Search() {
   }
 
   useEffect(() => {
-    const getStringValue = (field: string): string => {
-      const value = decodeURIComponent(searchParams.get(field));
-      return value === "null" ? "" : value;
-    };
-
-    const getArrValue = (field: string): string[] => {
-      const value = decodeURIComponent(searchParams.get(field));
-      return value === "null" ? [] : value.split(",");
-    };
-
-    setFilter({
-      ...filter,
-      title: getStringValue("title").replace("+", " "),
-      year: getStringValue("year"),
-      age_rating: getStringValue("age_rating"),
-      country: getArrValue("country"),
-      genres: getArrValue("genres"),
-    });
-  }, [searchParams.get("title"), searchParams.get("year"), searchParams.get("age_rating"), searchParams.get("country"), searchParams.get("genres")]);
-
-  useEffect(() => {
     if (!movies?.old?.length) return;
+    // Фильтрация при первой загрузке страницы
     let allMovies = movies.old;
-    allMovies = filterByField("title", allMovies);
-    allMovies = filterByField("year", allMovies);
-    allMovies = filterByField("age_rating", allMovies);
-    allMovies = filterByField("country", allMovies, true);
-    allMovies = filterByField("genres", allMovies, true);
-    setMoviesByFilter(allMovies)
-  }, [filter]);
+    allMovies = filterByFields(["title", "year", "age_rating", "country", "genres"], filter, allMovies);
+    const sortedMovies = allMovies.sort((curr, prev) => {
+      switch (sortBy) {
+        case "Новые": return prev.year - curr.year;
+        case "Старые": return curr.year - prev.year;
+        case "По рейтенгу": return prev.average_rating - curr.average_rating;
+      }
+    });
+    setMoviesByFilter(sortedMovies)
+  }, [movies.old]);
 
   useEffect(() => {
-    if (!movies?.current?.length) return;
-    setLoading(true);
-    const sortedMovies = movies.current.sort((curr, prev) => {
-      switch (sortBy) {
-        case "Новые":
-          return prev.year - curr.year;
-        case "Старые":
-          return curr.year - prev.year;
-        case "По рейтенгу":
-          return prev.average_rating - curr.average_rating;
-      }
+    setLoading((prev) => prev - 1);
+  }, [page])
+
+  function changeSearchParams(key: string, value: string) {
+    setSearchParams((searchParams) => {
+      const isValueEmpty = value === "" || value.length === 0
+      isValueEmpty ? searchParams.delete(key) : searchParams.set(key, value)
+      return searchParams;
     });
-    setMoviesByFilter(sortedMovies);
-    setLoading(false);
-  }, [sortBy]);
-
-  function filterByField(field: string, allMovies: Movie[], isArray: boolean = false): Movie[] {
-    const filterValue = filter[field];
-
-    if (!filterValue?.length) return allMovies;
-    return allMovies.filter((movie) => {
-      if (isArray) {
-        const movieValue = movie[field];
-        return filterValue.filter((el) => movieValue.includes(el)).length === filterValue.length ? movieValue : null;
-      } else {
-        const movieValue = typeof movie[field] == "object" ? movie[field]?.join(" ") : movie[field];
-        if (field === "age_rating") {
-          return movieValue === filterValue;
-        }
-        return String(movieValue).toLowerCase().includes(filterValue.toLowerCase());
-      }
-    });
-  }
-
-  function routeToRandom() {
-    const randomIndex = Math.floor(Math.random() * movies.current.length);
-    const id = movies.current[randomIndex].id;
-    navigate(`/movie/${id}`);
   }
 
   function onFilterChange(e) {
     const value = e.target.value;
     const key = e.target.name;
-    setSearchParams((searchParams) => {
-      if (value === "" || value.length === 0) {
-        searchParams.delete(key);
-      } else {
-        searchParams.set(key, value);
+    const newFilter = { ...filter, [key]: value }
+    setFilter(newFilter);
+    changeSearchParams(key, value)
+    let allMovies = movies.old;
+    allMovies = filterByFields(["title", "year", "age_rating", "country", "genres"], newFilter, allMovies);
+    const sortedMovies = allMovies.sort((curr, prev) => {
+      switch (sortBy) {
+        case "Новые": return prev.year - curr.year;
+        case "Старые": return curr.year - prev.year;
+        case "По рейтенгу": return prev.average_rating - curr.average_rating;
       }
-      return searchParams;
     });
+    setMoviesByFilter(sortedMovies)
+  }
 
-    setFilter({ ...filter, [key]: value });
+  function filterByFields(fields: string[], inputFilter: any, allMovies: Movie[]): Movie[] {
+    fields.map(field => {
+      const filterValue = inputFilter[field];
+      if (!filterValue?.length) return allMovies;
+
+      allMovies = allMovies.filter((movie) => {
+        if (field == 'genres' || field == 'country') {
+          const movieValue = movie[field];
+          return filterValue.filter((el) => movieValue.includes(el)).length === filterValue.length ? movieValue : null;
+        } else {
+          const movieValue = typeof movie[field] == "object" ? movie[field]?.join(" ") : movie[field];
+          if (field === "age_rating") {
+            return movieValue === filterValue;
+          }
+          return String(movieValue).toLowerCase().includes(filterValue.toLowerCase());
+        }
+      });
+    })
+
+    return allMovies
   }
 
   function onSortChange(e) {
     const value = e.target.value
     setSortBy(value);
+    changeSearchParams('sortBy', value)
+    if (!movies.current) return
+    const sortedMovies = movies.current.sort((curr, prev) => {
+      switch (value) {
+        case "Новые": return prev.year - curr.year;
+        case "Старые": return curr.year - prev.year;
+        case "По рейтенгу": return prev.average_rating - curr.average_rating;
+      }
+    });
+    setMoviesByFilter(sortedMovies);
   }
-
-  function clearFormValue() {
-    setFilter({ title: "", year: "", age_rating: '', country: [], genres: [] });
-    setSortBy("");
-    setMovies({ ...movies, current: movies.old });
-    for (const key of Object.keys(filter)) {
-      searchParams.delete(key);
-    }
-    setSearchParams(searchParams);
-  }
-
-  const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
-    const content = movies.current.slice((value - 1) * AMOUNT_OF_MOVIES_ON_PAGE, value * AMOUNT_OF_MOVIES_ON_PAGE);
-    const jsxMovies = content.map((movie) => <MovieCard key={movie.id} movie={movie} />);
-    setPage({ ...page, current: value, content: jsxMovies });
-  };
 
   function setMoviesByFilter(inputMovies) {
     setMovies({ ...movies, current: inputMovies });
@@ -208,6 +183,25 @@ export default function Search() {
       max: Math.ceil(inputMovies?.length / AMOUNT_OF_MOVIES_ON_PAGE),
       content: jsxMovies?.slice(0, AMOUNT_OF_MOVIES_ON_PAGE),
     });
+  }
+
+  function clearFormValue() {
+    setFilter({ title: "", year: "", age_rating: '', country: [], genres: [] });
+    setMovies({ ...movies, current: movies.old });
+    setSearchParams("");
+    setSortBy("");
+  }
+
+  const changePage = (event: React.ChangeEvent<unknown>, value: number) => {
+    const content = movies.current.slice((value - 1) * AMOUNT_OF_MOVIES_ON_PAGE, value * AMOUNT_OF_MOVIES_ON_PAGE);
+    const jsxMovies = content.map((movie) => <MovieCard key={movie.id} movie={movie} />);
+    setPage({ ...page, current: value, content: jsxMovies });
+  };
+
+  function routeToRandom() {
+    const randomIndex = Math.floor(Math.random() * movies.current.length);
+    const id = movies.current[randomIndex].id;
+    navigate(`/movie/${id}`);
   }
 
   const pagination = (className: string) => {
@@ -220,20 +214,20 @@ export default function Search() {
 
   return (
     <div className="grid sm:flex gap-8">
-      <div className="top-[24px] sm:sticky grid gap-4 w-full sm:w-[260px] h-fit">
-        {FILTER_INPUTS.map((el) => (
-          <div key={el.value} className="w-full">
-            <p className="ml-2">{el.name}</p>
+      <form className="top-[24px] sm:sticky grid gap-4 w-full sm:w-[260px] h-fit">
+        {FILTER_INPUTS_STR.map((input) => (
+          <div key={input.value} className="w-full">
+            <p className="ml-2">{input.name}</p>
             <input
+              disabled={loading > 0}
               className="w-full"
-              placeholder={el.name}
-              name={el.value}
+              placeholder={input.name}
+              name={input.value}
               onChange={onFilterChange}
-              value={filter[el.value]}
+              value={filter[input.value]}
             />
           </div>
         ))}
-
         <div className="w-full">
           <p className="ml-2">Жанры</p>
           <FormControl size="small" className="w-full md:max-w-[208px]">
@@ -259,7 +253,6 @@ export default function Search() {
             </Select>
           </FormControl>
         </div>
-
         <div className="w-full">
           <p className="ml-2">Страна</p>
           <FormControl className="w-full md:max-w-[208px]" size="small">
@@ -289,7 +282,6 @@ export default function Search() {
             </Select>
           </FormControl>
         </div>
-
         <div className="w-full">
           <p className="ml-2">Возраст</p>
           <FormControl size="small" className="w-full md:max-w-[208px]">
@@ -319,7 +311,6 @@ export default function Search() {
             </Select>
           </FormControl>
         </div>
-
         <div className="w-full">
           <p className="ml-2">Сортировка</p>
           <FormControl size="small" className="w-full md:max-w-[208px]">
@@ -344,7 +335,6 @@ export default function Search() {
             </Select>
           </FormControl>
         </div>
-
         <Button startIcon={<LayersClearRoundedIcon />} className="w-full" onClick={clearFormValue} variant="contained">
           Очистить фильтр
         </Button>
@@ -357,13 +347,19 @@ export default function Search() {
         >
           Случайный фильм
         </Button>
-      </div>
+      </form>
       <div className="w-full">
-        {pagination("mb-4")}
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {loading ? skeleton : page.content.length ? page.content : "Пусто :("}
-        </div>
-        {pagination("mt-4")}
+        {loading > 0
+          ? skeleton
+          : page.content.length
+            ? <>
+              {pagination("mb-4")}
+              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {loading > 0 ? skeleton : page.content.length ? page.content : "Пусто :("}
+              </div>
+              {pagination("mt-4")}
+            </>
+            : "Пусто :("}
       </div>
     </div>
   );
