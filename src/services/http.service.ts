@@ -41,8 +41,8 @@ export function rateReview(user_id: string, review_id: number, action: "like" | 
 }
 
 export function createComment(body: any, token?: string) {
-  let url = 'create_comment'
-  if (token) url += `?token=${token}`
+  let url = "create_comment";
+  if (token) url += `?token=${token}`;
   return _request(url, "POST", body);
 }
 
@@ -125,5 +125,10 @@ async function _request(path: string, method: string, body?: any) {
   return await fetch(url, options)
     .then((response) => response.json())
     .then((res) => res)
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
+      window.location.reload();
+    });
 }
