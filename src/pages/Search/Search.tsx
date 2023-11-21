@@ -27,7 +27,6 @@ const skeleton = (
 )
 
 export default function Search() {
-  console.log(1)
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [movies, setMovies] = useState({ current: null, old: null });

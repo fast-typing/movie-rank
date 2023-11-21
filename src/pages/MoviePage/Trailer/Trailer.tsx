@@ -7,6 +7,7 @@ export default function Trailer({ movie }) {
   const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
 
   function getMovieTrailer(): string {
+    console.log(movie.trailer?.replace("watch?v=", "embed/"))
     return movie.trailer?.replace("watch?v=", "embed/");
   }
 
@@ -26,8 +27,11 @@ export default function Trailer({ movie }) {
               <CloseIcon />
             </IconButton>
           </div>
-          <iframe className="w-full h-[70vh] md:h-[50vh] rounded" allowFullScreen src={getMovieTrailer()}></iframe>
-          {/* <VideoPlayer id={"dQw4w9WgXcQ"} /> */}
+          {
+            movie.trailer
+              ? <iframe className="w-full h-[70vh] md:h-[50vh] rounded" allowFullScreen src={getMovieTrailer()}></iframe>
+              : 'Трейлера нету :('
+          }
         </div>
       </Modal>
     </>

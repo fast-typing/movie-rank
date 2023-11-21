@@ -41,9 +41,8 @@ export function rateReview(user_id: string, review_id: number, action: "like" | 
 }
 
 export function createComment(body: any, token?: string) {
-  let url = "create_comment";
-  if (token) url += `?token=${token}`;
-  return _request(url, "POST", body);
+  if (token) body.token = token;
+  return _request("create_comment", "POST", body);
 }
 
 export function getAllComments(film_id: string) {
@@ -87,6 +86,10 @@ export function getAIAdvice(content: string): Promise<{ content: string }> {
   return _request(`gigachat/create_prompt?content=${content}`, "POST");
 }
 
+export function getFilmsByName(film_name: string) {
+  return _request(`get_films_by_name?film_name=${film_name}`, "GET");
+}
+
 // export async function getCoordinates(address: string) {
 //   const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${address}&format=json`;
 //   return await fetch(url)
@@ -127,8 +130,10 @@ async function _request(path: string, method: string, body?: any) {
     .then((res) => res)
     .catch((error) => {
       console.error(error);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user_id");
-      window.location.reload();
+      if (url.includes("token")) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        window.location.reload();
+      }
     });
 }
