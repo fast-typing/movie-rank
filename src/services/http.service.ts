@@ -17,6 +17,10 @@ export function getMovie(id: string): Promise<Movie> {
   return _request(`get_film?film_id=${id}`, "GET");
 }
 
+export function deleteComment(comment_id: number): Promise<{ message: string }> {
+  return _request(`delete_comment?comment_id=${comment_id}`, "DELETE");
+}
+
 export function getUserData(token?: string, username?: string): Promise<User> {
   let path = "get_user";
   if (token) path += `?token=${token}`;
