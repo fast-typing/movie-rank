@@ -48,7 +48,7 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
       <div className="card">
         {floatIcon}
         <div className="grid gap-3 sm:gap-2 cursor-pointer h-fit" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
-          <img loading="lazy" className="min-h-[400px] sm:min-h-fit" src={props.movie.poster} alt={props.movie.poster} />
+          <img loading="lazy" className="min-h-[400px] sm:min-h-fit" src={props.movie.poster} alt='картинка' />
           <div className="text">
             <h3 className="two-rows-text text-xl sm:text-lg w-[70%] !leading-tight">{props.movie.title}</h3>
             <div className="flex items-center sm:items-start text-lg sm:text-base">
