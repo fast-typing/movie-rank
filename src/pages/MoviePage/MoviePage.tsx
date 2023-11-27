@@ -1,20 +1,13 @@
 import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Movie } from "../../interfaces/Interfaces";
-import {
-  getAllComments,
-  getMovie,
-  getUsersRating,
-  getUserData,
-  getReviews,
-  getReplies,
-} from "../../services/http.service";
+import { getAllComments, getMovie, getUsersRating, getUserData, getReviews, getReplies } from "../../services/http.service";
 import { LIMIT_OF_REVIEW_BY_DEFAULT, MOVIE_FIELDS } from "../../App.constants";
 import Reviews from "./Reviews/Reviews";
 import PageSkeleton from "./PageSkeleton/PageSkeleton";
 import Trailer from "./Trailer/Trailer";
 import { changeBooleanTypesOfMovies } from "../../services/movieField.service";
-import { Chip, Divider, IconButton, Slide, Snackbar } from "@mui/material";
+import { Chip, Divider } from "@mui/material";
 import Widgets from "./Widgets/Widgets";
 import Comments from "./Comments/Comments";
 import { AuthContext } from "../../context/AuthProvider";
@@ -68,14 +61,12 @@ export default function MoviePage() {
     const movieFields = MOVIE_FIELDS;
     for (let key of Object.keys(movieFields)) {
       const layout = (
-        <>
-          <div className="flex gap-2 justify-between md:justify-normal text-sm">
-            <span className="md:w-[200px]">{movieFields[key]}: </span>
-            <h3 className="text-sm text-right md:text-left">
-              {Array.isArray(movie[key]) ? movie[key].join(", ") ?? "-" : movie[key] ?? "-"}
-            </h3>
-          </div>
-        </>
+        <div className="flex gap-2 justify-between md:justify-normal text-sm">
+          <span className="md:w-[200px]">{movieFields[key]}: </span>
+          <h3 className="text-sm text-right md:text-left">
+            {Array.isArray(movie[key]) ? movie[key].join(", ") ?? "-" : movie[key] ?? "-"}
+          </h3>
+        </div>
       );
 
       info.push(layout);

@@ -31,7 +31,7 @@ export default function Genres({ movies }) {
                 ? genres.map((el, i) => (
                     <Link
                         to={`/search?genres=${el}`}
-                        style={{ backgroundImage: `url(./img/${getCorrectNameOfGenre(el)}.jpg)` }}
+                        style={{ backgroundImage: `url(./img/${getCorrectNameOfGenre(el)}.webp)` }}
                         className="genre"
                         key={i}
                     >

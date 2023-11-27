@@ -17,6 +17,10 @@ export function getMovie(id: string): Promise<Movie> {
   return _request(`get_film?film_id=${id}`, "GET");
 }
 
+export function deleteComment(comment_id: number): Promise<{ message: string }> {
+  return _request(`delete_comment?comment_id=${comment_id}`, "DELETE");
+}
+
 export function getUserData(token?: string, username?: string): Promise<User> {
   let path = "get_user";
   if (token) path += `?token=${token}`;
@@ -41,9 +45,8 @@ export function rateReview(user_id: string, review_id: number, action: "like" | 
 }
 
 export function createComment(body: any, token?: string) {
-  let url = 'create_comment'
-  if (token) url += `?token=${token}`
-  return _request(url, "POST", body);
+  if (token) body.token = token;
+  return _request("create_comment", "POST", body);
 }
 
 export function getAllComments(film_id: string) {
@@ -67,8 +70,8 @@ export function rateFilm(body: RateFilm) {
   return _request(`rate_the_film`, "POST", body);
 }
 
-export function getRecommendations(user_id: string) {
-  return _request(`get_recommendations?user_id=${user_id}`, "GET");
+export function getRecommendations(user_id: string, num_films: number) {
+  return _request(`get_recommendations?user_id=${user_id}&num_films=${num_films}`, "GET");
 }
 
 export function getCinemasByCity(city_id: string): Promise<{ data: CinemaMovie[] }> {
@@ -85,6 +88,10 @@ export function getUsersRating(filmId: string): Promise<{ [id: string]: number }
 
 export function getAIAdvice(content: string): Promise<{ content: string }> {
   return _request(`gigachat/create_prompt?content=${content}`, "POST");
+}
+
+export function getFilmsByName(film_name: string) {
+  return _request(`get_films_by_name?film_name=${film_name}`, "GET");
 }
 
 // export async function getCoordinates(address: string) {
@@ -125,5 +132,12 @@ async function _request(path: string, method: string, body?: any) {
   return await fetch(url, options)
     .then((response) => response.json())
     .then((res) => res)
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      console.error(error);
+      if (url.includes("token")) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
+        window.location.reload();
+      }
+    });
 }

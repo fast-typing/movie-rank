@@ -25,7 +25,6 @@ export default function KinoAfisha({ cinemas }) {
   }
 
   function isSessionExpired(time: string): boolean {
-    console.log(new Date().toTimeString().split(" ")[0], time);
     if (time[0] === "0" && time[1] === "0") return false;
     return new Date().toTimeString().split(" ")[0] > time;
   }
@@ -56,7 +55,7 @@ export default function KinoAfisha({ cinemas }) {
                     content={el.movies.map((movie) => (
                       <div className="p-2 bg-[var(--black-2)] rounded h-fit">
                         <img
-                          className="w-full h-[300px] object-cover rounded"
+                          className="aspect-[2/3] w-full object-cover rounded"
                           src={movie.movie_poster}
                           alt={movie.movie_poster}
                         />

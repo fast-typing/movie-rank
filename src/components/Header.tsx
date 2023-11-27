@@ -2,11 +2,10 @@ import { useContext, useState } from "react";
 import MovieIcon from "@mui/icons-material/Movie";
 import { Box, IconButton, Button } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DragHandleRoundedIcon from "@mui/icons-material/DragHandleRounded";
 import { AuthContext } from "../context/AuthProvider";
 import { UserContext } from "../context/UserProvider";
-import { CLOSED_INPUT_STYLE, OPENED_INPUT_STYLE, SIDE_BAR_STYLE } from "../App.constants";
+import { SIDE_BAR_STYLE } from "../App.constants";
 import AuthModal from "./AuthModal";
 import FastSearch from "./FastSearch/FastSearch";
 
@@ -19,31 +18,11 @@ export default function Header() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const { isAuth, setAuth } = useContext(AuthContext);
-  const [search, setSearch] = useState("");
   const [modal, setModal] = useState<Modal>({ isOpen: false, type: "Вход" });
-  const [input, setInput] = useState({ open: false, focus: false });
   const [openSideBar, setOpenSideBar] = useState(false);
-
-  function findBySearch(event: any, isMobile: boolean) {
-    event.preventDefault();
-    const path = search.length ? `/search?title=${search}` : '/search'
-    routeTo(path);
-    setSearch("");
-    setInput({ focus: false, open: false });
-    if (isMobile) {
-      toggleSideBar();
-    }
-  }
 
   function toggleSideBar() {
     setOpenSideBar(!openSideBar)
-  }
-
-  function closeInput(): void {
-    if (search.length) return;
-    setTimeout(() => {
-      setInput({ focus: false, open: false });
-    }, 100)
   }
 
   function openModal(type: "Вход" | "Регистрация") {
@@ -69,40 +48,12 @@ export default function Header() {
     }
   }
 
-  function onSearchClick(e, isMobile) {
-    if (input.open === true) {
-      findBySearch(e, isMobile);
-    } else {
-      setInput({ ...input, open: true });
-    }
-  }
-
   const nav = (isMobile: boolean): JSX.Element => {
     const buttonClass = isMobile ? "w-full" : "";
-    const inputStyle = isMobile ? { width: "100%" } : input.open ? OPENED_INPUT_STYLE : CLOSED_INPUT_STYLE;
 
     return (
-      <form className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"} onSubmit={(e) => findBySearch(e, isMobile)}>
-        <span className="pseudo-input">
-          {isMobile ? null : <FastSearch input={input} setInput={setInput} search={search} setSearch={setSearch} />}
-          <span className="material-symbols-outlined z-1" onClick={(e) => onSearchClick(e, isMobile)}>
-            search
-          </span>
-          <input
-            value={search}
-            type="text"
-            onChange={(e) => setSearch(e.target.value)}
-            onFocus={() => setInput({ ...input, focus: true })}
-            onBlur={closeInput}
-            placeholder="Найти..."
-            style={inputStyle}
-          />
-          {isMobile ? (
-            <IconButton onClick={toggleSideBar}>
-              <CloseRoundedIcon />
-            </IconButton>
-          ) : null}
-        </span>
+      <div className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"}>
+        <FastSearch isMobile={isMobile} toggleSideBar={toggleSideBar}/>
         <Button onClick={() => routeTo("", isMobile)} variant="contained" className={buttonClass}>
           Главная
         </Button>
@@ -128,7 +79,7 @@ export default function Header() {
             </Button>
           </div>
         )}
-      </form>
+      </div>
     );
   };
 
