@@ -25,7 +25,6 @@ export default function KinoAfisha({ cinemas }) {
   }
 
   function isSessionExpired(time: string): boolean {
-    console.log(new Date().toTimeString().split(" ")[0], time);
     if (time[0] === "0" && time[1] === "0") return false;
     return new Date().toTimeString().split(" ")[0] > time;
   }

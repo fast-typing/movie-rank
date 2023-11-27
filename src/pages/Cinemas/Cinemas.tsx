@@ -4,6 +4,7 @@ import KinoAfisha from "./KinoAfisha/KinoAfisha";
 import { getCinemasByCity, getCities, getUserCity, getUserIP } from "../../services/http.service";
 import { Cinema } from "../../interfaces/Interfaces";
 import { CircularProgress } from "@mui/material";
+import Ad from "../../components/Ad";
 
 export default function Cinemas() {
   const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
@@ -97,21 +98,24 @@ export default function Cinemas() {
 
   return loading ? <div className="text-center"><CircularProgress /></div> : (
     <>
-      <YMaps>
-        <Map
-          className="w-full h-[500px]"
-          defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 14.5 }}
-        >
-          <FullscreenControl />
-          {addresses.map((cinema) => (
-            <Placemark
-              geometry={cinema.coordinates}
-              properties={{ iconCaption: 'Кинотеатр ' + cinema.name }}
-              options={{ iconColor: "#d32f2f" }}
-            />
-          ))}
-        </Map>
-      </YMaps>
+      <div className="grid gap-4">
+        <YMaps>
+          <Map
+            className="w-full h-[500px]"
+            defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 14.5 }}
+          >
+            <FullscreenControl />
+            {addresses.map((cinema) => (
+              <Placemark
+                geometry={cinema.coordinates}
+                properties={{ iconCaption: 'Кинотеатр ' + cinema.name }}
+                options={{ iconColor: "#d32f2f" }}
+              />
+            ))}
+          </Map>
+        </YMaps>
+        <Ad width='100%' height='130px'></Ad>
+      </div>
       <div>
         <h1 className="mb-4">Кинотеатры</h1>
         <KinoAfisha cinemas={cinemas} />

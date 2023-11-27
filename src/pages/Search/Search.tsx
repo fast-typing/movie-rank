@@ -203,9 +203,9 @@ export default function Search() {
     navigate(`/movie/${id}`);
   }
 
-  const pagination = (className: string) => {
+  const pagination = () => {
     return page.max > 1 ? (
-      <Stack spacing={1} className={className}>
+      <Stack spacing={1} >
         <Pagination size="large" count={page.max} page={page.current} onChange={changePage} />
       </Stack>
     ) : null;
@@ -352,11 +352,11 @@ export default function Search() {
           ? skeleton
           : page.content.length
             ? <>
-              {pagination("mb-4")}
-              <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {pagination()}
+              <div className="my-4 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {loading > 0 ? skeleton : page.content.length ? page.content : "Пусто :("}
               </div>
-              {pagination("mt-4")}
+              {pagination()}
             </>
             : "Пусто :("}
       </div>

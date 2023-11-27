@@ -70,8 +70,8 @@ export function rateFilm(body: RateFilm) {
   return _request(`rate_the_film`, "POST", body);
 }
 
-export function getRecommendations(user_id: string) {
-  return _request(`get_recommendations?user_id=${user_id}`, "GET");
+export function getRecommendations(user_id: string, num_films: number) {
+  return _request(`get_recommendations?user_id=${user_id}&num_films=${num_films}`, "GET");
 }
 
 export function getCinemasByCity(city_id: string): Promise<{ data: CinemaMovie[] }> {
