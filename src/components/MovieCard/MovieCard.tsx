@@ -9,10 +9,14 @@ import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { useNavigate } from "react-router-dom";
 import { favoriteToggle } from "../../services/http.service";
 import { red } from "@mui/material/colors";
+import { Slide, Snackbar } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import Toast from "../Toast";
 
 export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean }) {
   const [favorite, setFavorite] = useState(props.movie.is_favorite);
   const [loading, setLoading] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false)
   const navigate = useNavigate();
 
   function routeTo(path: string) {
@@ -21,9 +25,13 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
 
   async function toggleFavorite() {
     setLoading(true);
-    const token = localStorage.getItem('token') ?? '';
-    const res = await favoriteToggle(token, props.movie.id);
-    if (res.Message) { setFavorite(!favorite); }
+    const token = localStorage.getItem('token');
+    if (!token?.length) {
+      setOpenSnackBar(true)
+    } else {
+      const res = await favoriteToggle(token, props.movie.id);
+      if (res.Message) { setFavorite(!favorite); }
+    }
     setLoading(false);
   }
 
@@ -36,18 +44,21 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
     </div>
 
   return (
-    <div className="card">
-      {floatIcon}
-      <div className="grid gap-2 cursor-pointer h-fit" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
-        <img loading="lazy" className="min-h-[400px] sm:min-h-fit" src={props.movie.poster} alt={props.movie.poster} />
-        <div className="flex justify-between">
-          <h3 className="two-rows-text text-xl sm:text-lg w-[70%] !leading-tight">{props.movie.title}</h3>
-          <div className="flex text-lg sm:text-base">
-            <span>{props.movie.average_rating}</span>
-            <StarIcon sx={{ color: red[500] }} />
+    <>
+      <div className="card">
+        {floatIcon}
+        <div className="grid gap-3 sm:gap-2 cursor-pointer h-fit" onClick={() => routeTo(`/movie/${props.movie.id}`)}>
+          <img loading="lazy" src={props.movie.poster} alt={props.movie.poster} />
+          <div className="text">
+            <h3 className="two-rows-text text-xs sm:text-lg w-[70%] !leading-tight">{props.movie.title}</h3>
+            <div className="flex items-center sm:items-start text-sm sm:text-base">
+              <span>{props.movie.average_rating}</span>
+              <StarIcon sx={{ color: red[500], width: 0.8}}/>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <Toast open={openSnackBar} onClose={() => setOpenSnackBar(false)} message={"Войдите в аккаунт для добавления фильмы в избранное"} />
+    </>
   );
 }
