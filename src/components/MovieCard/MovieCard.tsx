@@ -53,7 +53,7 @@ export default function MovieCard(props: { movie: Movie, hideFavorite?: boolean 
             <h3 className="two-rows-text text-xs sm:text-lg w-[70%] !leading-tight">{props.movie.title}</h3>
             <div className="flex items-center sm:items-start text-sm sm:text-base">
               <span>{props.movie.average_rating}</span>
-              <StarIcon sx={{ color: red[500], width: 0.8 }} />
+              <StarIcon sx={{ color: red[500]}} />
             </div>
           </div>
         </div>

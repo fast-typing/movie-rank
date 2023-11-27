@@ -4,8 +4,8 @@ import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
 import { createComment } from "../../../services/http.service";
 import { Comment } from "../../../interfaces/Interfaces";
-import { io } from "socket.io-client";
-import useWebSocket from 'react-use-websocket';
+// import { io } from "socket.io-client";
+// import useWebSocket from 'react-use-websocket';
 
 interface Props {
   comments: Comment[]
