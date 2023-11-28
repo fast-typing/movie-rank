@@ -25,6 +25,7 @@ export interface Movie {
   is_postponed: boolean;
   is_finished: boolean;
   description: string
+  trailer_poster: string
   id: number;
 }
 

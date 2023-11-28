@@ -37,6 +37,7 @@ export default function Header() {
     setAuth(false);
     setUser(null);
     localStorage.removeItem("token");
+    localStorage.removeItem("is_admin");
     localStorage.removeItem("user_id");
     window.location.reload();
   }
@@ -53,12 +54,12 @@ export default function Header() {
 
     return (
       <div className={isMobile ? "grid gap-6 mb-6" : "flex gap-2"}>
-        <FastSearch isMobile={isMobile} toggleSideBar={toggleSideBar}/>
+        <FastSearch isMobile={isMobile} toggleSideBar={toggleSideBar} />
         <Button onClick={() => routeTo("", isMobile)} variant="contained" className={buttonClass}>
           Главная
         </Button>
         <Button onClick={() => routeTo("cinema", isMobile)} variant="contained" className={buttonClass}>
-          Кинотеатры
+          Афиша
         </Button>
         {isAuth ? (
           <>

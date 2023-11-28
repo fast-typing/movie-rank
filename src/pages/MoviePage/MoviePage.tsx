@@ -108,7 +108,7 @@ export default function MoviePage() {
         <hr />
         <Reviews film_id={filmId} propReviews={reviews} checkIsAuth={checkIsAuth} />
         <hr />
-        <Comments film_id={filmId} comments={comments} checkIsAuth={checkIsAuth} />
+        <Comments film_id={filmId} comments={comments} setComments={setComments} checkIsAuth={checkIsAuth} />
       </div>
       <Toast open={openSnackBar} onClose={() => setOpenSnackBar(false)} message={"Войдите в аккаунт для данного действия"} />
     </>

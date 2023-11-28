@@ -86,7 +86,7 @@ export const REVIEW_RATING_OPTIONS = [
 
 export const PAGE_TITLE_TO_PATH = {
   '/': 'Главная',
-  '/cinema': 'Кинотетры',
+  '/cinema': 'Афиша',
   '/search': 'Поиск',
   '/profile': 'Профиль',
   '/me': 'Ваш профиль',

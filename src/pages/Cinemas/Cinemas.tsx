@@ -102,7 +102,7 @@ export default function Cinemas() {
         <YMaps>
           <Map
             className="w-full h-[500px]"
-            defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 14.5 }}
+            defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 12 }}
           >
             <FullscreenControl />
             {addresses.map((cinema) => (

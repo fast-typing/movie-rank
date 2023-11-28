@@ -137,6 +137,7 @@ async function _request(path: string, method: string, body?: any) {
       if (url.includes("token")) {
         localStorage.removeItem("token");
         localStorage.removeItem("user_id");
+        localStorage.removeItem("is_admin");
         window.location.reload();
       }
     });

@@ -1,57 +1,32 @@
-import { useEffect, useState } from "react";
+import { Dispatch, useCallback, useEffect, useState } from "react";
 import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
-import { createComment } from "../../../services/http.service";
 import { Comment } from "../../../interfaces/Interfaces";
-// import { io } from "socket.io-client";
-// import useWebSocket from 'react-use-websocket';
+import useWebSocket from 'react-use-websocket';
 
 interface Props {
   comments: Comment[]
   film_id: string
+  setComments: Dispatch<any>
   checkIsAuth: () => boolean
 }
-
-// const socket = io('<wss://www.backend.movie-rank.ru/ws/comment/create>')
-// const socket = new WebSocket('ws://www.backend.movie-rank.ru/ws/comment/create')
 
 export default function Comments(props: Props) {
   const [edit, setEdit] = useState<boolean>(false);
   const [page, setPage] = useState({ current: 1, max: 1, content: [] });
-  const [comment, setComment] = useState("");
+  const [message, setMessage] = useState("");
 
-  // useWebSocket('ws://www.backend.movie-rank.ru/ws/comment/create', {
-  //   onOpen: () => console.log('WebSocket connection established.'),
-  //   onClose: () => console.log('WebSocket connection closed.'),
-  // });
-
-  // socket.on('connect', function() {
-  //   console.log('Соединение установлено');
-  // });
-
-  // socket.on('message', function(data) {
-  //   console.log(`Получено сообщение: ${data}`);
-  // });
-
-  // socket.on('disconnect', function() {
-  //   console.log('Соединение закрыто');
-  // });
-
-  // socket.on('error', function(error) {
-  //   console.log(`Ошибка: ${error}`);
-  // });
+  const { sendMessage, lastMessage, readyState } = useWebSocket('wss://www.backend.movie-rank.ru/ws/comment/create', {
+    onMessage: (e) => {
+      console.log(e)
+      const comment = e?.data
+      if (!comment) return
+      props.setComments((prev) => [...prev, JSON.parse(comment)])
+    }
+  });
 
   useEffect(() => {
-    // socket.onopen = (event) => {
-    //   console.log(event)
-    // };
-  
-    // socket.onclose = (data) => {
-    //   console.log(data);
-    //   console.log('asd')
-    // }
-
     setPage({
       ...page,
       max: Math.ceil(props.comments.length / AMOUNT_OF_COMMENTS_ON_PAGE),
@@ -59,29 +34,18 @@ export default function Comments(props: Props) {
     });
   }, []);
 
-  // socket.onopen = (event) => {
-  //   console.log(event)
-  // };
-
-  // socket.onclose = (data) => {
-  //   console.log(data);
-  //   console.log('asd')
-  // }
-
   const changePage = async (event: React.ChangeEvent<unknown>, value: number) => {
     const content = props.comments?.slice((value - 1) * AMOUNT_OF_COMMENTS_ON_PAGE, value * AMOUNT_OF_COMMENTS_ON_PAGE);
     setPage({ ...page, current: value, content: content });
   };
 
-  async function submitComment() {
-    const token = localStorage.getItem("token");
-    const res = await createComment({ message: comment, film_id: props.film_id }, token ?? null);
-    if (!res.film_id) return
-    window.location.reload()
+  async function submitMessage() {
+    sendMessage(JSON.stringify({ film_id: props.film_id, message: message }))
+    setMessage('')
   }
 
+
   function openEditForm() {
-    // if (!props.checkIsAuth()) return
     setEdit(!edit)
   }
 
@@ -99,11 +63,11 @@ export default function Comments(props: Props) {
             <textarea
               className="w-full"
               rows={5}
-              value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
               placeholder="Ваш комментарий"
             />
-            <Button className="h-fit w-fit" disabled={!comment.length} onClick={submitComment} variant="contained">
+            <Button className="h-fit w-fit" disabled={!message.length} onClick={submitMessage} variant="contained">
               Оставить комментарий
             </Button>
           </div>

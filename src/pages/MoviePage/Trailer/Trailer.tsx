@@ -7,14 +7,13 @@ export default function Trailer({ movie }) {
   const [videoModalOpen, setVideoModalOpen] = useState<boolean>(false);
 
   function getMovieTrailer(): string {
-    console.log(movie.trailer?.replace("watch?v=", "embed/"))
     return movie.trailer?.replace("watch?v=", "embed/");
   }
 
   return (
     <>
       <div className="trailer h-[40vh] md:h-[inherit]" onClick={() => setVideoModalOpen(true)}>
-        <img src={movie.poster} alt={movie.title} />
+        <img src={movie.trailer_poster} alt={movie.title} />
         <Button variant="contained" className="play-button">
           Смотреть трейлер
         </Button>
