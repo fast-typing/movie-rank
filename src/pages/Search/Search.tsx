@@ -206,7 +206,7 @@ export default function Search() {
   const pagination = () => {
     return page.max > 1 ? (
       <Stack spacing={1} >
-        <Pagination size="large" count={page.max} page={page.current} onChange={changePage} />
+        <Pagination shape="rounded" size="large" count={page.max} page={page.current} onChange={changePage} />
       </Stack>
     ) : null;
   };

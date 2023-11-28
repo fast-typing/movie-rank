@@ -102,7 +102,9 @@ const theme = createTheme({
             },
             '&:hover': {
               backgroundColor: 'rgba(0, 0, 0, 0.12)',
-            }
+            },
+            minWidth: 'fit-content',
+            padding: '0 10px'
           },
         },
       ],
