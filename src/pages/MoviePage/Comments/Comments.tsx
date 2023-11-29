@@ -19,12 +19,10 @@ export default function Comments(props: Props) {
 
   const { sendMessage } = useWebSocket("wss://www.backend.movie-rank.ru/ws/comment/create", {
     onMessage: (e) => {
-      console.log(e);
       const comment = e?.data;
       if (!comment) return;
       props.setComments((prev) => [...prev, JSON.parse(JSON.parse(comment))]);
     },
-    onOpen: (e) => console.log("open"),
   });
 
   useEffect(() => {
@@ -35,15 +33,9 @@ export default function Comments(props: Props) {
         content: props.comments.slice(0, AMOUNT_OF_COMMENTS_ON_PAGE),
       };
     });
-  }, []);
-
-  useEffect(() => {
-    if (page.content.length === 6) {
-      setPage((prev) => {
-        return { ...prev, max: prev.max + 1 };
-      });
+    if (page.current !== 1) {
+      changePage(null, page.current);
     }
-    changePage(null, page.current);
   }, [props.comments]);
 
   const changePage = async (event: React.ChangeEvent<unknown>, value: number) => {

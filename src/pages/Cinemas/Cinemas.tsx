@@ -22,10 +22,13 @@ export default function Cinemas() {
   }, []);
 
   async function initCinemas() {
+    const location = await getUserIP();
     const localStorageLocation = JSON.parse(localStorage.getItem("location"));
-    const location = localStorageLocation ? localStorageLocation : await getUserIP();
+    if (location !== localStorageLocation) {
+      localStorage.setItem('location', JSON.stringify({ latitude: location.latitude, longitude: location.longitude }))
+    }
+
     setCoordinates({ latitude: location.latitude, longitude: location.longitude });
-    localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }));
 
     const resCities = await getCities();
     const city = await getUserCity(location);
@@ -77,7 +80,6 @@ export default function Cinemas() {
     }
 
     const cinemasWithCoord = [];
-
     const getData = async (name) => {
       const correctedName = name.replace('&', 'и')
       const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
