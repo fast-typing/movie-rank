@@ -45,7 +45,13 @@ export default function Search() {
   });
 
   function getQueryStringValue(key: string): string {
-    const value = decodeURIComponent(searchParams.get(key))?.replace('+', ' ')
+    let value = null
+    if (key === 'age_rating') {
+      value = decodeURIComponent(searchParams.get(key))
+    } else {
+      value = decodeURIComponent(searchParams.get(key))?.replace('+', ' ')
+    }
+
     if (key === 'sortBy') {
       const isValueCorrect = value == 'Старые' || value == 'Новые' || value == 'По рейтенгу'
       return isValueCorrect ? value : ''
@@ -134,7 +140,7 @@ export default function Search() {
         case "По рейтенгу": return prev.average_rating - curr.average_rating;
       }
     });
-    setMoviesByFilter(sortedMovies)
+    setMoviesByFilter(allMovies)
   }
 
   function filterByFields(fields: string[], inputFilter: any, allMovies: Movie[]): Movie[] {
