@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function CommentBlock(props: Props) {
-  const isAdmin = localStorage.getItem("is_admin");
+  const isAdmin = localStorage.getItem("is_admin") === "true";
 
   const getDate = (): string => {
     return new Date(props.comment.created_at).toLocaleString();

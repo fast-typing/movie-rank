@@ -1,9 +1,8 @@
 import { useContext, useState } from "react";
-import { Backdrop, Button, Fade, IconButton, Modal, Slide, Snackbar } from "@mui/material";
+import { Backdrop, Button, Fade, Modal } from "@mui/material";
 import { login, registration } from "../services/http.service";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { AuthContext } from "../context/AuthProvider";
-import CloseIcon from "@mui/icons-material/Close";
 import Toast from "./Toast";
 
 interface Props {

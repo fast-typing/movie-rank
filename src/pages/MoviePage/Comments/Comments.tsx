@@ -3,13 +3,13 @@ import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
 import { Comment } from "../../../interfaces/Interfaces";
-import useWebSocket from 'react-use-websocket';
+import useWebSocket from "react-use-websocket";
 
 interface Props {
-  comments: Comment[]
-  film_id: string
-  setComments: Dispatch<any>
-  checkIsAuth: () => boolean
+  comments: Comment[];
+  film_id: string;
+  setComments: Dispatch<any>;
+  checkIsAuth: () => boolean;
 }
 
 export default function Comments(props: Props) {
@@ -17,36 +17,49 @@ export default function Comments(props: Props) {
   const [page, setPage] = useState({ current: 1, max: 1, content: [] });
   const [message, setMessage] = useState("");
 
-  const { sendMessage, lastMessage, readyState } = useWebSocket('wss://www.backend.movie-rank.ru/ws/comment/create', {
+  const { sendMessage } = useWebSocket("wss://www.backend.movie-rank.ru/ws/comment/create", {
     onMessage: (e) => {
-      console.log(e)
-      const comment = e?.data
-      if (!comment) return
-      props.setComments((prev) => [...prev, JSON.parse(comment)])
-    }
+      console.log(e);
+      const comment = e?.data;
+      if (!comment) return;
+      props.setComments((prev) => [...prev, JSON.parse(JSON.parse(comment))]);
+    },
+    onOpen: (e) => console.log("open"),
   });
 
   useEffect(() => {
-    setPage({
-      ...page,
-      max: Math.ceil(props.comments.length / AMOUNT_OF_COMMENTS_ON_PAGE),
-      content: props.comments.slice(0, AMOUNT_OF_COMMENTS_ON_PAGE),
+    setPage((prev) => {
+      return {
+        ...prev,
+        max: Math.ceil(props.comments.length / AMOUNT_OF_COMMENTS_ON_PAGE),
+        content: props.comments.slice(0, AMOUNT_OF_COMMENTS_ON_PAGE),
+      };
     });
   }, []);
 
+  useEffect(() => {
+    if (page.content.length === 6) {
+      setPage((prev) => {
+        return { ...prev, max: prev.max + 1 };
+      });
+    }
+    changePage(null, page.current);
+  }, [props.comments]);
+
   const changePage = async (event: React.ChangeEvent<unknown>, value: number) => {
     const content = props.comments?.slice((value - 1) * AMOUNT_OF_COMMENTS_ON_PAGE, value * AMOUNT_OF_COMMENTS_ON_PAGE);
-    setPage({ ...page, current: value, content: content });
+    setPage((prev) => {
+      return { ...prev, current: value, content: content };
+    });
   };
 
   async function submitMessage() {
-    sendMessage(JSON.stringify({ film_id: props.film_id, message: message }))
-    setMessage('')
+    sendMessage(JSON.stringify({ film_id: props.film_id, message: message }));
+    setMessage("");
   }
 
-
   function openEditForm() {
-    setEdit(!edit)
+    setEdit(!edit);
   }
 
   return (
@@ -60,21 +73,13 @@ export default function Comments(props: Props) {
       <div className="grid gap-8 mb-4">
         {edit ? (
           <div className="w-full gap-2 grid">
-            <textarea
-              className="w-full"
-              rows={5}
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Ваш комментарий"
-            />
+            <textarea className="w-full" rows={5} value={message} onChange={(e) => setMessage(e.target.value)} placeholder="Ваш комментарий" />
             <Button className="h-fit w-fit" disabled={!message.length} onClick={submitMessage} variant="contained">
               Оставить комментарий
             </Button>
           </div>
         ) : null}
-        {page.content.length
-          ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />)
-          : "Комментарии отсутствуют :("}
+        {page.content.length ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />) : "Комментарии отсутствуют :("}
       </div>
       {page.max > 1 ? (
         <Stack spacing={2}>
