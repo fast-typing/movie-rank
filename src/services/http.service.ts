@@ -10,7 +10,7 @@ export function registration(data) {
 }
 
 export function getAllMovies(): Promise<Movie[]> {
-  return _request(`get_all_films?limit=99999`, "GET");
+  return _request(`get_all_films?limit=1000`, "GET");
 }
 
 export function getMovie(id: string): Promise<Movie> {
