@@ -47,7 +47,7 @@ export default function Comments(props: Props) {
 
   async function submitMessage() {
     const token = localStorage.getItem('token')
-    const body = { film_id: props.film_id, message: message }
+    const body: any = { film_id: props.film_id, message: message }
     if (token) body.token = token
     sendMessage(JSON.stringify(body));
     setMessage("");
