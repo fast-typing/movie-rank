@@ -33,7 +33,7 @@ export default function Profile() {
     </div>
   ) : (
     <div>
-      <h1 className="mb-6">{user.data.username}</h1>
+      <h1 className="mb-6">{user.data.username} <span className="opacity-30">{window.location.href.includes('/me') ? '(вы)' : null}</span></h1>
       <UserMovies user={user} />
       <br />
       <Ad width='100%' height='130px'></Ad>
