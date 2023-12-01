@@ -17,7 +17,7 @@ export default function Comments(props: Props) {
   const [page, setPage] = useState({ current: 1, max: 1, content: [] });
   const [message, setMessage] = useState("");
 
-  const { sendMessage } = useWebSocket("wss://www.backend.movie-rank.ru/ws/comment/create", {
+  const { sendMessage } = useWebSocket(`wss://www.backend.movie-rank.ru/ws/comment/create/${props.film_id}`, {
     onMessage: (e) => {
       const comment = e?.data;
       if (!comment) return;
