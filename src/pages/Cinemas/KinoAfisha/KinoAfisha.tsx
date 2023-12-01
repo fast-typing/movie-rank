@@ -102,9 +102,9 @@ export default function KinoAfisha({ cinemas }) {
         )}
       </div>
       <p className="opacity-50 mt-8">
-        Вся информация взята с api{" "}
+        Вся информация была предоставленна{" "}
         <a href="https://www.kinoafisha.info/" className="underline">
-          киноафиши
+          киноафишой
         </a>
       </p>
     </Box>

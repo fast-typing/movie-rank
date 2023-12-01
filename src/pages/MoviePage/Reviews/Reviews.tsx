@@ -53,7 +53,7 @@ export default function Reviews(props: Props) {
       </div>
       <div className="grid gap-8 mb-4">
         {edit ? <ReviewForm film_id={props.film_id} /> : null}
-        {reviews.length ? reviews.map(review => <ReviewBlock key={review.id} checkIsAuth={props.checkIsAuth} review={review} />) : "Рецензий нема :("}
+        {reviews.length ? reviews.map(review => <ReviewBlock key={review.id} checkIsAuth={props.checkIsAuth} review={review} />) : "Рецензии отсутствуют"}
         {loading ? <div className="text-center"><CircularProgress /></div> : reviews.length % 3 == 0 && reviews.length !== 0 && !isAllReviewsLoaded ? <Button variant="contained" onClick={loadMore}>Показать еще</Button> : null}
       </div>
     </div>

@@ -31,7 +31,7 @@ export default function GPTDialog() {
             </Fab>
             <Modal open={open} onClose={toggleDialog}>
                 <form className="modal-content w-full sm:h-fit sm:w-[600px]" onSubmit={submit}>
-                    <p>В этом окне вы можете задать любой вопрос ИИ</p>
+                    <p>В этом окне вы можете найти фильм с помощью нейросети</p>
                     <textarea placeholder="Ваш запрос" className="h-[120px]" value={input} onChange={(e) => setInput(e.target.value)} />
                     {
                         loading

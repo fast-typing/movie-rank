@@ -360,11 +360,11 @@ export default function Search() {
             ? <>
               {pagination()}
               <div className="my-4 grid gap-4 grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {loading > 0 ? skeleton : page.content.length ? page.content : "Пусто :("}
+                {loading > 0 ? skeleton : page.content.length ? page.content : "По вашим параметрам ничего не найдено"}
               </div>
               {pagination()}
             </>
-            : "Пусто :("}
+            : "По вашим параметрам ничего не найдено"}
       </div>
     </div>
   );

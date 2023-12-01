@@ -74,7 +74,7 @@ export default function Comments(props: Props) {
             </Button>
           </div>
         ) : null}
-        {page.content.length ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />) : "Комментарии отсутствуют :("}
+        {page.content.length ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />) : "Комментарии остутсвуют"}
       </div>
       {page.max > 1 ? (
         <Stack spacing={2}>
