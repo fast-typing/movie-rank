@@ -22,7 +22,7 @@ export default function Header() {
   const [openSideBar, setOpenSideBar] = useState(false);
 
   function toggleSideBar() {
-    setOpenSideBar(!openSideBar)
+    setOpenSideBar(!openSideBar);
   }
 
   function openModal(type: "Вход" | "Регистрация") {
@@ -96,15 +96,22 @@ export default function Header() {
             <h2>Movie Rank</h2>
           </div>
         </Link>
+        {/* 👇 ПК Версия 👇 */}
         <div className="hidden lg:flex gap-2">{nav(false)}</div>
+        {/* ПК Версия */}
+
+        {/* 👇 Мобилка Версия 👇 */}
         <div className="block lg:hidden">
           <IconButton color="primary" onClick={toggleSideBar}>
             <DragHandleRoundedIcon />
           </IconButton>
-          <div className={openSideBar ? "absolute top-[86px] inset-x-0 bottom-0 z-50" : "hidden"}>
-            <Box sx={SIDE_BAR_STYLE}>{nav(true)}</Box>
-          </div>
+          {openSideBar ? (
+            <div className="absolute top-[86px] inset-x-0 bottom-0 z-[10]">
+              <Box sx={SIDE_BAR_STYLE}>{nav(true)}</Box>
+            </div>
+          ) : null}
         </div>
+        {/* Мобилка Версия */}
       </header>
 
       <AuthModal type={modal.type} open={modal.isOpen} onClose={closeModal} />

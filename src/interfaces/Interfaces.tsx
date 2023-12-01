@@ -53,7 +53,6 @@ export interface User {
   favorite_films: [];
   postponed_films: [];
   finished_films: [];
-  // current_films: [];
 }
 
 export interface Registration {

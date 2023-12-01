@@ -38,11 +38,6 @@ export default function MoviePage() {
       const user = token ? await getUserData(token) : null;
       if (!resMovie) return;
       const correctedMovie = changeBooleanTypesOfMovies([resMovie], user)[0];
-      // for (let i = 0; i < resComments.length; i++) {
-      //   const replies = await getReplies(null, resComments[i].id);
-      //   if (!replies.length) continue;
-      //   resComments[i] = { ...resComments[i], replies: replies };
-      // }
 
       document.title = correctedMovie.title
       initDetailedInfo(correctedMovie);

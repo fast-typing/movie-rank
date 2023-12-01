@@ -59,7 +59,7 @@ export default function Comments(props: Props) {
 
   return (
     <div>
-      <div className="flex justify-between items-center flex-wrap mb-8">
+      <div className="flex justify-between items-center flex-wrap mb-8 gap-2">
         <h1>Комментарии</h1>
         <Button variant="contained" onClick={openEditForm}>
           {edit ? "Закрыть" : "Написать комментарий"}
@@ -74,7 +74,7 @@ export default function Comments(props: Props) {
             </Button>
           </div>
         ) : null}
-        {page.content.length ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />) : "Комментарии отсутствуют :("}
+        {page.content.length ? page.content.map((comment) => <CommentBlock comment={comment} marginLeft={0} />) : "Комментарии отсутствуют"}
       </div>
       {page.max > 1 ? (
         <Stack spacing={2}>

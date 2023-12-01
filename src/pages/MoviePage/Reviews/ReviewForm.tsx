@@ -30,7 +30,7 @@ export default function ReviewForm({ film_id }) {
   const toggleButtons = REVIEW_RATING_OPTIONS.map(el =>
     <ToggleButton value={el.value}>
       <div className="flex gap-2">
-        {el.icon} <span>{el.text}</span>
+        {el.icon} <span className="hidden sm:block">{el.text}</span>
       </div>
     </ToggleButton>
   )

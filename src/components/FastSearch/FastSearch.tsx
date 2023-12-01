@@ -83,7 +83,7 @@ export default function FastSearch({ isMobile, toggleSideBar }) {
                                         </div>
                                     </div>
                                 </div>
-                            ) : 'Ничего не найдено :('
+                            ) : 'Ничего не найдено'
                     }
                 </div>}
             <span className="material-symbols-outlined z-1" onClick={(e) => onSearchClick(e)}>

@@ -26,7 +26,7 @@ export default function UserMovies({ user }) {
   }, []);
 
   function getMovieJSX(type: string): JSX.Element {
-    return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} key={movie.id} hideFavorite={true} />) : "Пусто :(";
+    return user.data[type]?.length ? user.data[type]?.map((movie) => <MovieCard movie={movie} key={movie.id} hideFavorite={true} />) : "Пусто~";
   }
 
   function getAmountOfMovieByType(type: string): number {

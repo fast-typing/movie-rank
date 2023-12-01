@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import Ad from "../../components/Ad";
 import UserMovies from "./UserMovies/UserMovies";
 
+console.log('Спасите меня!! Меня держат в подвале и заставляют работать по 30 часов в денб :(((')
+
 export default function Profile() {
   const [user, setUser] = useState({ data: null, loading: true });
   const { username } = useParams();

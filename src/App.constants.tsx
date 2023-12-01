@@ -14,7 +14,6 @@ export const LIMIT_OF_REVIEW_BY_DEFAULT = 3
 
 export const YANDEX_API_KEY = '8f171b20-f9ec-49cb-97f2-a8e9153f25f4'
 export const HTTP_URL = "https://backend.movie-rank.ru/"
-// export const HTTP_URL = "https://dvigit.onrender.com/"
 export const CITY = 'ижевск'
 
 export const MOVIE_FIELDS = {
@@ -24,10 +23,6 @@ export const MOVIE_FIELDS = {
   director: "Режиссер",
   writers: "Сценаристы",
   producers: "Продессеры",
-  // cinematographers: "Операторы",
-  // composers: "Композиторы",
-  // art_directors: "Художники",
-  // editor: "Монтажеры",
   budget: "Бюджет",
   box_office_world: "Сборы",
   age_rating: "Рейтинг в России",
