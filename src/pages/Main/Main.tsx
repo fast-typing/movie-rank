@@ -11,7 +11,7 @@ import "./Main.css";
 const skeleton = () => { return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />) }
 
 export default function Main() {
-  const [movies, setMovies] = useState({ default: [], top: [], new: [] });
+  const [movies, setMovies] = useState({ default: [], top: [], new: [],top_movie_rank: [],top_russia: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,7 +19,9 @@ export default function Main() {
       const res = await getAllMovies();
       if (!res) return;
       const markedMovies = await markFavorites(res);
-      setMovies({ default: res, top: sortByField("average_rating", markedMovies), new: sortByField("year", markedMovies) })
+      const russia = res.filter(movie => movie.country === "Россия","СССР")
+      console.log(russia)
+      setMovies({ default: res, top: sortByField("average_rating", markedMovies), new: sortByField("year", markedMovies), top_movie_rank: sortByField("local_rating", markedMovies), top_russia: sortByField("average_rating", russia)})
       setLoading(false)
     };
 
@@ -43,6 +45,14 @@ export default function Main() {
       <div>
         <h1 className="mb-3">Топ 10 лучших фильмов</h1>
         <AdaptiveContainer content={loading ? skeleton() : movies.top} />
+      </div>
+      <div>
+        <h1 className="mb-3">Топ 10 лучших фильмов по мнению Movie Rank</h1>
+        <AdaptiveContainer content={loading ? skeleton() : movies.top_movie_rank} />
+      </div>
+      <div>
+        <h1 className="mb-3">Топ 10 русских фильмов</h1>
+        <AdaptiveContainer content={loading ? skeleton() : movies.top_russia} />
       </div>
     </>
   );
