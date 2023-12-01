@@ -6,7 +6,7 @@ export default function MovieSkeleton() {
       <div className="grid gap-2 cursor-pointer">
         <Skeleton className="aspect-[2/3] !h-auto w-full" variant="rounded" />
         <div className="flex justify-between gap-2">
-          <Skeleton variant="rounded" height={55} width={150} />
+          <Skeleton variant="rounded" className="!h-auto max-w-[150px] w-full" />
           <div className="flex gap-1">
             <Skeleton variant="rounded" height={27} width={50} />
           </div>

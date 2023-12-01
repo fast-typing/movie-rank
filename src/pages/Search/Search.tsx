@@ -93,7 +93,7 @@ export default function Search() {
 
     const moviesAgeRatings = [];
     movies.map((movie: Movie) =>
-      moviesAgeRatings.includes(movie.age_rating) && movie.age_rating ? null : moviesAgeRatings.push(movie.age_rating)
+      !moviesAgeRatings.includes(movie.age_rating) && movie.age_rating !== null ? moviesAgeRatings.push(movie.age_rating) : null
     );
     setAgeRatings(moviesAgeRatings);
   }

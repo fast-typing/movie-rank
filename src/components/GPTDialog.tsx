@@ -37,7 +37,7 @@ export default function GPTDialog() {
                         loading
                             ? <LinearProgress />
                             : aiAdvice
-                                ? <TypeAnimation sequence={[aiAdvice, 0, () => { setIsAdviceDone(true) }]} speed={70} preRenderFirstString={isAdviceDone} />
+                                ? <div className="max-h-[200px] overflow-auto"><TypeAnimation sequence={[aiAdvice, 0, () => { setIsAdviceDone(true) }]} speed={70} preRenderFirstString={isAdviceDone} /></div>
                                 : null
                     }
                     <Button disabled={!input.length} variant="contained" onClick={submit}>Получить ответ</Button>

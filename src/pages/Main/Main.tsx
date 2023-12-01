@@ -8,12 +8,11 @@ import { markFavorites } from "../../services/movieField.service";
 import Genres from "./Genres/Genres";
 import "./Main.css";
 
+const skeleton = () => { return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />) }
+
 export default function Main() {
   const [movies, setMovies] = useState({ default: [], top: [], new: [] });
-  const [skeleton, setSkeleton] = useState({
-    loading: true,
-    content: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />),
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const init = async () => {
@@ -21,7 +20,7 @@ export default function Main() {
       if (!res) return;
       const markedMovies = await markFavorites(res);
       setMovies({ default: res, top: sortByField("average_rating", markedMovies), new: sortByField("year", markedMovies) })
-      setSkeleton({ ...skeleton, loading: false });
+      setLoading(false)
     };
 
     init();
@@ -39,11 +38,11 @@ export default function Main() {
       <Genres movies={movies.default} />
       <div>
         <h1 className="mb-3">Новинки</h1>
-        <AdaptiveContainer content={skeleton.loading ? skeleton.content : movies.new} />
+        <AdaptiveContainer content={loading ? skeleton() : movies.new} />
       </div>
       <div>
         <h1 className="mb-3">Топ 10 лучших фильмов</h1>
-        <AdaptiveContainer content={skeleton.loading ? skeleton.content : movies.top} />
+        <AdaptiveContainer content={loading ? skeleton() : movies.top} />
       </div>
     </>
   );

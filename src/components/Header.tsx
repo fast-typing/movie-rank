@@ -58,6 +58,9 @@ export default function Header() {
         <Button onClick={() => routeTo("", isMobile)} variant="contained" className={buttonClass}>
           Главная
         </Button>
+        <Button onClick={() => routeTo("search", isMobile)} variant="contained" className={buttonClass}>
+          Фильмы
+        </Button>
         <Button onClick={() => routeTo("cinema", isMobile)} variant="contained" className={buttonClass}>
           Афиша
         </Button>
