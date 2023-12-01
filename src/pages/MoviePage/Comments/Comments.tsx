@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
