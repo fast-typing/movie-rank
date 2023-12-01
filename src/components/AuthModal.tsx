@@ -52,11 +52,10 @@ export default function AuthModal(props: Props) {
     const user_id = res[1];
     const is_admin = res[2];
     setLoading(false);
-    props.onClose();
     if (!token?.length || !user_id) {
       openSnackbar("Что-то пошло не так...");
-      return;
     } else {
+      close()
       localStorage.setItem("token", token);
       localStorage.setItem("user_id", user_id);
       localStorage.setItem("is_admin", String(is_admin));
