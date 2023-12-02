@@ -3,8 +3,8 @@ import { User } from "../interfaces/Interfaces";
 import { getUserData } from "../services/http.service";
 
 type UserContextType = {
-  user: User | null; // флаг, показывающий, аутентифицирован ли пользователь
-  setUser: (user: User) => void; // функция для изменения значения isAuth
+  user: User | null;
+  setUser: (user: User) => void;
 };
 
 export const UserContext = createContext<UserContextType>({

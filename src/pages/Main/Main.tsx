@@ -8,10 +8,12 @@ import { markFavorites } from "../../services/movieField.service";
 import Genres from "./Genres/Genres";
 import "./Main.css";
 
-const skeleton = () => { return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />) }
+const skeleton = () => {
+  return [0, 0, 0, 0, 0, 0, 0, 0, 0, 0].map((el, i) => <MovieSceleton key={i} />);
+};
 
 export default function Main() {
-  const [movies, setMovies] = useState({ default: [], top: [], new: [],top_movie_rank: [],top_russia: [] });
+  const [movies, setMovies] = useState({ default: [], top_rating: [], newest: [], top_movie_rank: [], top_russia: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,10 +21,15 @@ export default function Main() {
       const res = await getAllMovies();
       if (!res) return;
       const markedMovies = await markFavorites(res);
-      const russia = res.filter(movie => movie.country === "Россия","СССР")
-      console.log(russia)
-      setMovies({ default: res, top: sortByField("average_rating", markedMovies), new: sortByField("year", markedMovies), top_movie_rank: sortByField("local_rating", markedMovies), top_russia: sortByField("average_rating", russia)})
-      setLoading(false)
+      const russianFilms = markedMovies.filter((movie) => ["Россия", "СССР"].includes(movie.country));
+      setMovies({
+        default: res,
+        top_rating: sortByField("average_rating", markedMovies),
+        newest: sortByField("year", markedMovies),
+        top_movie_rank: sortByField("local_rating", markedMovies),
+        top_russia: sortByField("average_rating", russianFilms),
+      });
+      setLoading(false);
     };
 
     init();
@@ -40,11 +47,11 @@ export default function Main() {
       <Genres movies={movies.default} />
       <div>
         <h1 className="mb-3">Новинки</h1>
-        <AdaptiveContainer content={loading ? skeleton() : movies.new} />
+        <AdaptiveContainer content={loading ? skeleton() : movies.newest} />
       </div>
       <div>
         <h1 className="mb-3">Топ 10 лучших фильмов</h1>
-        <AdaptiveContainer content={loading ? skeleton() : movies.top} />
+        <AdaptiveContainer content={loading ? skeleton() : movies.top_rating} />
       </div>
       <div>
         <h1 className="mb-3">Топ 10 лучших фильмов по мнению Movie Rank</h1>

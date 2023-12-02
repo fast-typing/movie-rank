@@ -1,4 +1,4 @@
-import { Dispatch, useCallback, useEffect, useState } from "react";
+import { Dispatch, useEffect, useState } from "react";
 import { AMOUNT_OF_COMMENTS_ON_PAGE } from "../../../App.constants";
 import { Button, Pagination, Stack } from "@mui/material";
 import CommentBlock from "./CommentBlock";
@@ -59,7 +59,7 @@ export default function Comments(props: Props) {
 
   return (
     <div>
-      <div className="flex justify-between items-center flex-wrap mb-8">
+      <div className="flex justify-between items-center flex-wrap mb-8 gap-2">
         <h1>Комментарии</h1>
         <Button variant="contained" onClick={openEditForm}>
           {edit ? "Закрыть" : "Написать комментарий"}

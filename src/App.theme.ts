@@ -62,7 +62,6 @@ const theme = createTheme({
         {
           props: {},
           style: {
-            // backgroundColor: mainColor,
             '&.Mui-selected': {
               backgroundColor: mainColor,
               '&:hover': {

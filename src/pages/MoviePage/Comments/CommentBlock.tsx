@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import LeaveCommentToParent from "../../../components/LeaveCommentToParent";
 import { Comment } from "../../../interfaces/Interfaces";
 import { IconButton } from "@mui/material";
 import { deleteComment } from "../../../services/http.service";

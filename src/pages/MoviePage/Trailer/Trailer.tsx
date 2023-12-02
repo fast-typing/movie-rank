@@ -29,7 +29,7 @@ export default function Trailer({ movie }) {
           {
             movie.trailer
               ? <iframe className="aspect-video w-full rounded" allowFullScreen src={getMovieTrailer()}></iframe>
-              : 'Трейлера нету :('
+              : 'Трейлер отсутствует'
           }
         </div>
       </Modal>

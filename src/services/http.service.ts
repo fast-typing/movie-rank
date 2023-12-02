@@ -94,14 +94,6 @@ export function getFilmsByName(film_name: string) {
   return _request(`get_films_by_name?film_name=${film_name}`, "GET");
 }
 
-// export async function getCoordinates(address: string) {
-//   const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${YANDEX_API_KEY}&geocode=${address}&format=json`;
-//   return await fetch(url)
-//     .then((response) => response.json())
-//     .then((res) => res)
-//     .catch((error) => console.error(error));
-// }
-
 export async function getUserIP() {
   return await fetch("https://ipapi.co/json")
     .then((response) => response.json())
