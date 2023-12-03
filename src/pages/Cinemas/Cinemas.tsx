@@ -119,11 +119,7 @@ export default function Cinemas() {
     setCinemas(cinemas);
     setLoading(false);
   }
-
-  useEffect(() => {
-    console.log(coordinates);
-  }, [coordinates]);
-
+  
   function formatAfishaCinemas(cinemas) {
     const formattedCinemas = [];
     for (const key of Object.keys(cinemas)) {
