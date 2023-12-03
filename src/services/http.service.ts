@@ -1,4 +1,4 @@
-import { HTTP_URL } from "../App.constants";
+import { HTTP_URL, YANDEX_API_KEY } from "../App.constants";
 import { Movie, Review, RateFilm, User, CinemaMovie } from "../interfaces/Interfaces";
 
 export function login(data) {
@@ -92,6 +92,13 @@ export function getAIAdvice(content: string): Promise<{ content: string }> {
 
 export function getFilmsByName(film_name: string) {
   return _request(`get_films_by_name?film_name=${film_name}`, "GET");
+}
+
+export async function getCoordinates(text: string): Promise<number[]> {
+  return await fetch(`https://search-maps.yandex.ru/v1/?text=${text}&lang=ru_RU&apikey=${YANDEX_API_KEY}`)
+    .then((response) => response.json())
+    .then((res) => res["features"][0]["geometry"]["coordinates"])
+    .catch((error) => console.error(error));
 }
 
 export async function getUserIP() {
