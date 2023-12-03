@@ -82,7 +82,7 @@ export default function Cinemas() {
     const cinemasWithCoord = [];
     const getData = async (name) => {
       const correctedName = name.replace('&', 'и')
-      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=6a33c0e0-23f5-41d9-b780-a0606b5bf9d9`;
+      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=c460ba12-46f8-42a6-b38b-5c462e42c349`;
       const res = await fetch(url);
       const data = await res.text();
       return data;
