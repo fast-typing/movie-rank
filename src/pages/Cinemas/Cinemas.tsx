@@ -8,7 +8,7 @@ import Ad from "../../components/Ad";
 import Autocomplete from "@mui/material/Autocomplete";
 
 export default function Cinemas() {
-  const [coordinates, setCoordinates] = useState({ latitude: 0, longitude: 0 });
+  const [coordinates, setCoordinates] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cinemas, setCinemas] = useState<Cinema[]>();
   const [userCity, setUserCity] = useState<{ name: string; id: string }>(null);
@@ -51,14 +51,14 @@ export default function Cinemas() {
           localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }));
         }
         const city_id = resCities.data[city];
-        const cinemas = await getCinemas('108');
+        const cinemas = await getCinemas("108");
         await initAddresses(cinemas, city);
         setCoordinates({ latitude: latt, longitude: long });
         setUserCity({ name: city, id: city_id });
         setCinemas(cinemas);
       },
       async (e) => {
-        const cinemas = await getCinemas('108');
+        const cinemas = await getCinemas("108");
         await initAddresses(cinemas, "Москва");
         setUserCity({ name: "Москва", id: "108" });
         setCoordinates({ latitude: 55.751244, longitude: 37.618423 });
@@ -119,6 +119,10 @@ export default function Cinemas() {
     setCinemas(cinemas);
     setLoading(false);
   }
+
+  useEffect(() => {
+    console.log(coordinates);
+  }, [coordinates]);
 
   function formatAfishaCinemas(cinemas) {
     const formattedCinemas = [];
@@ -194,18 +198,20 @@ export default function Cinemas() {
           />
         </div>
         <div className="grid gap-4">
-          <YMaps>
-            <Map className="w-full h-[500px]" defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 12 }}>
-              <FullscreenControl />
-              {addresses.map((cinema) => (
-                <Placemark
-                  geometry={cinema.coordinates}
-                  properties={{ iconCaption: "Кинотеатр " + cinema.name }}
-                  options={{ iconColor: "#d32f2f" }}
-                />
-              ))}
-            </Map>
-          </YMaps>
+          {coordinates ? (
+            <YMaps>
+              <Map className="w-full h-[500px]" defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 12 }}>
+                <FullscreenControl />
+                {addresses.map((cinema) => (
+                  <Placemark
+                    geometry={cinema.coordinates}
+                    properties={{ iconCaption: "Кинотеатр " + cinema.name }}
+                    options={{ iconColor: "#d32f2f" }}
+                  />
+                ))}
+              </Map>
+            </YMaps>
+          ) : null}
           <Ad width="100%" height="130px"></Ad>
         </div>
       </div>
