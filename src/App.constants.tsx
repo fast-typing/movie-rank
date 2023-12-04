@@ -12,7 +12,7 @@ export const AMOUNT_OF_REVIEWS_ON_PAGE = 12
 export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 export const LIMIT_OF_REVIEW_BY_DEFAULT = 3
 
-export const YANDEX_API_KEY = '6a33c0e0-23f5-41d9-b780-a0606b5bf9d9'
+export const YANDEX_API_KEY = 'c460ba12-46f8-42a6-b38b-5c462e42c349'
 export const HTTP_URL = "https://backend.movie-rank.ru/"
 
 export const MOVIE_FIELDS = {
