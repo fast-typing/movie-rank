@@ -342,6 +342,16 @@ const theme = createTheme({
         },
       ],
     },
+    MuiSkeleton: {
+      variants: [
+        {
+          props: {},
+          style: {
+            transform: 'unset',
+          },
+        },
+      ],
+    },
     MuiFab: {
       variants: [
         {

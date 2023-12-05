@@ -19,7 +19,8 @@
 
 html {
   overflow-y: scroll;
-  background-color: var(--black-1);
+  background-color: white;
+  /* background-color: var(--black-1); */
 }
 
 header,

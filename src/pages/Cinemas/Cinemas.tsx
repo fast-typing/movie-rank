@@ -3,10 +3,12 @@ import { useEffect, useState } from "react";
 import KinoAfisha from "./KinoAfisha/KinoAfisha";
 import { getCinemasByCity, getCities, getCoordinates, getUserCity, getUserIP } from "../../services/http.service";
 import { Cinema } from "../../interfaces/Interfaces";
-import { CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, Skeleton, TextField } from "@mui/material";
 import Ad from "../../components/Ad";
 import Autocomplete from "@mui/material/Autocomplete";
 import { YANDEX_API_KEY } from "../../App.constants";
+import AdaptiveContainer from "../../components/AdaptiveContainer";
+import MovieSkeleton from "../../components/MovieSkeleton";
 
 export default function Cinemas() {
   const [coordinates, setCoordinates] = useState(null);
@@ -120,7 +122,7 @@ export default function Cinemas() {
     setCinemas(cinemas);
     setLoading(false);
   }
-  
+
   function formatAfishaCinemas(cinemas) {
     const formattedCinemas = [];
     for (const key of Object.keys(cinemas)) {
@@ -176,9 +178,24 @@ export default function Cinemas() {
   }
 
   return loading ? (
-    <div className="text-center">
-      <CircularProgress />
-    </div>
+    <>
+      <div>
+        <div className="grid gap-2 sm:flex justify-between mb-4">
+          <Skeleton height={43} width={90} />
+          <Skeleton height={43} width={300} />
+        </div>
+        <div className="grid gap-4">
+          <Skeleton className="w-full !min-h-[500px]" />
+          <Skeleton height={130} className="w-full" />
+        </div>
+      </div>
+      <div className="grid gap-4">
+        <Skeleton height={43} width={180} />
+        <Skeleton height={48} className="w-full" />
+        <AdaptiveContainer content={<>{[0, 0, 0, 0, 0].map((el, i) => <MovieSkeleton key={i} />)}</>} />
+        {/* <KinoAfisha cinemas={cinemas} /> */}
+      </div>
+    </>
   ) : (
     <>
       <div>
@@ -197,20 +214,23 @@ export default function Cinemas() {
           />
         </div>
         <div className="grid gap-4">
-          {coordinates ? (
-            <YMaps>
-              <Map className="w-full h-[500px]" defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 12 }}>
-                <FullscreenControl />
-                {addresses.map((cinema) => (
-                  <Placemark
-                    geometry={cinema.coordinates}
-                    properties={{ iconCaption: "Кинотеатр " + cinema.name }}
-                    options={{ iconColor: "#d32f2f" }}
-                  />
-                ))}
-              </Map>
-            </YMaps>
-          ) : null}
+          <div className="w-full h-[500px]">
+            {coordinates ? (
+              <YMaps>
+                <Map className="w-full h-full" defaultState={{ center: [coordinates.latitude, coordinates.longitude], zoom: 12 }}>
+                  <FullscreenControl />
+                  {addresses.map((cinema) => (
+                    <Placemark
+                      geometry={cinema.coordinates}
+                      properties={{ iconCaption: "Кинотеатр " + cinema.name }}
+                      options={{ iconColor: "#d32f2f" }}
+                    // onClick={}
+                    />
+                  ))}
+                </Map>
+              </YMaps>
+            ) : null}
+          </div>
           <Ad width="100%" height="130px"></Ad>
         </div>
       </div>
