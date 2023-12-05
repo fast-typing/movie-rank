@@ -50,6 +50,7 @@ export const SIDE_BAR_STYLE = {
   height: "100%",
   backgroundColor: "#323232",
   padding: 4,
+  paddingTop: '86px'
 };
 
 export const TOGGLE_BUTTONS = [

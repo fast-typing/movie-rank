@@ -132,6 +132,10 @@ span {
   background-color: var(--black-1);
 }
 
+.overflow-y-block {
+  overflow-y: hidden;
+}
+
 .header-container {
   background-color: var(--black-3);
 }

@@ -22,6 +22,7 @@ export default function Header() {
   const [openSideBar, setOpenSideBar] = useState(false);
 
   function toggleSideBar() {
+    document.querySelector('html').classList.toggle('overflow-y-block')
     setOpenSideBar(!openSideBar);
   }
 
@@ -89,7 +90,7 @@ export default function Header() {
 
   return (
     <div className="header-container">
-      <header className="m-auto flex items-center justify-between py-6">
+      <header className="m-auto flex items-center justify-between py-6 z-20 relative">
         <Link to={``}>
           <div className="flex items-center gap-2">
             <MovieIcon fontSize="large" />
@@ -106,7 +107,7 @@ export default function Header() {
             <DragHandleRoundedIcon />
           </IconButton>
           {openSideBar ? (
-            <div className="absolute top-[86px] inset-x-0 bottom-0 z-[10]">
+            <div className="top-0 inset-x-0 bottom-0 z-[-1] fixed">
               <Box sx={SIDE_BAR_STYLE}>{nav(true)}</Box>
             </div>
           ) : null}
