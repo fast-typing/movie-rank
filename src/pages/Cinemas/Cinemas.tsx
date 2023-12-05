@@ -59,10 +59,10 @@ export default function Cinemas() {
         setCinemas(cinemas);
       },
       async (e) => {
-        const cinemas = await getCinemas("108");
-        await initAddresses(cinemas, "Москва");
-        setUserCity({ name: "Москва", id: "108" });
-        setCoordinates({ latitude: 55.751244, longitude: 37.618423 });
+        const cinemas = await getCinemas("360");
+        await initAddresses(cinemas, "Пенза");
+        setUserCity({ name: "Пенза", id: "360" });
+        setCoordinates({ latitude: 53.2007, longitude: 45.0046 });
         setCinemas(cinemas);
       }
     );
@@ -165,7 +165,9 @@ export default function Cinemas() {
 
     for (let i = 0; i < inputCinemas.length; i++) {
       const data = await getData(inputCinemas[i].name);
-      const cinemaCoordinates = JSON.parse(data)["features"][0]["geometry"]["coordinates"];
+      const features = JSON.parse(data)["features"]
+      if (!features.length) continue
+      const cinemaCoordinates = features[0]["geometry"]["coordinates"];
       cinemasWithCoord.push({ name: inputCinemas[i].name, coordinates: cinemaCoordinates.reverse() });
     }
 
