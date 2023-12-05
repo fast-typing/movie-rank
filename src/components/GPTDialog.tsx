@@ -3,6 +3,7 @@ import { useState } from "react";
 import { getAIAdvice } from "../services/http.service";
 import SmartToyIcon from '@mui/icons-material/SmartToy';
 import { TypeAnimation } from 'react-type-animation';
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function GPTDialog() {
     const [open, setOpen] = useState(false)
@@ -31,13 +32,16 @@ export default function GPTDialog() {
             </Fab>
             <Modal open={open} onClose={toggleDialog}>
                 <form className="modal-content w-full sm:h-fit sm:w-[600px]" onSubmit={submit}>
-                    <p>В этом окне вы можете найти фильм с помощью нейросети</p>
+                    <div className="flex justify-between gap-4">
+                        <p>В этом окне вы можете найти фильм с помощью нейросети</p>
+                        <CloseIcon onClick={toggleDialog}/>
+                    </div>
                     <textarea placeholder="Ваш запрос" className="h-[120px]" value={input} onChange={(e) => setInput(e.target.value)} />
                     {
                         loading
                             ? <LinearProgress />
                             : aiAdvice
-                                ? <div className="max-h-[200px] overflow-auto"><TypeAnimation sequence={[aiAdvice, 0, () => { setIsAdviceDone(true) }]} speed={70} preRenderFirstString={isAdviceDone} /></div>
+                                ? <div className="max-h-[200px] overflow-auto" onClick={() => setIsAdviceDone(true)}><TypeAnimation sequence={[aiAdvice, 0, () => { setIsAdviceDone(true) }]} speed={85} preRenderFirstString={isAdviceDone} /></div>
                                 : null
                     }
                     <Button disabled={!input.length} variant="contained" onClick={submit}>Получить ответ</Button>

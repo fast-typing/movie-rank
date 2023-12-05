@@ -29,9 +29,17 @@ export default function AuthModal(props: Props) {
     });
   }
 
+  function validateEmail(email: string) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
   async function submit(event: any) {
     event.preventDefault();
     if (form.username.length < 3 || form.password.length < 3) return;
+    if (!validateEmail(form.email)) {
+      openSnackbar("Введите корректный email");
+      return
+    }
     setLoading(true);
     if (props.type === "Вход") {
       loginInAccount();
