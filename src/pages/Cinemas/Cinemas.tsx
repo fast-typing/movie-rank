@@ -6,6 +6,7 @@ import { Cinema } from "../../interfaces/Interfaces";
 import { CircularProgress, TextField } from "@mui/material";
 import Ad from "../../components/Ad";
 import Autocomplete from "@mui/material/Autocomplete";
+import { YANDEX_API_KEY } from "../../App.constants";
 
 export default function Cinemas() {
   const [coordinates, setCoordinates] = useState(null);
@@ -156,7 +157,7 @@ export default function Cinemas() {
     const cinemasWithCoord = [];
     const getData = async (name) => {
       const correctedName = name.replace('&', 'и')
-      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=c460ba12-46f8-42a6-b38b-5c462e42c349`;
+      const url = `https://search-maps.yandex.ru/v1/?text=Кинотеатр ${correctedName} ${city}&lang=ru_RU&apikey=${YANDEX_API_KEY}`;
       const res = await fetch(url);
       const data = await res.text();
       return data;
