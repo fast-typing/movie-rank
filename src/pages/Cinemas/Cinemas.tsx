@@ -52,7 +52,7 @@ export default function Cinemas() {
           localStorage.setItem("location", JSON.stringify({ latitude: location.latitude, longitude: location.longitude }));
         }
         const city_id = resCities.data[city];
-        const cinemas = await getCinemas("108");
+        const cinemas = await getCinemas(city_id);
         await initAddresses(cinemas, city);
         setCoordinates({ latitude: latt, longitude: long });
         setUserCity({ name: city, id: city_id });
