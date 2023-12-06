@@ -36,14 +36,16 @@ export default function AuthModal(props: Props) {
   async function submit(event: any) {
     event.preventDefault();
     if (form.username.length < 3 || form.password.length < 3) return;
-    if (!validateEmail(form.email)) {
-      openSnackbar("Введите корректный email");
-      return
-    }
-    setLoading(true);
+
     if (props.type === "Вход") {
+      setLoading(true);
       loginInAccount();
     } else {
+      if (!validateEmail(form.email)) {
+        openSnackbar("Введите корректный email");
+        return
+      }
+      setLoading(true);
       const res = await registration(form);
       if (res.detail === "User already exists") {
         openSnackbar("Пользователь с таким ником или почтой уже существует");
