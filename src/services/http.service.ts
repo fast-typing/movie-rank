@@ -2,7 +2,7 @@ import { HTTP_URL, YANDEX_API_KEY } from "../App.constants";
 import { Movie, Review, RateFilm, User, CinemaMovie } from "../interfaces/Interfaces";
 
 export function login(data) {
-  return _request(`login?username=${data.username}&password=${data.password}`, "POST");
+  return _request(`login/?username=${data.username}&password=${data.password}`, "POST");
 }
 
 export function registration(data) {
@@ -14,7 +14,7 @@ export function getAllMovies(): Promise<Movie[]> {
 }
 
 export function getMovie(id: string): Promise<Movie> {
-  return _request(`get_film?film_id=${id}`, "GET");
+  return _request(`get_film/?film_id=${id}`, "GET");
 }
 
 export function deleteComment(comment_id: number): Promise<{ message: string }> {
@@ -71,7 +71,7 @@ export function rateFilm(body: RateFilm) {
 }
 
 export function getRecommendations(user_id: string, num_films: number) {
-  return _request(`get_recommendations?user_id=${user_id}&num_films=${num_films}`, "GET");
+  return _request(`get_recommendations/?user_id=${user_id}&num_films=${num_films}`, "GET");
 }
 
 export function getCinemasByCity(city_id: string): Promise<{ data: CinemaMovie[] }> {
@@ -91,7 +91,7 @@ export function getAIAdvice(content: string): Promise<{ content: string }> {
 }
 
 export function getFilmsByName(film_name: string) {
-  return _request(`get_films_by_name?film_name=${film_name}`, "GET");
+  return _request(`get_films_by_name/?film_name=${film_name}`, "GET");
 }
 
 export async function getCoordinates(text: string): Promise<number[]> {

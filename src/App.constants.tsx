@@ -13,7 +13,7 @@ export const AMOUNT_OF_MOVIES_ON_FAST_SEARCH = 3
 export const LIMIT_OF_REVIEW_BY_DEFAULT = 3
 
 export const YANDEX_API_KEY = '9468c21a-1fd5-4fbf-b74c-9cbaf478959b'
-export const HTTP_URL = "https://backend.movie-rank.ru/"
+export const HTTP_URL = "https://back.movie-rank.universal-hub.site/"
 
 export const MOVIE_FIELDS = {
   country: "Страна",
