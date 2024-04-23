@@ -6,7 +6,7 @@ export function login(data) {
 }
 
 export function registration(data) {
-  return _request(`registration`, "POST", data);
+  return _request(`registration/`, "POST", data);
 }
 
 export function getAllMovies(): Promise<Movie[]> {
@@ -29,7 +29,7 @@ export function getUserData(token?: string, username?: string): Promise<User> {
 }
 
 export function createReview(token: string, review: any): Promise<Review> {
-  return _request(`create_review?token=${token}`, "POST", review);
+  return _request(`create_review/?token=${token}`, "POST", review);
 }
 
 export function markFilm(token: string, film_id: number, type: "postopened" | "abandoned" | "finished" | "planned") {
@@ -46,7 +46,7 @@ export function rateReview(user_id: string, review_id: number, action: "like" | 
 
 export function createComment(body: any, token?: string) {
   if (token) body.token = token;
-  return _request("create_comment", "POST", body);
+  return _request("create_comment/", "POST", body);
 }
 
 export function getAllComments(film_id: string) {
@@ -75,7 +75,7 @@ export function getRecommendations(user_id: string, num_films: number) {
 }
 
 export function getCinemasByCity(city_id: string): Promise<{ data: CinemaMovie[] }> {
-  return _request(`api_kinoafisha/get_schedule_events?city=${city_id}`, "GET");
+  return _request(`api_kinoafisha/get_schedule_events/?city=${city_id}`, "GET");
 }
 
 export function getCities(): Promise<{ data: {} }> {
@@ -87,7 +87,7 @@ export function getUsersRating(filmId: string): Promise<{ [id: string]: number }
 }
 
 export function getAIAdvice(content: string): Promise<{ content: string }> {
-  return _request(`gigachat/create_prompt?content=${content}`, "POST");
+  return _request(`gigachat/create_prompt/?content=${content}`, "POST");
 }
 
 export function getFilmsByName(film_name: string) {
